@@ -4,9 +4,24 @@ import ConfirmDialog from "@/components/ConfirmDialog.vue";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@iconify/vue";
 import { useRoute } from "vue-router";
-import type { FormState, FormConfig } from "@/types/forms";
+import { siteConfig } from "@/config";
 
-interface Props extends FormState, FormConfig {}
+interface Signature {
+  title: string;
+  name: string;
+  imageUrl: string;
+}
+
+interface Props {
+  isSubmitted: boolean;
+  isSubmitting: boolean;
+  isFormValid: boolean;
+  isPrintView: boolean;
+  showEditButton?: boolean;
+  qrImageSrc?: string;
+  signature?: Signature;
+  universityName: string;
+}
 
 const props = withDefaults(defineProps<Props>(), {
   isSubmitted: false,
@@ -15,6 +30,8 @@ const props = withDefaults(defineProps<Props>(), {
   isPrintView: false,
   showEditButton: true,
 });
+
+const appName = siteConfig.app.name;
 
 const emit = defineEmits<{
   submit: [];
@@ -32,6 +49,10 @@ const isBlankLayout = computed(() => route.meta.layout === "blank");
 function handlePrint() {
   window.print();
 }
+
+function handleExitPage() {
+  window.location.href = "/";
+}
 </script>
 
 <template>
@@ -42,7 +63,7 @@ function handlePrint() {
       description="با خروج از این صفحه، اطلاعات واردشده ذخیره نخواهد شد. آیا از خروج از صفحه اطمینان دارید؟"
       confirm-text="تأیید خروج"
       cancel-text="انصراف"
-      redirect-to="/"
+      @confirm="handleExitPage"
     >
       <template #trigger>
         <Button variant="default" aria-label="Back" class="fixed left-3 top-3">
@@ -67,8 +88,12 @@ function handlePrint() {
           <!-- Footer Signature -->
           <footer v-if="props.signature && props.isPrintView" class="w-full flex justify-end my-12">
             <div class="text-center">
-              <p class="font-medium mb-2 text-sm">{{ props.signature.title }}</p>
-              <p class="font-bold mb-4">{{ props.signature.name }}</p>
+              <p class="font-medium mb-2 text-sm">
+                {{ props.signature.title }}
+              </p>
+              <p class="font-bold mb-4">
+                {{ props.signature.name }}
+              </p>
 
               <!-- Signature and seal -->
               <div class="relative">
@@ -79,6 +104,7 @@ function handlePrint() {
                 </p>
 
                 <img
+                  v-if="props.signature.imageUrl"
                   :src="props.signature.imageUrl"
                   alt="digital signature"
                   width="150"
@@ -153,6 +179,24 @@ function handlePrint() {
             <img width="150" :src="props.qrImageSrc" alt="qr code" class="print:grayscale" />
           </figure>
 
+          <!-- Logo and Brand -->
+          <div
+            v-if="props.isPrintView"
+            class="items-center gap-2 absolute bottom-5 end-4 hidden print:flex scale-90"
+          >
+            <img
+              src="@/assets/images/logo.svg"
+              :alt="appName"
+              class="object-contain w-12 shrink-0 grayscale"
+            />
+            <section class="min-w-0">
+              <h3 class="text-sm font-bold text-foreground">{{ appName }}</h3>
+              <p class="text-[0.6rem] text-muted-foreground mt-0.5 wrap-break-word">
+                {{ props.universityName }}
+              </p>
+            </section>
+          </div>
+
           <!-- Corner Decorations -->
           <div
             class="absolute top-2 left-2 w-4 h-4 border-l-2 border-t-2 border-black opacity-30"
@@ -170,8 +214,21 @@ function handlePrint() {
 @reference "@/assets/css/main.css";
 
 @media print {
+  /* Single A4 page, no margin */
+  @page {
+    size: 210mm 297mm;
+    margin: 0;
+  }
+
+  html,
   body {
-    background: none;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 210mm !important;
+    height: 297mm !important;
+    max-height: 297mm !important;
+    overflow: hidden !important;
+    background: white;
   }
 
   button {
@@ -183,33 +240,31 @@ function handlePrint() {
   }
 
   .form-print-root {
-    position: fixed !important;
-    inset: 0 !important;
+    position: relative !important;
+    width: 210mm !important;
+    height: 297mm !important;
+    max-height: 297mm !important;
     margin: 0 !important;
     padding: 0 !important;
     overflow: hidden !important;
+    box-sizing: border-box;
   }
 
   .form-print-wrapper {
-    position: absolute !important;
-    left: 50% !important;
-    top: 50% !important;
-    transform: translate(-50%, -50%) !important;
+    position: relative !important;
     width: 210mm !important;
     height: 297mm !important;
     margin: 0 !important;
     padding: 0 !important;
-    max-width: 100vw;
-    max-height: 100vh;
+    box-sizing: border-box;
   }
 
   .form-print-sheet {
-    width: 100% !important;
-    height: 100% !important;
-    min-height: 0 !important;
-    max-width: 210mm !important;
-    max-height: 297mm !important;
+    width: 210mm !important;
+    height: 297mm !important;
+    margin: 0 !important;
     padding: 4mm !important;
+    box-sizing: border-box;
   }
 }
 </style>

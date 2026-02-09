@@ -88,7 +88,7 @@ function transformApiResponseToFormData(
       currentAcademicYear: apiResponse.academic_year || "",
     },
     certificate: {
-      recipient: apiResponse.certifcate || "",
+      recipient: apiResponse.certificate || "",
       validityDate: apiResponse.expiration_date || "",
     },
     description: apiResponse.description || "",
@@ -129,9 +129,6 @@ export const useEducationFormStore = defineStore("educationForm", () => {
       academic_year: formData.education.currentAcademicYear || "",
       certificate: formData.certificate.recipient || "",
       description: formData.description || "",
-      university: 1, // TODO: Should remove
-      faculty: 1, // TODO: Should remove
-      signer: 1, // TODO: Should remove
     };
   }
 

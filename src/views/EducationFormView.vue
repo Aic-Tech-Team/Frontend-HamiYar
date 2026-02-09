@@ -147,6 +147,7 @@ const isInputDisabled = computed(() => isSubmitted.value || !isEditMode.value);
     :show-edit-button="!isPrintView"
     :qr-image-src="qrImageSrc"
     :signature="formData.signature"
+    :university-name="formData.header.university"
     @submit="handleSubmit"
     @edit="resetForm"
     @issuance="handleIssuance"

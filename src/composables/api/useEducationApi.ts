@@ -31,12 +31,7 @@ export const useEducationApi = () => {
     );
     if (!response.data) throw new Error("No data received from API");
 
-    // TODO: Remove mock when backend returns tracking_number in POST response
-    let trackingNumber = response.data.tracking_number;
-    if (!trackingNumber) {
-      trackingNumber = "4313955399";
-    }
-    return trackingNumber;
+    return response.data.tracking_number;
   }
 
   return {

@@ -68,19 +68,19 @@ function transformApiResponseToFormData(apiResponse: InternshipResponse): Intern
       fullName: `${student.first_name || ""} ${student.last_name || ""}`.trim(),
     },
     education: {
-      field: "", // TODO: Get from API if available
+      field: student.field_of_study || "",
       entryAcademicYear: student.entry_year || "",
       degreeType: student.education_level || "",
       system: student.education_system || "",
     },
     internship: {
-      course: "", // TODO: GET doesn't return; backend to add to POST later
+      course: apiResponse.course || "",
       duration: apiResponse.time || "",
       instructor: apiResponse.teacher || "",
-      companyName: "", // TODO: Get from API if available
+      companyName: apiResponse.company?.name || "",
       address: apiResponse.company?.address || "",
       postalCode: apiResponse.company?.postal_code || "",
-      department: "", // TODO: Get from API if available
+      department: apiResponse.company?.department || "",
       disciplinarian: apiResponse.disciplinarian ?? false,
     },
     signature: {
@@ -117,13 +117,11 @@ export const useInternshipFormStore = defineStore("internshipForm", () => {
       company_name: formData.internship.companyName || "",
       company_postal_code: formData.internship.postalCode || "",
       company_address: formData.internship.address || "",
+      company_department: formData.internship.department || "",
       time: formData.internship.duration || "",
       course: formData.internship.course || "",
       teacher: formData.internship.instructor || "",
       disciplinarian: formData.internship.disciplinarian ?? false,
-      department: formData.internship.department || "",
-      description: "", // TODO: Should remove
-      signer: 1, // TODO: Should remove
     };
   }
 

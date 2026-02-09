@@ -401,6 +401,22 @@
   }
 }
 
+/* Toast: keep inside viewport on mobile */
+@media (max-width: 640px) {
+  [data-sonner-toaster] {
+    left: 12px !important;
+    right: 12px !important;
+    width: calc(100vw - 24px) !important;
+    max-width: calc(100vw - 24px) !important;
+    transform: none !important;
+  }
+  [data-sonner-toast][data-styled="true"] {
+    max-width: 100% !important;
+    width: 100% !important;
+    box-sizing: border-box;
+  }
+}
+
 @media print {
   /* Print Page Size (A4) */
   @page {
