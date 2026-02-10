@@ -97,10 +97,6 @@ export const useInternshipFormStore = defineStore("internshipForm", () => {
   const _rawApiResponse = ref<InternshipResponse | null>(null);
   const _trackingNumber = ref<string | null>(null);
 
-  const formData = computed(() => _formData.value);
-  const rawApiResponse = computed(() => _rawApiResponse.value);
-  const trackingNumber = computed(() => _trackingNumber.value);
-
   function setTrackingNumber(value: string | null) {
     _trackingNumber.value = value;
   }
@@ -126,9 +122,9 @@ export const useInternshipFormStore = defineStore("internshipForm", () => {
   }
 
   return {
-    formData,
-    rawApiResponse,
-    trackingNumber,
+    formData: computed(() => _formData.value),
+    rawApiResponse: computed(() => _rawApiResponse.value),
+    trackingNumber: computed(() => _trackingNumber.value),
     getDefaultFormData,
     setFormDataFromApi,
     setTrackingNumber,

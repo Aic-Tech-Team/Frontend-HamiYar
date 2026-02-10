@@ -6,11 +6,7 @@ export const useAuthJwtStore = defineStore("authJwt", () => {
   const _accessToken = ref<string | null>(localStorage.getItem("access_token"));
   const _refreshToken = ref<string | null>(localStorage.getItem("refresh_token"));
 
-  // Public Getters (Read-only)
-  const accessToken = computed(() => _accessToken.value);
-  const refreshToken = computed(() => _refreshToken.value);
-
-  const isAuthenticated = computed(() => !!accessToken.value);
+  const isAuthenticated = computed(() => !!_accessToken.value);
 
   function setTokens(newAccessToken: string, newRefreshToken: string) {
     // Update state
@@ -33,8 +29,8 @@ export const useAuthJwtStore = defineStore("authJwt", () => {
   }
 
   return {
-    accessToken,
-    refreshToken,
+    accessToken: computed(() => _accessToken.value),
+    refreshToken: computed(() => _refreshToken.value),
 
     isAuthenticated,
 

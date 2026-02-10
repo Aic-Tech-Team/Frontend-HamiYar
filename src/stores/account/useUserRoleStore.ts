@@ -6,9 +6,6 @@ export const useUserRoleStore = defineStore("userRole", () => {
   // Private State
   const _userRole = ref<UserRole | null>((localStorage.getItem("user_role") as UserRole) || null);
 
-  // Public Getters (Read-only)
-  const userRole = computed(() => _userRole.value);
-
   const isSystemAdmin = computed(() => _userRole.value === "SystemAdmin");
   const isAdmin = computed(() => _userRole.value === "Admin");
   const isUser = computed(() => _userRole.value === "User");
@@ -42,7 +39,7 @@ export const useUserRoleStore = defineStore("userRole", () => {
   }
 
   return {
-    userRole,
+    userRole: computed(() => _userRole.value),
 
     isSystemAdmin,
     isAdmin,
