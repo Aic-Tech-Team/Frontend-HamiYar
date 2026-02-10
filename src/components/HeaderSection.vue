@@ -229,7 +229,7 @@ async function logout() {
           <Button
             variant="default"
             size="sm"
-            class="h-9! sm:h-11! sm:px-4! "
+            class="h-9! sm:h-11! sm:px-4!"
             aria-label="Logout"
             @click="logout"
           >
@@ -250,7 +250,6 @@ async function logout() {
           </section>
           <p class="text-brand-primary-800 max-w-2xl mx-auto text-base sm:text-lg px-1">
             به سامانه یکپارچه خدماتی حامی یار {{ siteConfig.university.name }}
-            <span class="whitespace-nowrap font-medium">({{ siteConfig.university.city }})</span>
             خوش آمدید. از طریق این سامانه میتوانید به خدمات اداری حامی دسترسی داشته باشید.
           </p>
         </section>

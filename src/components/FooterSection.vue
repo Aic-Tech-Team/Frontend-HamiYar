@@ -39,7 +39,7 @@ function handleHashClick(to: string, event: Event) {
                 <section class="min-w-0">
                   <h3 class="text-base xs:text-lg font-bold text-foreground">{{ appName }}</h3>
                   <p class="text-xs text-muted-foreground mt-0.5 wrap-break-word">
-                    {{ siteConfig.university.fullName }}
+                    {{ siteConfig.university.name }}
                   </p>
                 </section>
               </div>
@@ -115,7 +115,7 @@ function handleHashClick(to: string, event: Event) {
                   rel="noopener noreferrer"
                   class="text-sm text-muted-foreground hover:text-brand-primary-600 transition-colors duration-200"
                 >
-                  {{ siteConfig.university.fullName }}
+                  {{ siteConfig.university.name }}
                 </a>
               </li>
               <li class="flex items-center gap-3">

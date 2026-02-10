@@ -5,7 +5,6 @@ export interface SiteConfig {
   university: {
     name: string;
     city: string;
-    fullName: string;
   };
   contact: {
     phone: string;
@@ -54,8 +53,7 @@ export const siteConfig: SiteConfig = {
   },
   university: {
     name: "دانشگاه آزاد اسلامی",
-    city: "واحد کرج",
-    fullName: "دانشگاه آزاد اسلامی واحد کرج",
+    city: "",
   },
   contact: {
     phone: "026-3418-1234",

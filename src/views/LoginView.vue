@@ -9,14 +9,13 @@ import { siteConfig } from "@/config";
       <div class="flex flex-col items-center gap-2 text-center mb-4 xs:mb-6">
         <!-- Logo -->
         <figure class="mb-2">
-          <img class="w-16 xs:w-20 h-auto" src="@/assets/images/logo.svg" alt="لوگو حامی یار" />
+          <img class="w-16 xs:w-20 h-auto" src="@/assets/images/logo.svg" alt="logo" />
         </figure>
 
         <h1 class="text-lg xs:text-xl font-bold">ورود به حساب کاربری</h1>
         <p class="text-muted-foreground text-xs xs:text-sm leading-relaxed wrap-break-word">
           به سامانه یکپارچه خدماتی حامی یار
-          <span class="font-medium">{{ siteConfig.university.name }}</span>
-          <span class="whitespace-nowrap">({{ siteConfig.university.city }})</span>
+          {{ siteConfig.university.name }}
           خوش آمدید.
         </p>
       </div>
