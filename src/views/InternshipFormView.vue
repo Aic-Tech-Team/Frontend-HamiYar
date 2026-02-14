@@ -29,6 +29,8 @@ function prefillFromStudent() {
   const student = studentStore.student;
   if (!student) return;
 
+  formData.header.university = student.university?.name || "";
+  formData.header.city = student.university?.city || "";
   formData.student.code = student.student_number || "";
   formData.student.fullName =
     student.full_name || `${student.first_name || ""} ${student.last_name || ""}`.trim();
