@@ -169,7 +169,7 @@ function handleExitPage() {
                 @click="emit('issuance')"
               >
                 <Icon icon="mdi:file-document-check" class="size-6" />
-                صدور گواهی
+                تولید سند نهایی
               </Button>
             </template>
           </div>
