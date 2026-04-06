@@ -52,7 +52,14 @@ async function doRefreshToken(failedRequest: AxiosError) {
 
     return Promise.resolve();
   } catch (error) {
-    await logoutAsync();
+    if (axios.isAxiosError(error)) {
+      const status = error.response?.status;
+
+      // Only logout if the refresh token is explicitly rejected (expired, invalid, etc.)
+      if (status === 401 || status === 403 || status === 400 || status === 404) {
+        await logoutAsync();
+      }
+    }
 
     return Promise.reject(error);
   }
@@ -76,37 +83,37 @@ axiosInstance.interceptors.response.use(
       router.replace({ name: "Error", params: { code: "500" } });
     }
 
-  // Standardize error messages
-  if (error.response?.data) {
-    const data = error.response.data;
-    let extractedMessages: string[] = [];
+    // Standardize error messages
+    if (error.response?.data) {
+      const data = error.response.data;
+      let extractedMessages: string[] = [];
 
-    if (Array.isArray(data)) {
-      // Handle direct array: ["error message"]
-      extractedMessages = data;
-    } else if (typeof data === 'object') {
-      // Handle object with common fields
-      const possibleFields = ['messages', 'message', 'detail', 'error'];
-      for (const field of possibleFields) {
-        if (data[field]) {
-          extractedMessages = Array.isArray(data[field]) ? data[field] : [data[field]];
-          break;
+      if (Array.isArray(data)) {
+        // Handle direct array: ["error message"]
+        extractedMessages = data;
+      } else if (typeof data === "object") {
+        // Handle object with common fields
+        const possibleFields = ["messages", "message", "detail", "error"];
+        for (const field of possibleFields) {
+          if (data[field]) {
+            extractedMessages = Array.isArray(data[field]) ? data[field] : [data[field]];
+            break;
+          }
         }
       }
+
+      // Fallback if no specific field found but data is string
+      if (extractedMessages.length === 0 && typeof data === "string") {
+        extractedMessages = [data];
+      }
+
+      // Attach to error object for easy access in components
+      error.extractedMessage = extractedMessages[0] || "خطایی رخ داده است";
+      error.allMessages = extractedMessages;
     }
 
-    // Fallback if no specific field found but data is string
-    if (extractedMessages.length === 0 && typeof data === 'string') {
-      extractedMessages = [data];
-    }
-
-    // Attach to error object for easy access in components
-    error.extractedMessage = extractedMessages[0] || "خطایی رخ داده است";
-    error.allMessages = extractedMessages;
-  }
-
-  return Promise.reject(error);
-},
+    return Promise.reject(error);
+  },
 );
 
 const $api = axiosInstance;
