@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { computed, watch, ref } from "vue";
-import { Icon } from "@iconify/vue";
 import { Button } from "@/components/ui/button";
 // import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 // import { Label } from "@/components/ui/label";
@@ -14,6 +13,8 @@ import {
 } from "@/components/ui/dialog";
 import { Field, FieldGroup } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+
+import IconGgSpinner from "~icons/gg/spinner";
 
 type IdentifierType = "national" | "student";
 
@@ -103,7 +104,7 @@ function onSubmit(e: Event) {
       <DialogFooter class="flex-row-reverse">
         <Button type="submit" :form="formId" :disabled="isSubmitDisabled" :aria-busy="props.isSubmitting">
           {{ props.isSubmitting ? "درحال بررسی" : "بررسی" }}
-          <Icon v-if="props.isSubmitting" icon="gg:spinner" class="size-5 animate-spin" />
+          <IconGgSpinner v-if="props.isSubmitting" class="size-5 animate-spin" />
         </Button>
       </DialogFooter>
     </DialogContent>

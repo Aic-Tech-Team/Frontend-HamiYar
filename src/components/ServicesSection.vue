@@ -2,6 +2,9 @@
 import PersonModal from "@/components/PersonModal.vue";
 import ServiceCard from "@/components/ServiceCard.vue";
 
+import IconSolarDiplomaVerifiedOutline from "~icons/solar/diploma-verified-outline";
+import IconSolarCaseOutline from "~icons/solar/case-outline";
+
 import { ref } from "vue";
 import { toast } from "vue-sonner";
 import router from "@/router";
@@ -58,13 +61,12 @@ async function handleServiceRequest(identifier: UserIdentifier): Promise<void> {
     console.error("Error checking student:", error);
 
     // Use the pre-extracted message from our interceptor
-const errorMessage = error?.response?.status === 404
-          ? "کاربری با این مشخصات یافت نشد"
-          : error.extractedMessage || "خطا در ارتباط با سرور";
+    const errorMessage = error?.response?.status === 404
+      ? "کاربری با این مشخصات یافت نشد"
+      : error.extractedMessage || "خطا در ارتباط با سرور";
 
     toast.error("خطا!", {
       description: errorMessage,
-
       richColors: true,
     });
   } finally {
@@ -86,7 +88,7 @@ const errorMessage = error?.response?.status === 404
     <div class="gap-y-16 gap-x-6 flex flex-col md:flex-row w-full max-w-6xl">
       <div class="flex-1 w-full md:w-1/2">
         <ServiceCard
-          icon="solar:diploma-verified-outline"
+          :icon="IconSolarDiplomaVerifiedOutline"
           title="گواهی اشتغال به تحصیل"
           description="صدور گواهی اشتغال به تحصیل با وارد کردن شماره دانشجویی"
           @start-service="openServiceModal('education')"
@@ -94,7 +96,7 @@ const errorMessage = error?.response?.status === 404
       </div>
       <div class="flex-1 w-full md:w-1/2">
         <ServiceCard
-          icon="solar:case-outline"
+          :icon="IconSolarCaseOutline"
           title="نامه کارآموزی"
           description="صدور نامه کارآموزی با وارد کردن شماره دانشجویی"
           @start-service="openServiceModal('internship')"

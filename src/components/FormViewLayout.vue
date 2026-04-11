@@ -2,9 +2,15 @@
 import { computed } from "vue";
 import ConfirmDialog from "@/components/ConfirmDialog.vue";
 import { Button } from "@/components/ui/button";
-import { Icon } from "@iconify/vue";
 import { useRoute } from "vue-router";
 import { siteConfig } from "@/config";
+
+import IconIconParkSolidBack from "~icons/icon-park-solid/back";
+import IconMynauiSaveSolid from "~icons/mynaui/save-solid";
+import IconGgSpinner from "~icons/gg/spinner";
+import IconMdiPencil from "~icons/mdi/pencil";
+import IconMdiPrinter from "~icons/mdi/printer";
+import IconMdiFileDocumentCheck from "~icons/mdi/file-document-check";
 
 interface Signature {
   title: string;
@@ -67,7 +73,7 @@ function handleExitPage() {
     >
       <template #trigger>
         <Button variant="default" aria-label="Back" class="fixed left-3 top-3">
-          <Icon icon="icon-park-solid:back" width="48" height="48" />
+          <IconIconParkSolidBack width="48" height="48" />
           بازگشت
         </Button>
       </template>
@@ -128,8 +134,8 @@ function handleExitPage() {
                 :disabled="!props.isFormValid || props.isSubmitting"
                 @click="emit('submit')"
               >
-                <Icon v-if="!props.isSubmitting" icon="mynaui:save-solid" class="size-6" />
-                <Icon v-else icon="gg:spinner" class="size-6 animate-spin" />
+                <IconMynauiSaveSolid v-if="!props.isSubmitting" class="size-6" />
+                <IconGgSpinner v-else class="size-6 animate-spin" />
                 {{ props.isSubmitting ? "در حال ثبت..." : "ثبت اطلاعات" }}
               </Button>
             </template>
@@ -145,7 +151,7 @@ function handleExitPage() {
                   class="text-base border-2"
                   @click="emit('edit')"
                 >
-                  <Icon icon="mdi:pencil" class="size-6" />
+                  <IconMdiPencil class="size-6" />
                   ویرایش
                 </Button>
               </template>
@@ -157,7 +163,7 @@ function handleExitPage() {
                 class="text-base"
                 @click="handlePrint"
               >
-                <Icon icon="mdi:printer" class="size-6" />
+                <IconMdiPrinter class="size-6" />
                 چاپ
               </Button>
 
@@ -168,7 +174,7 @@ function handleExitPage() {
                 class="text-base"
                 @click="emit('issuance')"
               >
-                <Icon icon="mdi:file-document-check" class="size-6" />
+                <IconMdiFileDocumentCheck class="size-6" />
                 تولید سند نهایی
               </Button>
             </template>

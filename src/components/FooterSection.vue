@@ -1,7 +1,12 @@
 <script setup lang="ts">
-import { Icon } from "@iconify/vue";
 import { RouterLink, useRoute } from "vue-router";
 import { siteConfig } from "@/config";
+import IconHome2Outline from "~icons/solar/home-2-outline";
+import IconWidget5Outline from "~icons/solar/widget-5-outline";
+import IconHeadphonesRoundSoundOutline from "~icons/solar/headphones-round-sound-outline";
+import IconMapPointOutline from "~icons/solar/map-point-outline";
+import IconPhoneCallingOutline from "~icons/solar/phone-calling-outline";
+import IconLetterOutline from "~icons/solar/letter-outline";
 
 const route = useRoute();
 const appName = siteConfig.app.name;
@@ -57,10 +62,7 @@ function handleHashClick(to: string, event: Event) {
             </div>
             <ul class="space-y-3">
               <li class="flex items-center gap-3">
-                <Icon
-                  icon="solar:home-2-outline"
-                  class="size-4.5 text-brand-primary-600 shrink-0"
-                />
+                <IconHome2Outline class="size-4.5 text-brand-primary-600 shrink-0" />
                 <RouterLink
                   to="/"
                   class="text-sm text-muted-foreground hover:text-brand-primary-600 transition-colors duration-200"
@@ -69,10 +71,7 @@ function handleHashClick(to: string, event: Event) {
                 </RouterLink>
               </li>
               <li class="flex items-center gap-3">
-                <Icon
-                  icon="solar:widget-5-outline"
-                  class="size-4.5 text-brand-primary-600 shrink-0"
-                />
+                <IconWidget5Outline class="size-4.5 text-brand-primary-600 shrink-0" />
                 <RouterLink
                   to="/#services"
                   @click="handleHashClick('/#services', $event)"
@@ -82,10 +81,7 @@ function handleHashClick(to: string, event: Event) {
                 </RouterLink>
               </li>
               <li class="flex items-center gap-3">
-                <Icon
-                  icon="solar:headphones-round-sound-outline"
-                  class="size-4.5 text-brand-primary-600 shrink-0"
-                />
+                <IconHeadphonesRoundSoundOutline class="size-4.5 text-brand-primary-600 shrink-0" />
                 <RouterLink
                   to="/#support"
                   @click="handleHashClick('/#support', $event)"
@@ -104,10 +100,7 @@ function handleHashClick(to: string, event: Event) {
             </div>
             <ul class="space-y-3">
               <li class="flex items-start gap-3">
-                <Icon
-                  icon="solar:map-point-outline"
-                  class="size-5 text-brand-primary-600 shrink-0"
-                />
+                <IconMapPointOutline class="size-5 text-brand-primary-600 shrink-0" />
 
                 <a
                   href="https://edu.iau.ac.ir/"
@@ -119,10 +112,7 @@ function handleHashClick(to: string, event: Event) {
                 </a>
               </li>
               <li class="flex items-center gap-3">
-                <Icon
-                  icon="solar:phone-calling-outline"
-                  class="size-5 text-brand-primary-600 shrink-0"
-                />
+                <IconPhoneCallingOutline class="size-5 text-brand-primary-600 shrink-0" />
                 <a
                   :href="`tel:+${siteConfig.contact.phone.replace(/-/g, '')}`"
                   class="text-sm text-muted-foreground hover:text-brand-primary-600 transition-colors duration-200"
@@ -131,7 +121,7 @@ function handleHashClick(to: string, event: Event) {
                 </a>
               </li>
               <li class="flex items-center gap-3">
-                <Icon icon="solar:letter-outline" class="size-5 text-brand-primary-600 shrink-0" />
+                <IconLetterOutline class="size-5 text-brand-primary-600 shrink-0" />
                 <a
                   :href="`mailto:${siteConfig.contact.email}`"
                   class="text-sm text-muted-foreground hover:text-brand-primary-600 transition-colors duration-200"

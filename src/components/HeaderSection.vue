@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { Button } from "@/components/ui/button";
-import { Icon } from "@iconify/vue";
 import { useRoute } from "vue-router";
 import { siteConfig } from "@/config";
 
 import { useAuthApi } from "@/composables/api/useAuthApi";
+
+import IconSolarLogout3LineDuotone from "~icons/solar/logout-3-line-duotone";
 
 interface NavigationItem {
   label: string;
@@ -234,7 +235,7 @@ async function logout() {
             @click="logout"
           >
             <span class="hidden xs:inline">خروج از حساب</span>
-            <Icon icon="solar:logout-3-line-duotone" class="size-5 shrink-0 xs:size-6" />
+            <IconSolarLogout3LineDuotone class="size-5 shrink-0 xs:size-6" />
           </Button>
         </div>
       </nav>

@@ -6,8 +6,11 @@ import { useAuthApi } from "@/composables/api/useAuthApi";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Field, FieldContent, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
-import { Icon } from "@iconify/vue";
 import { toast } from "vue-sonner";
+
+import IconMdiEye from "~icons/mdi/eye";
+import IconMdiEyeOff from "~icons/mdi/eye-off";
+import IconGgSpinner from "~icons/gg/spinner";
 
 import type { AuthRequestModal } from "@/types/account/auth";
 
@@ -79,8 +82,8 @@ async function handleSubmit(e: Event) {
   } catch (error: any) {
     console.error("Error logging in:", error);
 
-// Use the pre-extracted message from our interceptor
-const errorMessage = error.extractedMessage || "خطا در ارتباط با سرور";
+    // Use the pre-extracted message from our interceptor
+    const errorMessage = error.extractedMessage || "خطا در ارتباط با سرور";
 
     toast.error("خطا در ورود", {
       description: errorMessage,
@@ -98,9 +101,16 @@ const errorMessage = error.extractedMessage || "خطا در ارتباط با س
       <Field>
         <FieldLabel required>نام کاربری</FieldLabel>
         <FieldContent>
-          <Input v-model="username" type="text" placeholder="نام کاربری" autocomplete="username"
-            :class="{ 'border-destructive ring-destructive/20': usernameError }" @blur="validateUsername"
-            @input="usernameError = ''" required />
+          <Input
+            v-model="username"
+            type="text"
+            placeholder="نام کاربری"
+            autocomplete="username"
+            :class="{ 'border-destructive ring-destructive/20': usernameError }"
+            @blur="validateUsername"
+            @input="usernameError = ''"
+            required
+          />
           <FieldError v-if="usernameError">{{ usernameError }}</FieldError>
         </FieldContent>
       </Field>
@@ -109,14 +119,25 @@ const errorMessage = error.extractedMessage || "خطا در ارتباط با س
         <FieldLabel required>رمز عبور</FieldLabel>
         <FieldContent>
           <div class="relative">
-            <Input v-model="password" :type="showPassword ? 'text' : 'password'" placeholder="رمز عبور"
-              autocomplete="current-password" class="pe-10"
-              :class="{ 'border-destructive ring-destructive/20': passwordError }" @blur="validatePassword"
-              @input="passwordError = ''" required />
-            <button type="button" @click="showPassword = !showPassword"
+            <Input
+              v-model="password"
+              :type="showPassword ? 'text' : 'password'"
+              placeholder="رمز عبور"
+              autocomplete="current-password"
+              class="pe-10"
+              :class="{ 'border-destructive ring-destructive/20': passwordError }"
+              @blur="validatePassword"
+              @input="passwordError = ''"
+              required
+            />
+            <button
+              type="button"
+              @click="showPassword = !showPassword"
               class="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
-              tabindex="-1">
-              <Icon :icon="showPassword ? 'mdi:eye-off' : 'mdi:eye'" class="size-5" />
+              tabindex="-1"
+            >
+              <IconMdiEyeOff v-if="showPassword" class="size-5" />
+              <IconMdiEye v-else class="size-5" />
             </button>
           </div>
           <FieldError v-if="passwordError">{{ passwordError }}</FieldError>
@@ -126,7 +147,7 @@ const errorMessage = error.extractedMessage || "خطا در ارتباط با س
 
     <Button type="submit" class="w-full mt-8" :disabled="isSubmitting" :aria-busy="isSubmitting">
       {{ isSubmitting ? "در حال ورود..." : "ورود" }}
-      <Icon v-if="isSubmitting" icon="gg:spinner" class="size-5 ml-2 animate-spin" />
+      <IconGgSpinner v-if="isSubmitting" class="size-5 ml-2 animate-spin" />
     </Button>
   </form>
 </template>

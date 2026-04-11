@@ -1,11 +1,13 @@
 <script setup lang="ts">
+import type { Component } from "vue";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Icon } from "@iconify/vue";
+
+import IconMdiArrowLeft from "~icons/mdi/arrow-left";
 
 interface Props {
-  icon: string;
+  icon: Component;
   title: string;
   description: string;
   isActive?: boolean;
@@ -28,7 +30,11 @@ const emit = defineEmits<{
       'opacity-60 pointer-events-none': !props.isActive,
     }"
   >
-    <Badge v-if="!props.isActive" variant="destructive" class="absolute top-4 left-4 z-10 opacity-90">
+    <Badge
+      v-if="!props.isActive"
+      variant="destructive"
+      class="absolute top-4 left-4 z-10 opacity-90"
+    >
       غیر فعال
     </Badge>
 
@@ -36,8 +42,8 @@ const emit = defineEmits<{
       <div
         class="p-4 xs:p-5 w-max mx-auto rounded-2xl xs:rounded-3xl bg-brand-primary-50 mb-4 -mt-14 xs:-mt-16 transition-colors duration-300 border-2"
       >
-        <Icon
-          :icon="props.icon"
+        <component
+          :is="props.icon"
           class="size-12 xs:size-15 text-primary transition-all duration-300"
           :class="{
             'group-hover:rotate-12 group-hover:scale-110': props.isActive,
@@ -65,7 +71,7 @@ const emit = defineEmits<{
         :disabled="!props.isActive"
       >
         شروع درخواست
-        <Icon icon="mdi:arrow-left" class="size-5 mr-2" />
+        <IconMdiArrowLeft class="size-5 mr-2" />
       </Button>
     </CardFooter>
   </Card>

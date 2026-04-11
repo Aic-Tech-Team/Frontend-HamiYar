@@ -9,8 +9,16 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Icon } from "@iconify/vue";
 import { siteConfig } from "@/config";
+
+import IconPhTelegramLogoLight from "~icons/ph/telegram-logo-light";
+import IconSolarLetterOutline from "~icons/solar/letter-outline";
+import IconSolarMapPointOutline from "~icons/solar/map-point-outline";
+import IconIcBaselineTelegram from "~icons/ic/baseline-telegram";
+import IconMageLinkedin from "~icons/mage/linkedin";
+import IconRiInstagramFill from "~icons/ri/instagram-fill";
+import IconSolarRefreshCircleOutline from "~icons/solar/refresh-circle-outline";
+import IconSolarPlain2Outline from "~icons/solar/plain-2-outline";
 
 // Validation Schema
 const supportSchema = z.object({
@@ -79,19 +87,19 @@ const onSubmit = handleSubmit(async (values) => {
 // Contact info data
 const contactInfo = [
   {
-    icon: "ph:telegram-logo-light",
+    icon: IconPhTelegramLogoLight,
     title: "تلگرام پشتیبانی",
     value: siteConfig.aic.contact.telegram.username,
     action: siteConfig.aic.contact.telegram.url,
   },
   {
-    icon: "solar:letter-outline",
+    icon: IconSolarLetterOutline,
     title: "ایمیل پشتیبانی",
     value: siteConfig.aic.contact.email.address,
     action: siteConfig.aic.contact.email.mailto,
   },
   {
-    icon: "solar:map-point-outline",
+    icon: IconSolarMapPointOutline,
     title: "آدرس دفتر",
     value: siteConfig.aic.contact.address.text,
     action: siteConfig.aic.contact.address.url,
@@ -123,7 +131,7 @@ const contactInfo = [
           <div class="relative z-10 space-y-8 mt-10">
             <div v-for="(item, index) in contactInfo" :key="index" class="flex items-start gap-4">
               <div class="p-3 bg-white/15 rounded-xl backdrop-blur-sm shrink-0">
-                <Icon :icon="item.icon" class="text-2xl text-white" />
+                <component :is="item.icon" class="text-2xl text-white" />
               </div>
               <div class="flex flex-col gap-1">
                 <span class="text-sm font-medium text-white/70">{{ item.title }}</span>
@@ -139,17 +147,17 @@ const contactInfo = [
             <!-- Telegram -->
             <a :href="siteConfig.aic.social.telegram.url" target="_blank" rel="noopener noreferrer"
               class="p-2 bg-white/15 rounded-full hover:bg-white/20 transition-all">
-              <Icon icon="ic:baseline-telegram" class="text-2xl" />
+              <IconIcBaselineTelegram class="text-2xl" />
             </a>
             <!-- LinkedIn -->
             <a :href="siteConfig.aic.social.linkedin.url" target="_blank" rel="noopener noreferrer"
               class="p-2 bg-white/15 rounded-full hover:bg-white/20 transition-all">
-              <Icon icon="mage:linkedin" class="text-2xl" />
+              <IconMageLinkedin class="text-2xl" />
             </a>
             <!-- Instagram -->
             <a :href="siteConfig.aic.social.instagram.url" target="_blank" rel="noopener noreferrer"
               class="p-2 bg-white/15 rounded-full hover:bg-white/20 transition-all">
-              <Icon icon="ri:instagram-fill" class="text-2xl" />
+              <IconRiInstagramFill class="text-2xl" />
             </a>
           </div>
         </section>
@@ -221,8 +229,8 @@ const contactInfo = [
             <div class="flex justify-end pt-4 mt-auto">
               <Button type="submit" size="xl" :disabled="isSubmitting">
                 <span>ارسال پیام</span>
-                <Icon v-if="isSubmitting" icon="solar:refresh-circle-outline" class="text-xl animate-spin" />
-                <Icon v-else icon="solar:plain-2-outline" class="text-xl" />
+                <IconSolarRefreshCircleOutline v-if="isSubmitting" class="text-xl animate-spin" />
+                <IconSolarPlain2Outline v-else class="text-xl" />
               </Button>
             </div>
           </form>

@@ -5,13 +5,14 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import FormViewLayout from "@/components/FormViewLayout.vue";
 import { getInputSize } from "@/utils/formUtils";
-import { Icon } from "@iconify/vue";
 import { useEducationFormStore } from "@/stores/education/useEducationFormStore";
 import { useGlobalLoadingStore } from "@/stores/useGlobalLoadingStore";
 import { useEducationApi } from "@/composables/api/useEducationApi";
 import { useStudentStore } from "@/stores/student/useStudentStore";
 import { useRequestsFormSubmission } from "@/composables/useRequestsFormSubmission";
 import { useDate } from "@/composables/useDate";
+
+import IconPersonRounded from "~icons/material-symbols:person-rounded";
 
 const route = useRoute();
 const router = useRouter();
@@ -185,12 +186,7 @@ const isInputDisabled = computed(() => isSubmitted.value || !isEditMode.value);
             class="border w-[30mm] h-[40mm] border-neutral-400 p-1 bg-white grayscale flex-center"
           >
             <div class="w-full h-full bg-transparent border border-neutral-300 flex-center">
-              <Icon
-                icon="material-symbols:person-rounded"
-                class="text-neutral-600"
-                width="60"
-                height="60"
-              />
+              <IconPersonRounded class="text-neutral-600" width="60" height="60" />
             </div>
           </figure>
         </div>

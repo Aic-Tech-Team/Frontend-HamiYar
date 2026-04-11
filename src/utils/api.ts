@@ -55,8 +55,7 @@ async function doRefreshToken(failedRequest: AxiosError) {
     if (axios.isAxiosError(error)) {
       const status = error.response?.status;
 
-      // Only logout if the refresh token is explicitly rejected (expired, invalid, etc.)
-      if (status === 401 || status === 403 || status === 400 || status === 404) {
+      if (status && status >= 400 && status < 500) {
         await logoutAsync();
       }
     }

@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { storeToRefs } from "pinia";
-import { Icon } from "@iconify/vue";
 import { useGlobalLoadingStore } from "@/stores/useGlobalLoadingStore";
+
+import IconGgSpinner from "~icons/gg/spinner";
 
 const globalLoadingStore = useGlobalLoadingStore();
 const { isLoading } = storeToRefs(globalLoadingStore);
@@ -27,7 +28,7 @@ const { isLoading } = storeToRefs(globalLoadingStore);
         <div
           class="flex flex-col items-center gap-4 rounded-2xl bg-background/95 px-8 py-6 shadow-lg border border-border"
         >
-          <Icon icon="gg:spinner" class="size-12 text-brand-primary-600 animate-spin" aria-hidden="true" />
+          <IconGgSpinner class="size-12 text-brand-primary-600 animate-spin" aria-hidden="true" />
           <p class="text-sm font-medium text-foreground">در حال بارگذاری...</p>
         </div>
       </div>
