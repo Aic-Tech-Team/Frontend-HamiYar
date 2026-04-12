@@ -99,6 +99,7 @@ async function handleServiceRequest(identifier: UserIdentifier): Promise<void> {
           :icon="IconSolarCaseOutline"
           title="نامه کارآموزی"
           description="صدور نامه کارآموزی با وارد کردن شماره دانشجویی"
+          :is-active="false" 
           @start-service="openServiceModal('internship')"
         />
       </div>

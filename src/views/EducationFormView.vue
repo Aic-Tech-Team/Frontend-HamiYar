@@ -12,7 +12,7 @@ import { useStudentStore } from "@/stores/student/useStudentStore";
 import { useRequestsFormSubmission } from "@/composables/useRequestsFormSubmission";
 import { useDate } from "@/composables/useDate";
 
-import IconPersonRounded from "~icons/material-symbols:person-rounded";
+import IconSolarUserRoundedBold from "~icons/solar/user-rounded-bold";
 
 const route = useRoute();
 const router = useRouter();
@@ -186,7 +186,7 @@ const isInputDisabled = computed(() => isSubmitted.value || !isEditMode.value);
             class="border w-[30mm] h-[40mm] border-neutral-400 p-1 bg-white grayscale flex-center"
           >
             <div class="w-full h-full bg-transparent border border-neutral-300 flex-center">
-              <IconPersonRounded class="text-neutral-600" width="60" height="60" />
+              <IconSolarUserRoundedBold class="text-neutral-600" width="60" height="60" />
             </div>
           </figure>
         </div>
@@ -196,7 +196,7 @@ const isInputDisabled = computed(() => isSubmitted.value || !isEditMode.value);
     <template #body>
       <section class="text-xs font-medium px-2">
         <p class="font-bold text-sm mb-4">گواهی می شود :</p>
-        <section class="leading-8">
+        <section class="leading-10">
           آقای / خانم <span class="display-value">{{ formData.student.fullName }}</span> فرزند
           <span class="display-value">{{ formData.student.fatherName }}</span> شماره شناسنامه
           <span class="display-value">{{ formData.student.idNumber }}</span> صادره از
@@ -210,7 +210,7 @@ const isInputDisabled = computed(() => isSubmitted.value || !isEditMode.value);
           در این واحد دانشگاهی می باشد.
         </section>
 
-        <section :class="!isSubmitted ? 'leading-12' : 'leading-8'">
+        <section :class="!isSubmitted ? 'leading-12' : 'leading-10'">
           نامبرده در نیمسال
           <Input
             v-if="!isPrintView"
@@ -244,7 +244,7 @@ const isInputDisabled = computed(() => isSubmitted.value || !isEditMode.value);
           ثبت نام نموده و اشتغال به تحصیل دارد .
         </section>
 
-        <section :class="!isSubmitted ? 'leading-12' : 'leading-8'">
+        <section :class="!isSubmitted ? 'leading-12' : 'leading-10'">
           این گواهی جهت ارائه به
           <Input
             v-if="!isPrintView"
@@ -261,7 +261,7 @@ const isInputDisabled = computed(() => isSubmitted.value || !isEditMode.value);
           صادر شده و ارزش دیگری ندارد.
         </section>
 
-        <section v-if="isPrintView" class="leading-8">
+        <section v-if="isPrintView" class="leading-10">
           اعتبار این گواهی تا تاریخ
           <span class="display-value">{{
             formatDateString(formData.certificate.validityDate) || formData.certificate.validityDate

@@ -22,13 +22,13 @@ export const useAuthApi = () => {
 
   async function logoutAsync(shouldNavigate = true): Promise<void> {
     try {
-      console.log(`logout - complete this later: ${logoutUrl}`);
-      await $api.delete(logoutUrl);
-    } catch {
-      // Clear tokens regardless of API result
-    } finally {
+      const refreshToken = authStore.refreshToken;
       authStore.clearTokens();
       if (shouldNavigate) router.push("/login");
+
+      await $api.post(logoutUrl, { refresh: refreshToken });
+    } catch (error) {
+      console.error("Error during logout:", error);
     }
   }
 

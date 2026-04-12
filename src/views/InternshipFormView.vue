@@ -206,7 +206,7 @@ const disciplinaryCaseValue = computed({
       </section>
 
       <section class="text-xs font-medium px-2">
-        <div :class="!isSubmitted ? 'leading-12' : 'leading-8'">
+        <div :class="!isSubmitted ? 'leading-12' : 'leading-10'">
           احتراما بدینوسیله
           <span class="display-value">{{ formData.student.fullName }}</span>
           دانشجوی رشته <span class="display-value">{{ formData.education.field }}</span> مقطع
@@ -244,7 +244,7 @@ const disciplinaryCaseValue = computed({
           ساعت معرفی می نماید.
         </div>
 
-        <div class="leading-8">
+        <div class="leading-10">
           استاد درس کارآموزی ایشان
           <Input
             v-if="!isPrintView"
@@ -261,7 +261,7 @@ const disciplinaryCaseValue = computed({
           عضو هیئت علمی این واحد دانشگاهی می باشد.
         </div>
 
-        <section class="leading-8">
+        <section class="leading-10">
           خواهشمند است دستور فرمائید با تعیین سرپرست کارآموزی وی در آن واحد اقدامات مقتضی بعمل آمده
           و در پایان دوره فرم پیوست را تکمیل و در پاکت در بسته به این واحد دانشگاهی ارسال فرمایند.
           در ضمن خاطر نشان می سازد که دانشجوی معرفی شده موظف به اجرای کلیه مقررات انضباطی آن واحد می

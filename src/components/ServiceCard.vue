@@ -27,7 +27,7 @@ const emit = defineEmits<{
     class="group rounded-2xl xs:rounded-3xl transition-all duration-300 border-2 w-full min-w-0 relative"
     :class="{
       'hover:shadow-md hover:-translate-y-1': props.isActive,
-      'opacity-60 pointer-events-none': !props.isActive,
+      'opacity-70 pointer-events-none': !props.isActive,
     }"
   >
     <Badge
@@ -70,8 +70,11 @@ const emit = defineEmits<{
         variant="subtle"
         :disabled="!props.isActive"
       >
-        شروع درخواست
-        <IconMdiArrowLeft class="size-5 mr-2" />
+        <template v-if="props.isActive">
+          شروع درخواست
+          <IconMdiArrowLeft class="size-5 mr-2" />
+        </template>
+        <template v-else> به زودی... </template>
       </Button>
     </CardFooter>
   </Card>
