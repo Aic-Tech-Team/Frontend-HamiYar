@@ -71,12 +71,6 @@ createAuthRefreshInterceptor(axiosInstance, doRefreshToken);
 axiosInstance.interceptors.response.use(
   (response) => response,
   async (error) => {
-    const { logoutAsync } = useAuthApi();
-
-    if (error.response?.status === 401) {
-      await logoutAsync();
-    }
-
     // Global redirect for any 5xx server error
     if (error.response?.status >= 500 && error.response?.status < 600) {
       router.replace({ name: "Error", params: { code: "500" } });
