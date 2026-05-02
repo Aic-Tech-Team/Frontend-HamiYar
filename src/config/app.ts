@@ -1,4 +1,4 @@
-export interface SiteConfig {
+interface AppConfig {
   app: {
     name: string;
   };
@@ -47,7 +47,7 @@ export interface SiteConfig {
   };
 }
 
-export const siteConfig: SiteConfig = {
+export const appConfig: AppConfig = {
   app: {
     name: "سامانه حامی یار",
   },

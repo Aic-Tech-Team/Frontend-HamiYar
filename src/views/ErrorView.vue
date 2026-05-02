@@ -18,7 +18,7 @@
 <script setup lang="ts">
 import { computed, watchEffect } from "vue";
 import { useRoute } from "vue-router";
-import { siteConfig } from "@/config";
+import { appConfig } from "@/config";
 import { useAuthJwtStore } from "@/stores/account/useAuthJwtStore";
 import { Button } from "@/components/ui/button";
 
@@ -58,6 +58,6 @@ const error = computed(() => {
 });
 
 watchEffect(() => {
-  document.title = `${error.value.title} | ${siteConfig.app.name}`;
+  document.title = `${error.value.title} | ${appConfig.app.name}`;
 });
 </script>

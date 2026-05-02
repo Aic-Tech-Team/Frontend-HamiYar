@@ -1,9 +1,9 @@
-export type ApiConfig = {
+interface ApiConfig {
   apiBaseUrl: string;
   apiPrefix: string;
   apiVersion: string;
   baseUrl: string;
-};
+}
 
 const getApiConfig = (): ApiConfig => {
   const { VITE_API_BASE_URL } = import.meta.env as {

@@ -1,11 +1,11 @@
 import { createRouter, createWebHistory } from "vue-router";
 import "@/types/router";
-import { siteConfig } from "@/config";
+import { appConfig } from "@/config";
 import { useAuthJwtStore } from "@/stores/account/useAuthJwtStore";
 import HomeView from "@/views/HomeView.vue";
 import LoginView from "@/views/LoginView.vue";
 
-const appName = siteConfig.app.name;
+const appName = appConfig.app.name;
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),

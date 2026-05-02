@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import LoginForm from "@/components/LoginForm.vue";
-import { siteConfig } from "@/config";
+import { appConfig } from "@/config";
 </script>
 
 <template>
@@ -15,7 +15,7 @@ import { siteConfig } from "@/config";
         <h1 class="text-lg xs:text-xl font-bold">ورود به حساب کاربری</h1>
         <p class="text-muted-foreground text-xs xs:text-sm leading-relaxed wrap-break-word">
           به سامانه یکپارچه خدماتی حامی یار
-          {{ siteConfig.university.name }}
+          {{ appConfig.university.name }}
           خوش آمدید.
         </p>
       </div>

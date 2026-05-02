@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { RouterLink, useRoute } from "vue-router";
-import { siteConfig } from "@/config";
+import { appConfig } from "@/config";
 import IconHome2Outline from "~icons/solar/home-2-outline";
 import IconWidget5Outline from "~icons/solar/widget-5-outline";
 import IconHeadphonesRoundSoundOutline from "~icons/solar/headphones-round-sound-outline";
@@ -9,7 +9,7 @@ import IconPhoneCallingOutline from "~icons/solar/phone-calling-outline";
 import IconLetterOutline from "~icons/solar/letter-outline";
 
 const route = useRoute();
-const appName = siteConfig.app.name;
+const appName = appConfig.app.name;
 
 function handleHashClick(to: string, event: Event) {
   if (!to.includes("#")) return;
@@ -44,7 +44,7 @@ function handleHashClick(to: string, event: Event) {
                 <section class="min-w-0">
                   <h3 class="text-base xs:text-lg font-bold text-foreground">{{ appName }}</h3>
                   <p class="text-xs text-muted-foreground mt-0.5 wrap-break-word">
-                    {{ siteConfig.university.name }}
+                    {{ appConfig.university.name }}
                   </p>
                 </section>
               </div>
@@ -108,25 +108,25 @@ function handleHashClick(to: string, event: Event) {
                   rel="noopener noreferrer"
                   class="text-sm text-muted-foreground hover:text-brand-primary-600 transition-colors duration-200"
                 >
-                  {{ siteConfig.university.name }}
+                  {{ appConfig.university.name }}
                 </a>
               </li>
               <li class="flex items-center gap-3">
                 <IconPhoneCallingOutline class="size-5 text-brand-primary-600 shrink-0" />
                 <a
-                  :href="`tel:+${siteConfig.contact.phone.replace(/-/g, '')}`"
+                  :href="`tel:+${appConfig.contact.phone.replace(/-/g, '')}`"
                   class="text-sm text-muted-foreground hover:text-brand-primary-600 transition-colors duration-200"
                 >
-                  {{ siteConfig.contact.phone }}
+                  {{ appConfig.contact.phone }}
                 </a>
               </li>
               <li class="flex items-center gap-3">
                 <IconLetterOutline class="size-5 text-brand-primary-600 shrink-0" />
                 <a
-                  :href="`mailto:${siteConfig.contact.email}`"
+                  :href="`mailto:${appConfig.contact.email}`"
                   class="text-sm text-muted-foreground hover:text-brand-primary-600 transition-colors duration-200"
                 >
-                  {{ siteConfig.contact.email }}
+                  {{ appConfig.contact.email }}
                 </a>
               </li>
             </ul>
@@ -142,16 +142,16 @@ function handleHashClick(to: string, event: Event) {
             >
               این سامانه توسط
               <span class="text-foreground font-semibold"
-                >هسته فناور هوش پژوهان با همکاری دپارتمان فنی {{ siteConfig.aic.techTeam }}</span
+                >هسته فناور هوش پژوهان با همکاری دپارتمان فنی {{ appConfig.aic.techTeam }}</span
               >
               از
               <a
-                :href="siteConfig.aic.website"
+                :href="appConfig.aic.website"
                 target="_blank"
                 rel="noopener noreferrer"
                 class="text-brand-primary-500 hover:text-brand-primary-700 font-bold transition-colors duration-200 underline-offset-4 underline"
               >
-                {{ siteConfig.aic.name }}
+                {{ appConfig.aic.name }}
               </a>
               توسعه یافته است.
             </p>
@@ -171,12 +171,12 @@ function handleHashClick(to: string, event: Event) {
             <span class="inline-block animate-heartbeat text-brand-primary-600 text-base">💜</span>
             <span>توسط</span>
             <a
-              :href="siteConfig.aic.website"
+              :href="appConfig.aic.website"
               target="_blank"
               rel="noopener noreferrer"
               class="text-brand-primary-600 ms-0.5 hover:text-brand-primary-700 font-bold transition-colors duration-200"
             >
-              {{ siteConfig.aic.nickname }}
+              {{ appConfig.aic.nickname }}
             </a>
           </div>
 

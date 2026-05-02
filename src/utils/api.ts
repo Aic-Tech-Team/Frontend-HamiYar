@@ -4,7 +4,6 @@ import createAuthRefreshInterceptor from "axios-auth-refresh";
 
 import router from "@/router";
 import { useApiConfig } from "@/composables/api/useApiConfig";
-import { useAuthApi } from "@/composables/api/useAuthApi";
 import { useAuthJwtStore } from "@/stores/account/useAuthJwtStore.ts";
 
 import type { AxiosError } from "axios";
@@ -26,7 +25,6 @@ axiosInstance.interceptors.request.use((config) => {
 });
 
 async function doRefreshToken(failedRequest: AxiosError) {
-  const { logoutAsync } = useAuthApi();
   const { apiEndpoints } = useApiConfig();
   const authStore = useAuthJwtStore();
 
@@ -56,7 +54,12 @@ async function doRefreshToken(failedRequest: AxiosError) {
       const status = error.response?.status;
 
       if (status && status >= 400 && status < 500) {
-        await logoutAsync();
+        const { useUserRoleStore } = await import("@/stores/account/useUserRoleStore");
+
+        authStore.clearTokens();
+        useUserRoleStore().clearUserRole();
+
+        router.push("/login");
       }
     }
 

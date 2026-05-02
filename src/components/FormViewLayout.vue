@@ -3,7 +3,7 @@ import { computed } from "vue";
 import ConfirmDialog from "@/components/ConfirmDialog.vue";
 import { Button } from "@/components/ui/button";
 import { useRoute } from "vue-router";
-import { siteConfig } from "@/config";
+import { appConfig } from "@/config";
 
 import IconIconParkSolidBack from "~icons/icon-park-solid/back";
 import IconMynauiSaveSolid from "~icons/mynaui/save-solid";
@@ -37,7 +37,7 @@ const props = withDefaults(defineProps<Props>(), {
   showEditButton: true,
 });
 
-const appName = siteConfig.app.name;
+const appName = appConfig.app.name;
 
 const emit = defineEmits<{
   submit: [];

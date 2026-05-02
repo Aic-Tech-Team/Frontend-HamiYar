@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Button } from "@/components/ui/button";
 import { useRoute } from "vue-router";
-import { siteConfig } from "@/config";
+import { appConfig } from "@/config";
 
 import { useAuthApi } from "@/composables/api/useAuthApi";
 
@@ -246,11 +246,11 @@ async function logout() {
             <h1
               class="text-3xl xs:text-4xl sm:text-5xl font-bold text-brand-primary-900 wrap-break-word"
             >
-              {{ siteConfig.app.name }}
+              {{ appConfig.app.name }}
             </h1>
           </section>
           <p class="text-brand-primary-800 max-w-2xl mx-auto text-base sm:text-lg px-1">
-            به سامانه یکپارچه خدماتی حامی یار {{ siteConfig.university.name }}
+            به سامانه یکپارچه خدماتی حامی یار {{ appConfig.university.name }}
             خوش آمدید. از طریق این سامانه میتوانید به خدمات اداری حامی دسترسی داشته باشید.
           </p>
         </section>
