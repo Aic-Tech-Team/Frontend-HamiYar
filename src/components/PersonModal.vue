@@ -94,15 +94,25 @@ function onSubmit(e: Event) {
       <form :id="formId" @submit="onSubmit">
         <FieldGroup>
           <Field>
-            <Input v-model="identifier" id="identifier" type="text" numeric
+            <Input
+              v-model="identifier"
+              id="identifier"
+              type="text"
+              numeric
               :placeholder="identifierType === 'national' ? 'کد ملی (10 رقمی)' : 'شماره دانشجویی'"
-              :maxlength="identifierType === 'national' ? '10' : ''" />
+              :maxlength="identifierType === 'national' ? '10' : ''"
+            />
           </Field>
         </FieldGroup>
       </form>
 
       <DialogFooter class="flex-row-reverse">
-        <Button type="submit" :form="formId" :disabled="isSubmitDisabled" :aria-busy="props.isSubmitting">
+        <Button
+          type="submit"
+          :form="formId"
+          :disabled="isSubmitDisabled"
+          :aria-busy="props.isSubmitting"
+        >
           {{ props.isSubmitting ? "درحال بررسی" : "بررسی" }}
           <IconGgSpinner v-if="props.isSubmitting" class="size-5 animate-spin" />
         </Button>

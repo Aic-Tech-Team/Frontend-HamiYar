@@ -39,7 +39,7 @@ function handleHashClick(to: string, event: Event) {
                 <img
                   src="@/assets/images/logo.svg"
                   :alt="appName"
-                  class="object-contain w-14 xs:w-[70px] shrink-0"
+                  class="object-contain w-14 xs:w-17.5 shrink-0"
                 />
                 <section class="min-w-0">
                   <h3 class="text-base xs:text-lg font-bold text-foreground">{{ appName }}</h3>

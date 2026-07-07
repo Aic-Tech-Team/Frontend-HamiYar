@@ -61,9 +61,10 @@ async function handleServiceRequest(identifier: UserIdentifier): Promise<void> {
     console.error("Error checking student:", error);
 
     // Use the pre-extracted message from our interceptor
-    const errorMessage = error?.response?.status === 404
-      ? "کاربری با این مشخصات یافت نشد"
-      : error.extractedMessage || "خطا در ارتباط با سرور";
+    const errorMessage =
+      error?.response?.status === 404
+        ? "کاربری با این مشخصات یافت نشد"
+        : error.extractedMessage || "خطا در ارتباط با سرور";
 
     toast.error("خطا!", {
       description: errorMessage,
@@ -99,7 +100,7 @@ async function handleServiceRequest(identifier: UserIdentifier): Promise<void> {
           :icon="IconSolarCaseOutline"
           title="نامه کارآموزی"
           description="صدور نامه کارآموزی با وارد کردن شماره دانشجویی"
-          :is-active="false" 
+          :is-active="false"
           @start-service="openServiceModal('internship')"
         />
       </div>
