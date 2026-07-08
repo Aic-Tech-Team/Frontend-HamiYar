@@ -29,4 +29,5 @@ const props = withDefaults(defineProps<Props>(), {
     :cta-label="props.ctaLabel"
     :cta-to="props.ctaTo"
   />
+  
 </template>
