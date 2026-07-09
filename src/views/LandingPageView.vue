@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { reactive } from "vue";
 import HeaderPublic from "@/layouts/HeaderPublic.vue";
+import LandingHero from "@/components/landing/LandingHero.vue";
 
 interface NavigationItem {
   label: string;
@@ -16,9 +17,13 @@ const navigationItems = reactive<NavigationItem[]>([
 </script>
 
 <template>
-  <HeaderPublic
-    :navigation-items="navigationItems"
-    cta-label="شروع کنید"
-    cta-to="/login"
+  <HeaderPublic 
+  :navigation-items="navigationItems" 
+  cta-label="شروع کنید" 
+  cta-to="/login" 
   />
+
+  <section class="pt-16 sm:pt-20"></section>
+
+  <LandingHero />
 </template>
