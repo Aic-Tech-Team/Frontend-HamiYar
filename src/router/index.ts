@@ -46,7 +46,7 @@ const router = createRouter({
       name: "Landing",
       component: () => import("@/views/LandingPageView.vue"),
       meta: {
-        title: `خوش آمدین | ${appName}`,
+        title: `صفحه اصلی | ${appName}`,
         mode: "public",
       },
     },
