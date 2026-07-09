@@ -17,13 +17,13 @@ const navigationItems = reactive<NavigationItem[]>([
 </script>
 
 <template>
-  <HeaderPublic 
-  :navigation-items="navigationItems" 
-  cta-label="شروع کنید" 
-  cta-to="/login" 
-  />
+  <div>
+    <HeaderPublic 
+    :navigation-items="navigationItems" 
+    cta-label="شروع کنید" 
+    cta-to="/login" 
+    />
 
-  <section class="pt-16 sm:pt-20"></section>
-
-  <LandingHero />
+    <LandingHero />
+  </div>
 </template>

@@ -10,9 +10,9 @@ import IconSolarCheckCircleBold from "~icons/solar/check-circle-bold";
 
 <template>
   <section
-    class="bg-[#FDF7FF] w-full container-padding pt-10 xs:pt-14 lg:pt-20 pb-14 lg:pb-24 overflow-x-hidden"
+    class="bg-[#FDF7FF] sm:mt-16 w-full container-padding pt-10 mt-15 xs:pt-14 lg:pt-20 pb-14 lg:pb-24 overflow-x-hidden"
   >
-    <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 items-stretch gap-10 lg:gap-16">
+    <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 items-center gap-12 lg:gap-16">
       <div
         class="flex flex-col items-center text-center lg:items-start lg:text-start gap-5 xs:gap-6"
       >
@@ -20,18 +20,18 @@ import IconSolarCheckCircleBold from "~icons/solar/check-circle-bold";
           class="inline-flex items-center gap-2 rounded-full bg-brand-primary-50 text-brand-primary-700 px-4 py-1.5 text-xs xs:text-sm font-medium"
         >
           <span class="size-1.5 rounded-full bg-emerald-500"></span>
-          سامانه اتوماسیون نامه‌های اداری دانشگاه
+          ویژه دانشجویان و دانش‌آموختگان
         </span>
 
         <h1
           class="text-[#421A8C] text-4xl xs:text-5xl md:text-6xl font-bold leading-tight xs:leading-tight max-w-xl"
         >
-          مدارک دانشگاهی دانشجویان، <span class="text-[#6425D0]">بدون صف و بدون کاغذبازی</span>
+          مدارک دانشگاهی شما، <span class="text-[#6425D0]">بدون صف و بدون کاغذبازی</span>
         </h1>
 
         <p class="text-sm xs:text-base text-muted-foreground leading-relaxed max-w-lg">
-          تنها با وارد کردن اطلاعات دانشجو، نامه‌های رسمی به‌صورت خودکار تولید و آماده چاپ خواهند
-          بود.
+          لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک
+          است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است.
         </p>
 
         <div class="flex flex-col xs:flex-row items-center gap-3 xs:gap-4 w-full xs:w-auto pt-1">
@@ -62,18 +62,18 @@ import IconSolarCheckCircleBold from "~icons/solar/check-circle-bold";
         </ul>
       </div>
 
-      <div class="w-full flex justify-center lg:justify-center" aria-hidden="true">
+      <div class="w-full flex justify-center lg:justify-end pt-4 lg:pt-0" aria-hidden="true">
         <div
-          class="w-full max-w-sm xs:max-w-md h-full flex flex-col rounded-2xl border border-border bg-white shadow-xl p-4 xs:p-5"
+          class="floating-card w-full sm:w-[80%] lg:max-w-md aspect-square lg:aspect-[4/5] flex flex-col rounded-2xl border border-border bg-white p-5 xs:p-7"
         >
-          <div class="flex items-center justify-between mb-4">
+          <div class="flex items-center justify-between mb-5">
             <div class="flex items-center gap-1.5">
-              <span class="size-2 rounded-full bg-red-400"></span>
-              <span class="size-2 rounded-full bg-yellow-400"></span>
-              <span class="size-2 rounded-full bg-green-400"></span>
+              <span class="size-3 rounded-full bg-red-400"></span>
+              <span class="size-3 rounded-full bg-yellow-400"></span>
+              <span class="size-3 rounded-full bg-green-400"></span>
             </div>
 
-            <div class="flex items-center gap-2 rounded-full border border-border pe-1 ps-2.5 py-1">
+            <div class="flex items-center gap-2 rounded-full border border-border pe-1 ps-3 py-1.5">
               <span class="text-xs font-medium text-foreground">دانشگاه آزاد اسلامی</span>
               <div
                 class="size-6 rounded-md bg-brand-primary-100 flex items-center justify-center shrink-0"
@@ -83,35 +83,61 @@ import IconSolarCheckCircleBold from "~icons/solar/check-circle-bold";
             </div>
           </div>
 
-          <hr class="border-border mb-4" />
+          <hr class="border-border mb-5" />
 
-          <div class="flex items-center gap-3 mb-4">
+          <div class="flex items-center gap-4 mb-6">
             <div
-              class="size-10 rounded-lg bg-brand-primary-100 flex items-center justify-center shrink-0"
+              class="size-12 rounded-xl bg-brand-primary-100 flex items-center justify-center shrink-0"
             >
-              <IconSolarCardOutline class="size-5 text-brand-primary-600" />
+              <IconSolarCardOutline class="size-6 text-brand-primary-600" />
             </div>
             <div class="text-start min-w-0">
-              <p class="text-sm font-semibold text-foreground truncate">درخواست گواهی موقت</p>
-              <p class="text-xs text-muted-foreground truncate">
+              <p class="text-base font-semibold text-foreground truncate">درخواست گواهی موقت</p>
+              <p class="text-sm text-muted-foreground truncate mt-0.5">
                 علی مرادی - شماره دانشجویی 123456789
               </p>
             </div>
           </div>
 
-          <div class="space-y-2 mb-4">
-            <div class="h-2.5 rounded-full bg-muted w-full"></div>
-            <div class="h-2.5 rounded-full bg-muted w-full"></div>
+          <div class="space-y-3 mb-8">
+            <div class="h-3 rounded-full bg-muted w-full"></div>
+            <div class="h-3 rounded-full bg-muted w-4/5"></div>
           </div>
 
           <div
-            class="mt-auto flex items-center justify-between rounded-lg border border-border bg-brand-primary-50 px-3 py-2.5"
+            class="mt-auto flex items-center justify-between rounded-xl border border-brand-primary-100 bg-brand-primary-50 px-4 py-3"
           >
-            <span class="text-xs font-medium text-brand-primary-700">در حال تأیید نهایی...</span>
-            <IconSolarMenuDotsBold class="size-4 text-brand-primary-400 shrink-0" />
+            <span class="text-sm font-bold text-brand-primary-700">در حال تأیید نهایی...</span>
+            <IconSolarMenuDotsBold class="size-5 text-brand-primary-400 shrink-0" />
           </div>
         </div>
       </div>
     </div>
   </section>
 </template>
+
+<style scoped>
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-15px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+.floating-card {
+  animation: float 6s ease-in-out infinite;
+
+  box-shadow: 0 20px 40px -10px rgba(100, 37, 208, 0.15);
+
+  transition: all 0.3s ease;
+}
+
+.floating-card:hover {
+  box-shadow: 0 30px 50px -15px rgba(100, 37, 208, 0.25);
+}
+</style>
