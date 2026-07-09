@@ -42,6 +42,15 @@ const router = createRouter({
 
     // Public routes
     {
+      path: "/",
+      name: "Landing",
+      component: () => import("@/views/LandingPageView.vue"),
+      meta: {
+        title: `صفحه اصلی | ${appName}`,
+        mode: "public",
+      },
+    },
+    {
       path: "/login",
       name: "Login",
       component: LoginView,
