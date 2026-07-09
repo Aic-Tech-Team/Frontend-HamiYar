@@ -18,13 +18,7 @@ interface Props {
   ctaTo?: string;
 }
 
-const props = withDefaults(defineProps<Props>(), {
-  navigationItems: () => [
-    { label: "خدمات", to: "/#services" },
-    { label: "فرآیند کار", to: "/#process" },
-    { label: "پشتیبانی", to: "/#support" },
-    { label: "درباره ما", to: "/#about" },
-  ],
+withDefaults(defineProps<Props>(), {
   ctaLabel: "شروع کنید",
   ctaTo: "/login",
 });
@@ -107,7 +101,7 @@ onUnmounted(() => {
 
       <ul class="hidden md:flex items-center gap-6 lg:gap-8">
         <li
-          v-for="item in props.navigationItems"
+          v-for="item in navigationItems"
           :key="item.label"
           class="text-sm lg:text-base font-medium text-brand-primary-800 hover:text-brand-primary-600 transition-colors"
         >
@@ -122,14 +116,14 @@ onUnmounted(() => {
 
       <div class="hidden md:flex items-center shrink-0">
         <slot name="actions">
-          <RouterLink :to="props.ctaTo">
+          <RouterLink :to="ctaTo">
             <Button
               variant="default"
               class="sm:px-4! transition-all duration-300"
               :class="isScrolled ? 'h-8! sm:h-9!' : 'h-9! sm:h-11!'"
               @click="handleCtaClick"
             >
-              {{ props.ctaLabel }}
+              {{ ctaLabel }}
             </Button>
           </RouterLink>
         </slot>
@@ -168,7 +162,7 @@ onUnmounted(() => {
         class="md:hidden px-4 pb-4 border-t border-brand-primary-100 bg-white/95 backdrop-blur-sm"
       >
         <ul class="flex flex-col gap-3 pt-4">
-          <li v-for="item in props.navigationItems" :key="item.label">
+          <li v-for="item in navigationItems" :key="item.label">
             <RouterLink
               :to="item.to"
               class="block text-brand-primary-800 font-medium py-1"
@@ -180,9 +174,9 @@ onUnmounted(() => {
         </ul>
         <div class="mt-4">
           <slot name="actions">
-            <RouterLink :to="props.ctaTo" class="block" @click="closeMobileMenu">
+            <RouterLink :to="ctaTo" class="block" @click="closeMobileMenu">
               <Button variant="default" size="sm" class="w-full" @click="handleCtaClick">
-                {{ props.ctaLabel }}
+                {{ ctaLabel }}
               </Button>
             </RouterLink>
           </slot>
