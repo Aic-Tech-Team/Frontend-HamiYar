@@ -10,7 +10,7 @@ import IconSolarCheckCircleBold from "~icons/solar/check-circle-bold";
 
 <template>
   <section
-    class="bg-[#FDF7FF] sm:mt-16 w-full container-padding pt-10 mt-15 xs:pt-14 lg:pt-20 pb-14 lg:pb-24 overflow-x-hidden"
+    class="bg-brand-primary-50/25 sm:mt-16 w-full container-padding pt-10 mt-15 xs:pt-14 lg:pt-20 pb-14 lg:pb-24 overflow-x-hidden"
   >
     <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 items-center gap-12 lg:gap-16">
       <div
@@ -24,9 +24,9 @@ import IconSolarCheckCircleBold from "~icons/solar/check-circle-bold";
         </span>
 
         <h1
-          class="text-[#421A8C] text-4xl xs:text-5xl md:text-6xl font-bold leading-tight xs:leading-tight max-w-xl"
+          class="text-primary text-4xl xs:text-5xl md:text-6xl font-bold leading-tight xs:leading-tight max-w-xl"
         >
-          مدارک دانشگاهی شما، <span class="text-[#6425D0]">بدون صف و بدون کاغذبازی</span>
+          مدارک دانشگاهی شما، <span class="text-brand-primary-500">بدون صف و بدون کاغذبازی</span>
         </h1>
 
         <p class="text-sm xs:text-base text-muted-foreground leading-relaxed max-w-lg">
