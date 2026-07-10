@@ -35,7 +35,7 @@ const whyUsItems = [
 <template>
   <section id="about" class="w-full bg-brand-primary-50 container-padding py-16 lg:py-24">
     <div class="max-w-3xl mx-auto text-center mb-14">
-      <h2 class="text-3xl md:text-4xl font-bold text-brand-primary-700 mb-5">چرا این سامانه؟</h2>
+      <h2 class="text-3xl md:text-4xl font-bold text-brand-primary-700 mb-5">چرا سامانه حامیار؟</h2>
  
       <p class="text-sm md:text-base text-muted-foreground leading-8 max-w-2xl mx-auto">
         این سامانه با هدف کاهش زمان صدور نامه‌های اداری، افزایش دقت و یکپارچه‌سازی فرآیندهای
