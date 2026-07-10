@@ -2,6 +2,7 @@
 import { reactive } from "vue";
 import HeaderPublic from "@/layouts/HeaderPublic.vue";
 import LandingHero from "@/components/landing/LandingHero.vue";
+import LandingWhyUs from "@/components/landing/LandingWhyUs.vue";
 
 interface NavigationItem {
   label: string;
@@ -25,5 +26,6 @@ const navigationItems = reactive<NavigationItem[]>([
     />
 
     <LandingHero />
+    <LandingWhyUs />
   </div>
 </template>
