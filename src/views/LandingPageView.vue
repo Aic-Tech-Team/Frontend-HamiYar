@@ -10,10 +10,10 @@ interface NavigationItem {
 }
 
 const navigationItems = reactive<NavigationItem[]>([
+  { label: "درباره ما", to: "/#about" },
   { label: "خدمات", to: "/#services" },
   { label: "فرآیند کار", to: "/#process" },
   { label: "پشتیبانی", to: "/#support" },
-  { label: "درباره ما", to: "/#about" },
 ]);
 </script>
 
