@@ -64,7 +64,7 @@ const router = createRouter({
 
     // Authenticated routes
     {
-      path: "/",
+      path: "/home",
       name: "Home",
       component: HomeView,
       meta: {
