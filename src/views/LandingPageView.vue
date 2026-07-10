@@ -26,6 +26,6 @@ const navigationItems = reactive<NavigationItem[]>([
     />
 
     <LandingHero />
-    <LandingWhyUs id="about"/>
+    <LandingWhyUs />
   </div>
 </template>
