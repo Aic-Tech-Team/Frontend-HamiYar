@@ -20,7 +20,7 @@ const navigationItems = reactive<NavigationItem[]>([
   { label: "پشتیبانی", to: "/#support" },
 ]);
 
-// Landing lives at "/" — these stay relative to root, unlike HomeView's "/home" versions.
+
 const footerQuickLinks = [
   { label: "صفحه اصلی", to: "/", icon: IconHome2Outline },
   { label: "خدمات", to: "/#services", icon: IconWidget5Outline },
