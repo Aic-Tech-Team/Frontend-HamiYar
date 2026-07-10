@@ -1,28 +1,38 @@
 <script setup lang="ts">
+import type { Component } from "vue";
 import { RouterLink, useRoute } from "vue-router";
 import { appConfig } from "@/config";
-import IconHome2Outline from "~icons/solar/home-2-outline";
-import IconWidget5Outline from "~icons/solar/widget-5-outline";
-import IconHeadphonesRoundSoundOutline from "~icons/solar/headphones-round-sound-outline";
 import IconMapPointOutline from "~icons/solar/map-point-outline";
 import IconPhoneCallingOutline from "~icons/solar/phone-calling-outline";
 import IconLetterOutline from "~icons/solar/letter-outline";
-
+ 
+interface QuickLink {
+  label: string;
+  to: string;
+  icon: Component;
+}
+ 
+interface Props {
+  quickLinks: QuickLink[];
+}
+ 
+defineProps<Props>();
+ 
 const route = useRoute();
 const appName = appConfig.app.name;
-
+ 
 function handleHashClick(to: string, event: Event) {
   if (!to.includes("#")) return;
-
+ 
   const [path, hash] = to.split("#");
-
+ 
   if (route.path === path && hash) {
     event.preventDefault();
     document.querySelector(`#${hash}`)?.scrollIntoView({ behavior: "smooth" });
   }
 }
 </script>
-
+ 
 <template>
   <footer
     class="w-full bg-background border-t-2 shadow-[0_-4px_20px_rgba(0,0,0,0.08)] print:hidden overflow-x-hidden"
@@ -48,51 +58,32 @@ function handleHashClick(to: string, event: Event) {
                   </p>
                 </section>
               </div>
-
+ 
               <p class="text-sm text-muted-foreground leading-relaxed wrap-break-word">
                 سامانه یکپارچه خدماتی برای دسترسی آسان به خدمات اداری و آموزشی حامی
               </p>
             </div>
           </section>
-
+ 
           <!-- Quick Links Column -->
           <section class="min-w-0">
             <div class="border-b-2 pb-2 font-semibold text-foreground mb-4 text-sm xs:text-base">
               دسترسی سریع
             </div>
             <ul class="space-y-3">
-              <li class="flex items-center gap-3">
-                <IconHome2Outline class="size-4.5 text-brand-primary-600 shrink-0" />
+              <li v-for="link in quickLinks" :key="link.label" class="flex items-center gap-3">
+                <component :is="link.icon" class="size-4.5 text-brand-primary-600 shrink-0" />
                 <RouterLink
-                  to="/"
+                  :to="link.to"
+                  @click="handleHashClick(link.to, $event)"
                   class="text-sm text-muted-foreground hover:text-brand-primary-600 transition-colors duration-200"
                 >
-                  صفحه اصلی
-                </RouterLink>
-              </li>
-              <li class="flex items-center gap-3">
-                <IconWidget5Outline class="size-4.5 text-brand-primary-600 shrink-0" />
-                <RouterLink
-                  to="/#services"
-                  @click="handleHashClick('/#services', $event)"
-                  class="text-sm text-muted-foreground hover:text-brand-primary-600 transition-colors duration-200"
-                >
-                  خدمات
-                </RouterLink>
-              </li>
-              <li class="flex items-center gap-3">
-                <IconHeadphonesRoundSoundOutline class="size-4.5 text-brand-primary-600 shrink-0" />
-                <RouterLink
-                  to="/#support"
-                  @click="handleHashClick('/#support', $event)"
-                  class="text-sm text-muted-foreground hover:text-brand-primary-600 transition-colors duration-200"
-                >
-                  پشتیبانی
+                  {{ link.label }}
                 </RouterLink>
               </li>
             </ul>
           </section>
-
+ 
           <!-- Contact/Info Column -->
           <section class="min-w-0">
             <div class="border-b-2 pb-2 font-semibold text-foreground mb-4 text-sm xs:text-base">
@@ -101,7 +92,7 @@ function handleHashClick(to: string, event: Event) {
             <ul class="space-y-3">
               <li class="flex items-start gap-3">
                 <IconMapPointOutline class="size-5 text-brand-primary-600 shrink-0" />
-
+ 
                 <a
                   href="https://edu.iau.ac.ir/"
                   target="_blank"
@@ -131,7 +122,7 @@ function handleHashClick(to: string, event: Event) {
               </li>
             </ul>
           </section>
-
+ 
           <!-- About Column -->
           <section class="min-w-0">
             <div class="border-b-2 pb-2 font-semibold text-foreground mb-4 text-sm xs:text-base">
@@ -158,7 +149,7 @@ function handleHashClick(to: string, event: Event) {
           </section>
         </div>
       </div>
-
+ 
       <!-- Bottom Bar -->
       <div class="border-t border-border py-3 xs:py-4">
         <div
@@ -179,7 +170,7 @@ function handleHashClick(to: string, event: Event) {
               {{ appConfig.aic.nickname }}
             </a>
           </div>
-
+ 
           <p class="text-xs text-muted-foreground shrink-0">
             © {{ new Date().getFullYear() }} {{ appName }}. تمامی حقوق محفوظ است.
           </p>
