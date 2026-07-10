@@ -69,7 +69,7 @@ const router = createRouter({
       component: HomeView,
       meta: {
         title: `صفحه اصلی | ${appName}`,
-        mode: "public",
+        mode: "private",
       },
     },
 
