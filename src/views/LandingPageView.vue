@@ -3,6 +3,7 @@ import { reactive } from "vue";
 import HeaderPublic from "@/layouts/HeaderPublic.vue";
 import LandingHero from "@/components/landing/LandingHero.vue";
 import LandingWhyUs from "@/components/landing/LandingWhyUs.vue";
+import LandingCTA from "@/components/landing/LandingCTA.vue";
 
 interface NavigationItem {
   label: string;
@@ -19,13 +20,10 @@ const navigationItems = reactive<NavigationItem[]>([
 
 <template>
   <div>
-    <HeaderPublic 
-    :navigation-items="navigationItems" 
-    cta-label="شروع کنید" 
-    cta-to="/login" 
-    />
+    <HeaderPublic :navigation-items="navigationItems" cta-label="شروع کنید" cta-to="/login" />
 
     <LandingHero />
     <LandingWhyUs />
+    <LandingCTA />
   </div>
 </template>
