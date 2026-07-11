@@ -45,7 +45,7 @@ const steps = [
 </script>
 
 <template>
-  <section class="bg-brand-primary-50 w-full container-padding py-14 lg:py-20 -z-20">
+  <section id="process" class="bg-brand-primary-50 w-full container-padding py-14 lg:py-20 -z-20">
     <div class="max-w-5xl mx-auto text-center mb-14 lg:mb-16">
       <p class="text-xs xs:text-sm font-medium text-brand-primary-600 mb-2">
         فرآیند صدور نامه
