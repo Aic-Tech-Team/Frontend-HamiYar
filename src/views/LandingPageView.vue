@@ -8,6 +8,7 @@ import LandingProcess from "@/components/landing/LandingProcess.vue";
 import LandingCTA from "@/components/landing/LandingCTA.vue";
 import LandingServices from "@/components/landing/LandingServices.vue";
 import SupportSection from "@/components/SupportSection.vue";
+
 import { NavigationItem } from "@/types/navitems";
 import IconHome2Outline from "~icons/solar/home-2-outline";
 import IconWidget5Outline from "~icons/solar/widget-5-outline";
