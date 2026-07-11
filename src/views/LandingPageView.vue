@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { reactive } from "vue";
-import HeaderPublic from "@/layouts/HeaderPublic.vue";
-import FooterSection from "@/layouts/FooterSection.vue";
+import HeaderPublic from "@/components/layout/HeaderPublic.vue";
+import FooterSection from "@/components/layout/FooterSection.vue";
 import LandingHero from "@/components/landing/LandingHero.vue";
 import LandingWhyUs from "@/components/landing/LandingWhyUs.vue";
 import LandingProcess from "@/components/landing/LandingProcess.vue";
@@ -9,7 +9,7 @@ import LandingCTA from "@/components/landing/LandingCTA.vue";
 import LandingServices from "@/components/landing/LandingServices.vue";
 import SupportSection from "@/components/SupportSection.vue";
 
-import { NavigationItem } from "@/types/navitems";
+import type { NavigationItem } from "@/types/navigationItems";
 import IconHome2Outline from "~icons/solar/home-2-outline";
 import IconWidget5Outline from "~icons/solar/widget-5-outline";
 import IconHeadphonesRoundSoundOutline from "~icons/solar/headphones-round-sound-outline";
@@ -20,7 +20,6 @@ const navigationItems = reactive<NavigationItem[]>([
   { label: "فرآیند کار", to: "/#process" },
   { label: "پشتیبانی", to: "/#support" },
 ]);
-
 
 const footerQuickLinks = [
   { label: "صفحه اصلی", to: "/", icon: IconHome2Outline },

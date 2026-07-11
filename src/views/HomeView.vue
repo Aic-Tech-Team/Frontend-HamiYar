@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { reactive } from "vue";
-import HeaderPublic from "@/layouts/HeaderPublic.vue";
-import FooterSection from "@/layouts/FooterSection.vue";
+import HeaderPublic from "@/components/layout/HeaderPublic.vue";
+import FooterSection from "@/components/layout/FooterSection.vue";
 import HomeHeroSection from "@/components/HomeHeroSection.vue";
 import ServicesSection from "@/components/ServicesSection.vue";
 import SupportSection from "@/components/SupportSection.vue";
 import { Button } from "@/components/ui/button";
 import { useAuthApi } from "@/composables/api/useAuthApi";
-import { NavigationItem } from "@/types/footer";
+import type { NavigationItem } from "@/types/navigationItems";
 import IconHome2Outline from "~icons/solar/home-2-outline";
 import IconWidget5Outline from "~icons/solar/widget-5-outline";
 import IconHeadphonesRoundSoundOutline from "~icons/solar/headphones-round-sound-outline";
