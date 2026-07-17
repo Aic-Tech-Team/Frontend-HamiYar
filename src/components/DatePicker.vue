@@ -8,7 +8,7 @@ import {
   parseDate,
 } from "@internationalized/date";
 import { useDate } from "@/composables/useDate";
-import { CalendarIcon, ChevronLeft, ChevronRight } from "lucide-vue-next";
+import { CalendarIcon, ChevronLeft, ChevronRight } from "@lucide/vue";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
