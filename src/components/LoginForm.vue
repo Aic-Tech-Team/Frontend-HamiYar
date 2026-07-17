@@ -77,7 +77,7 @@ async function handleSubmit(e: Event) {
       richColors: true,
     });
 
-    const redirectPath = (route.query.redirect as string) || "/";
+    const redirectPath = (route.query.redirect as string) || "/dashboard";
     router.push(redirectPath);
   } catch (error: any) {
     console.error("Error logging in:", error);

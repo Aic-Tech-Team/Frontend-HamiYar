@@ -2,8 +2,6 @@ import { createRouter, createWebHistory } from "vue-router";
 import "@/types/router";
 import { appConfig } from "@/config";
 import { useAuthJwtStore } from "@/stores/account/useAuthJwtStore";
-import HomeView from "@/views/HomeView.vue";
-import LoginView from "@/views/LoginView.vue";
 
 const appName = appConfig.app.name;
 
@@ -20,102 +18,145 @@ const router = createRouter({
     return { top: 0 };
   },
   routes: [
-    // Error routes - dynamic content by status code
+    // Errors — /error, /error/:code
     {
       path: "/error",
-      redirect: { name: "Error", params: { code: "404" } },
-    },
-    {
-      path: "/error/:code",
-      name: "Error",
-      component: () => import("@/views/ErrorView.vue"),
       meta: {
-        title: `خطا | ${appName}`,
-        mode: "public",
+        requiresAuth: false,
         layout: "blank",
       },
-    },
-    {
-      path: "/:pathMatch(.*)*",
-      redirect: { name: "Error", params: { code: "404" } },
+      children: [
+        {
+          path: "",
+          redirect: { name: "Error", params: { code: "404" } },
+        },
+        {
+          path: ":code",
+          name: "Error",
+          component: () => import("@/views/errors/ErrorView.vue"),
+          meta: {
+            title: `خطا | ${appName}`,
+          },
+        },
+      ],
     },
 
-    // Public routes
+    // Public
     {
       path: "/",
       name: "Landing",
       component: () => import("@/views/LandingPageView.vue"),
       meta: {
         title: `صفحه اصلی | ${appName}`,
-        mode: "public",
+        requiresAuth: false,
+        layout: "default",
       },
     },
     {
       path: "/login",
       name: "Login",
-      component: LoginView,
+      component: () => import("@/views/LoginView.vue"),
       meta: {
         title: `ورود | ${appName}`,
-        mode: "public",
+        requiresAuth: false,
+        redirectIfAuthenticated: true,
         layout: "blank",
-        guestOnly: true,
       },
     },
 
-    // Authenticated routes
+    // Dashboard — /dashboard/*
     {
-      path: "/home",
-      name: "Home",
-      component: HomeView,
+      path: "/dashboard",
       meta: {
-        title: `صفحه اصلی | ${appName}`,
-        mode: "private",
+        requiresAuth: true,
+        layout: "dashboard",
       },
+      children: [
+        {
+          path: "",
+          name: "Dashboard",
+          component: () => import("@/views/dashboard/DashboardView.vue"),
+          meta: {
+            title: `داشبورد | ${appName}`,
+          },
+        },
+        {
+          path: "example",
+          name: "DashboardExample",
+          component: () => import("@/views/dashboard/ExampleView.vue"),
+          meta: {
+            title: `مثال | ${appName}`,
+          },
+        },
+      ],
     },
 
-    // Education form routes
+    // Education forms — /education, /education/:trackingNumber
     {
       path: "/education",
-      name: "Education",
-      component: () => import("@/views/EducationFormView.vue"),
       meta: {
-        title: `گواهی اشتغال به تحصیل | ${appName}`,
-        mode: "private",
+        layout: "form",
         fixedViewport: true,
       },
-    },
-    {
-      path: "/education/:trackingNumber",
-      name: "EducationPublic",
-      component: () => import("@/views/EducationFormView.vue"),
-      meta: {
-        title: `گواهی اشتغال به تحصیل | ${appName}`,
-        mode: "public",
-        layout: "blank",
-        fixedViewport: true,
-      },
+      children: [
+        {
+          path: "",
+          name: "Education",
+          component: () => import("@/views/forms/EducationFormView.vue"),
+          meta: {
+            title: `گواهی اشتغال به تحصیل | ${appName}`,
+            requiresAuth: true,
+          },
+        },
+        {
+          path: ":trackingNumber",
+          name: "EducationPublic",
+          component: () => import("@/views/forms/EducationFormView.vue"),
+          meta: {
+            title: `گواهی اشتغال به تحصیل | ${appName}`,
+            requiresAuth: false,
+            print: true,
+          },
+        },
+      ],
     },
 
-    // Internship form routes
+    // Internship forms — /internship, /internship/:trackingNumber
     {
       path: "/internship",
-      name: "Internship",
-      component: () => import("@/views/InternshipFormView.vue"),
       meta: {
-        title: `نامه کارآموزی | ${appName}`,
-        mode: "private",
+        layout: "form",
         fixedViewport: true,
       },
+      children: [
+        {
+          path: "",
+          name: "Internship",
+          component: () => import("@/views/forms/InternshipFormView.vue"),
+          meta: {
+            title: `نامه کارآموزی | ${appName}`,
+            requiresAuth: true,
+          },
+        },
+        {
+          path: ":trackingNumber",
+          name: "InternshipPublic",
+          component: () => import("@/views/forms/InternshipFormView.vue"),
+          meta: {
+            title: `نامه کارآموزی | ${appName}`,
+            requiresAuth: false,
+            print: true,
+          },
+        },
+      ],
     },
+
+    // Catch-all → 404 (must be last; public so guests aren't sent to login)
     {
-      path: "/internship/:trackingNumber",
-      name: "InternshipPublic",
-      component: () => import("@/views/InternshipFormView.vue"),
+      path: "/:pathMatch(.*)*",
+      redirect: { name: "Error", params: { code: "404" } },
       meta: {
-        title: `نامه کارآموزی | ${appName}`,
-        mode: "public",
-        layout: "blank",
-        fixedViewport: true,
+        requiresAuth: false,
       },
     },
   ],
@@ -129,41 +170,29 @@ function setViewport(content: string) {
   if (meta) meta.setAttribute("content", content);
 }
 
-// Global Navigation Guard
 router.beforeEach((to, from, next) => {
   const authStore = useAuthJwtStore();
   const isAuthenticated = authStore.isAuthenticated;
+  const requiresAuth = to.meta.requiresAuth ?? true;
 
-  // Set viewport: fixed width for form pages (zoom out on mobile)
   if (to.meta.fixedViewport) {
     setViewport(VIEWPORT_FIXED);
   } else if (from?.meta?.fixedViewport) {
     setViewport(VIEWPORT_DEFAULT);
   }
 
-  // Set document title
   if (to.meta.title) {
     document.title = to.meta.title;
   }
 
-  // Handle public routes
-  if (to.meta.mode === "public") {
-    // Guest-only routes: redirect authenticated users
-    if (to.meta.guestOnly && isAuthenticated) {
-      next({ name: "Home" });
-      return;
-    }
-    // Public routes are accessible to everyone
-    next();
+  if (requiresAuth && !isAuthenticated) {
+    next({ name: "Login", query: { redirect: to.fullPath } });
     return;
   }
 
-  // Handle private routes (default if mode is not specified)
-  if (to.meta.mode === "private" || !to.meta.mode) {
-    if (!isAuthenticated) {
-      next({ name: "Login", query: { redirect: to.fullPath } });
-      return;
-    }
+  if (to.meta.redirectIfAuthenticated && isAuthenticated) {
+    next({ name: "Dashboard" });
+    return;
   }
 
   next();

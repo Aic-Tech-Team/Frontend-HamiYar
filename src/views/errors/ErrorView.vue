@@ -10,14 +10,17 @@
       {{ error.description }}
     </p>
     <Button v-if="authStore.isAuthenticated" as-child class="mt-6 xs:mt-8">
-      <router-link to="/">بازگشت به صفحه اصلی</router-link>
+      <RouterLink :to="{ name: 'Dashboard' }">بازگشت به داشبورد</RouterLink>
+    </Button>
+    <Button v-else as-child class="mt-6 xs:mt-8">
+      <RouterLink :to="{ name: 'Landing' }">بازگشت به صفحه اصلی</RouterLink>
     </Button>
   </div>
 </template>
 
 <script setup lang="ts">
 import { computed, watchEffect } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, RouterLink } from "vue-router";
 import { appConfig } from "@/config";
 import { useAuthJwtStore } from "@/stores/account/useAuthJwtStore";
 import { Button } from "@/components/ui/button";
