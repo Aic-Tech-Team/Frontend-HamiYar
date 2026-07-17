@@ -3,28 +3,24 @@ import { ref, onMounted, onUnmounted } from "vue";
 import { RouterLink } from "vue-router";
 import { Button } from "@/components/ui/button";
 import { appConfig } from "@/config";
+import type { NavigationItem } from "@/types/navigationItems";
 
 import IconLucideMenu from "~icons/lucide/menu";
 import IconLucideX from "~icons/lucide/x";
 
-interface NavigationItem {
-  label: string;
-  to: string;
-}
-
 interface Props {
-  navigationItems?: NavigationItem[];
-  ctaLabel?: string;
-  ctaTo?: string;
+  items?: NavigationItem[];
+  actionLabel?: string;
+  actionTo?: string;
 }
 
 withDefaults(defineProps<Props>(), {
-  ctaLabel: "شروع کنید",
-  ctaTo: "/login",
+  actionLabel: "شروع کنید",
+  actionTo: "/login",
 });
 
 const emit = defineEmits<{
-  ctaClick: [];
+  actionClick: [];
 }>();
 
 const isMobileMenuOpen = ref(false);
@@ -39,8 +35,8 @@ function closeMobileMenu() {
   isMobileMenuOpen.value = false;
 }
 
-function handleCtaClick() {
-  emit("ctaClick");
+function handleActionClick() {
+  emit("actionClick");
 }
 
 function handleScroll() {
@@ -101,7 +97,7 @@ onUnmounted(() => {
 
       <ul class="hidden md:flex items-center gap-6 lg:gap-8">
         <li
-          v-for="item in navigationItems"
+          v-for="item in items"
           :key="item.label"
           class="text-sm lg:text-base font-medium text-brand-primary-800 hover:text-brand-primary-600 transition-colors"
         >
@@ -116,14 +112,14 @@ onUnmounted(() => {
 
       <div class="hidden md:flex items-center shrink-0">
         <slot name="actions">
-          <RouterLink :to="ctaTo">
+          <RouterLink :to="actionTo">
             <Button
               variant="default"
               class="sm:px-4! transition-all duration-300"
               :class="isScrolled ? 'h-8! sm:h-9!' : 'h-9! sm:h-11!'"
-              @click="handleCtaClick"
+              @click="handleActionClick"
             >
-              {{ ctaLabel }}
+              {{ actionLabel }}
             </Button>
           </RouterLink>
         </slot>
@@ -162,7 +158,7 @@ onUnmounted(() => {
         class="md:hidden px-4 pb-4 border-t border-brand-primary-100 bg-white/95 backdrop-blur-sm"
       >
         <ul class="flex flex-col gap-3 pt-4">
-          <li v-for="item in navigationItems" :key="item.label">
+          <li v-for="item in items" :key="item.label">
             <RouterLink
               :to="item.to"
               class="block text-brand-primary-800 font-medium py-1"
@@ -174,9 +170,9 @@ onUnmounted(() => {
         </ul>
         <div class="mt-4">
           <slot name="actions">
-            <RouterLink :to="ctaTo" class="block" @click="closeMobileMenu">
-              <Button variant="default" size="sm" class="w-full" @click="handleCtaClick">
-                {{ ctaLabel }}
+            <RouterLink :to="actionTo" class="block" @click="closeMobileMenu">
+              <Button variant="default" size="sm" class="w-full" @click="handleActionClick">
+                {{ actionLabel }}
               </Button>
             </RouterLink>
           </slot>
