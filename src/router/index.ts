@@ -68,7 +68,7 @@ const router = createRouter({
     {
       path: "/dashboard",
       meta: {
-        requiresAuth: true,
+        requiresAuth: false,
         layout: "dashboard",
       },
       children: [
