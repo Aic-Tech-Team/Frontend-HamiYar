@@ -1,15 +1,54 @@
+<script lang="ts">
+export const description
+  = "A sidebar that collapses to icons."
+export const iframeHeight = "800px"
+export const containerClass = "w-full h-full"
+</script>
+
 <script setup lang="ts">
-import { appConfig } from "@/config";
-import ServicesSection from "@/components/ServicesSection.vue";
+import AppSidebar from "@/components/dashboard/AppSidebar.vue"
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb"
+import { Separator } from "@/components/ui/separator"
+import {
+  SidebarInset,
+  SidebarProvider,
+  SidebarTrigger,
+} from "@/components/ui/sidebar"
 </script>
 
 <template>
-  <div class="p-6">
-    <h1 class="text-2xl font-bold">داشبورد</h1>
-    <p class="mt-2 text-muted-foreground">
-      به سامانه {{ appConfig.app.name }} خوش آمدید.
-    </p>
-
-    <ServicesSection class="mt-10" />
-  </div>
+  <SidebarProvider>
+    <AppSidebar />
+    <SidebarInset>
+      <header class="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
+        <div class="flex items-center gap-2 px-4">
+          <SidebarTrigger class="-ml-1" />
+          <Separator
+            orientation="vertical"
+            class="mr-2 data-[orientation=vertical]:h-4"
+          />
+          <Breadcrumb>
+            <BreadcrumbList>
+              <!-- Breadcrumb Items should be here --> 
+            </BreadcrumbList>
+          </Breadcrumb>
+        </div>
+      </header>
+      <div class="flex flex-1 flex-col gap-4 p-4 pt-0">
+        <div class="grid auto-rows-min gap-4 md:grid-cols-3">
+          <div class="bg-muted/50 aspect-video rounded-xl" />
+          <div class="bg-muted/50 aspect-video rounded-xl" />
+          <div class="bg-muted/50 aspect-video rounded-xl" />
+        </div>
+        <div class="bg-muted/50 min-h-[100vh] flex-1 rounded-xl md:min-h-min" />
+      </div>
+    </SidebarInset>
+  </SidebarProvider>
 </template>
