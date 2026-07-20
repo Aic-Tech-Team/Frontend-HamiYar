@@ -78,7 +78,7 @@ const { isMobile } = useSidebar()
             </div>
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuItem class="cursor-pointer">
+          <DropdownMenuItem class="cursor-pointer dir-rtl">
             <LogOut />
             خروج
           </DropdownMenuItem>
