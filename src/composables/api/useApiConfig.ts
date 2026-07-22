@@ -24,6 +24,10 @@ export const useApiConfig = () => {
         submit: `${baseUrl}/intern/`,
       },
     },
+
+    contact: {
+      create: `${baseUrl}/ticket/create/`,
+    },
   };
 
   return { apiEndpoints };
