@@ -10,6 +10,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { appConfig } from "@/config";
+import { useContactApi } from "@/composables/api/useContactApi";
 
 import IconPhTelegramLogoLight from "~icons/ph/telegram-logo-light";
 import IconSolarLetterOutline from "~icons/solar/letter-outline";
@@ -41,6 +42,7 @@ const supportSchema = z.object({
 type SupportFormValues = z.infer<typeof supportSchema>;
 
 const isSubmitting = ref(false);
+const { submitContact } = useContactApi();
 
 // Form Handling
 const { handleSubmit, resetForm } = useForm<SupportFormValues>({
@@ -58,10 +60,12 @@ const onSubmit = handleSubmit(async (values) => {
   isSubmitting.value = true;
 
   try {
-    // Simulate API delay
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-
-    console.log("Payload:", values);
+    await submitContact({
+      phone: values.phone,
+      email: values.email || undefined,
+      subject: values.subject,
+      message: values.description,
+    });
 
     toast.success("پیام شما با موفقیت ارسال شد.", {
       description: "کارشناسان ما به زودی با شما ارتباط خواهند گرفت.",
