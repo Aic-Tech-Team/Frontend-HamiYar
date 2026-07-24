@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { RouterLink } from "vue-router";
 import { Button } from "@/components/ui/button";
+import { ArrowLeft } from "@lucide/vue";
 
 import IconSolarShieldCheckOutline from "~icons/solar/shield-check-outline";
 </script>
@@ -29,7 +30,7 @@ import IconSolarShieldCheckOutline from "~icons/solar/shield-check-outline";
         </div>
 
         <h2
-          class="text-white text-3xl sm:text-4xl md:text-5xl font-bold leading-tight md:leading-tight max-w-3xl mb-4 md:mb-6"
+          class="text-white text-2xl sm:text-3xl md:text-4xl font-bold leading-tight md:leading-tight max-w-3xl mb-4 md:mb-6"
         >
           همین امروز فرآیندهای دانشگاهی خود را متحول کنید
         </h2>
@@ -46,7 +47,7 @@ import IconSolarShieldCheckOutline from "~icons/solar/shield-check-outline";
             class="bg-white hover:bg-brand-primary-50 text-brand-primary-600 rounded-full px-8 h-12 sm:h-14 text-sm sm:text-base font-bold flex-center gap-2 transition-all active:scale-95 shadow-[0_8px_20px_rgba(0,0,0,0.12)] hover:shadow-[0_12px_24px_rgba(0,0,0,0.18)]"
           >
             عضویت در سامانه
-            <span aria-hidden="true" class="text-lg leading-none">&larr;</span>
+            <ArrowLeft class="size-4 sm:size-5" aria-hidden="true" />
           </Button>
         </RouterLink>
       </div>
