@@ -39,11 +39,6 @@ function handleActionClick() {
   emit("actionClick");
 }
 
-// The header itself never hides — it always stays pinned at the top.
-// v-motion here only animates its background/shadow fading in once you've
-// scrolled past the threshold (the "shrink" of width/height/text is still
-// plain Tailwind on the child elements below, since that's several
-// different properties across several different elements at once).
 const headerEl = ref<HTMLElement | null>(null);
 const { variant: headerVariant } = useMotion(headerEl, {
   top: {
@@ -58,7 +53,6 @@ const { variant: headerVariant } = useMotion(headerEl, {
   },
 });
 
-// Single, simple threshold — past this, switch to the compact/scrolled look.
 const COMPACT_THRESHOLD = 60;
 
 function handleScroll() {

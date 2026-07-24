@@ -1,8 +1,13 @@
 <script setup lang="ts">
+import { ref } from "vue";
 import IconSolarUserCheckOutline from "~icons/solar/user-check-outline";
 import IconSolarPenNewSquareOutline from "~icons/solar/pen-new-square-outline";
 import IconSolarDocumentTextOutline from "~icons/solar/document-text-outline";
 import IconSolarPlainOutline from "~icons/solar/plain-outline";
+import { useElementVisibility } from "@vueuse/core";
+
+const sectionRef = ref<HTMLElement | null>(null);
+const isSectionVisible = useElementVisibility(sectionRef);
 
 const steps = [
   {
@@ -45,11 +50,19 @@ const steps = [
 </script>
 
 <template>
-  <section id="process" class="bg-brand-primary-50 w-full container-padding py-14 lg:py-20 -z-20">
-    <div class="max-w-5xl mx-auto text-center mb-14 lg:mb-16">
-      <p class="text-xs xs:text-sm font-medium text-brand-primary-600 mb-2">
-        فرآیند صدور نامه
-      </p>
+  <section
+    ref="sectionRef"
+    id="process"
+    class="bg-brand-primary-50 w-full container-padding py-14 lg:py-20 -z-20"
+  >
+    <div
+      :key="isSectionVisible ? 'in-view' : 'out-of-view'"
+      v-motion
+      :initial="{ opacity: 0, y: 20 }"
+      :visible="{ opacity: 1, y: 0, transition: { duration: 600 } }"
+      class="max-w-5xl mx-auto text-center mb-14 lg:mb-16"
+    >
+      <p class="text-xs xs:text-sm font-medium text-brand-primary-600 mb-2">فرآیند صدور نامه</p>
 
       <h2 class="text-2xl xs:text-3xl md:text-4xl font-bold text-brand-primary-700 mb-4">
         صدور نامه در چهار مرحله ساده
@@ -62,25 +75,30 @@ const steps = [
 
     <div class="max-w-6xl mx-auto relative">
       <div
-        class="hidden lg:block absolute top-8 left-[12.5%] right-[12.5%] border-t border-brand-primary-700"
+        v-motion
+        :initial="{ scaleX: 0 }"
+        :visible="{ scaleX: 1, transition: { duration: 900, delay: 200 } }"
+        class="hidden lg:block absolute top-8 left-[12.5%] right-[12.5%] border-t border-brand-primary-700 origin-right"
       ></div>
 
       <div class="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-4 gap-y-10 gap-x-6">
         <div
-          v-for="step in steps"
+          v-for="(step, index) in steps"
           :key="step.title"
+          v-motion
+          :initial="{ opacity: 0, y: 30 }"
+          :visible="{ opacity: 1, y: 0, transition: { duration: 500, delay: index * 130 } }"
           class="flex flex-col items-center text-center gap-4"
         >
           <div class="relative">
             <div
+              v-motion
+              :initial="{ scale: 1, y: 0 }"
+              :hovered="{ scale: 1.08, y: -4 }"
               :class="step.boxClass"
               class="size-16 rounded-2xl flex items-center justify-center"
             >
-              <component
-                :is="step.icon"
-                class="size-6"
-                :class="step.iconClass"
-              />
+              <component :is="step.icon" class="size-6" :class="step.iconClass" />
             </div>
 
             <span
