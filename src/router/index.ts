@@ -2,6 +2,8 @@ import { createRouter, createWebHistory } from "vue-router";
 import "@/types/router";
 import { appConfig } from "@/config";
 import { useAuthJwtStore } from "@/stores/account/useAuthJwtStore";
+import LandingPageView from "@/views/LandingPageView.vue";
+
 
 const appName = appConfig.app.name;
 
@@ -45,7 +47,7 @@ const router = createRouter({
     {
       path: "/",
       name: "Landing",
-      component: () => import("@/views/LandingPageView.vue"),
+      component: LandingPageView,
       meta: {
         title: `صفحه اصلی | ${appName}`,
         requiresAuth: false,
