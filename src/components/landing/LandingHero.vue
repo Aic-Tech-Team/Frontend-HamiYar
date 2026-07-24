@@ -1,11 +1,45 @@
 <script setup lang="ts">
+import { ref, onMounted, onUnmounted } from "vue";
 import { RouterLink } from "vue-router";
+import Typewriter from "typewriter-effect/dist/core";
 import { Button } from "@/components/ui/button";
 
 import IconSolarSquareAcademicCapOutline from "~icons/solar/square-academic-cap-outline";
 import IconSolarCardOutline from "~icons/solar/card-outline";
 import IconSolarMenuDotsBold from "~icons/solar/menu-dots-bold";
 import IconSolarCheckCircleBold from "~icons/solar/check-circle-bold";
+import { ArrowLeft } from "@lucide/vue";
+
+// typewriter-effect needs a real DOM element to type into — grab it via template ref.
+const typedTargetEl = ref<HTMLElement | null>(null);
+let typewriterInstance: InstanceType<typeof Typewriter> | null = null;
+
+onMounted(() => {
+  if (!typedTargetEl.value) return;
+
+  typewriterInstance = new Typewriter(typedTargetEl.value, {
+    delay: 65, // ms per character while typing — not too fast to read
+    deleteSpeed: 35, // faster while deleting, feels natural
+    loop: true,
+  });
+
+  typewriterInstance
+    .typeString(
+      'مدارک دانشگاهی شما، <span class="text-brand-primary-500">بدون صف و بدون کاغذبازی</span>',
+    )
+    .pauseFor(2200) // pause on the finished sentence before it starts deleting
+    .deleteAll()
+    .typeString("از درخواست تا دریافت مدرک، همه‌چیز فقط چند کلیک فاصله دارد")
+    .pauseFor(2200)
+    .deleteAll()
+    .start();
+});
+
+onUnmounted(() => {
+  // Always stop the instance on unmount, or its internal animation-frame loop
+  // keeps running against a DOM node that no longer exists.
+  typewriterInstance?.stop();
+});
 </script>
 
 <template>
@@ -17,6 +51,9 @@ import IconSolarCheckCircleBold from "~icons/solar/check-circle-bold";
         class="flex flex-col items-center text-center lg:items-start lg:text-start gap-5 xs:gap-6"
       >
         <span
+          v-motion
+          :initial="{ opacity: 0, y: -10 }"
+          :enter="{ opacity: 1, y: 0, transition: { delay: 100, duration: 500 } }"
           class="inline-flex items-center gap-2 rounded-full bg-brand-primary-50 text-brand-primary-700 px-4 py-1.5 text-xs xs:text-sm font-medium"
         >
           <span class="size-1.5 rounded-full bg-emerald-500"></span>
@@ -24,29 +61,65 @@ import IconSolarCheckCircleBold from "~icons/solar/check-circle-bold";
         </span>
 
         <h1
-          class="text-primary text-4xl xs:text-5xl md:text-6xl font-bold leading-tight xs:leading-tight max-w-xl"
+          v-motion
+          :initial="{ opacity: 0, y: 16 }"
+          :enter="{ opacity: 1, y: 0, transition: { delay: 200, duration: 600 } }"
+          class="text-primary text-3xl xs:text-4xl md:text-5xl font-bold leading-tight xs:leading-tight max-w-xl min-h-[3.3em]"
         >
-          مدارک دانشگاهی شما، <span class="text-brand-primary-500">بدون صف و بدون کاغذبازی</span>
+          <span ref="typedTargetEl"></span>
         </h1>
 
-        <p class="text-sm xs:text-base text-muted-foreground leading-relaxed max-w-lg">
-          لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک
-          است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است.
+        <p
+          v-motion
+          :initial="{ opacity: 0, y: 16 }"
+          :enter="{ opacity: 1, y: 0, transition: { delay: 300, duration: 600 } }"
+          class="text-sm xs:text-base text-muted-foreground leading-relaxed max-w-lg"
+        >
+          سامانه‌ای هوشمند برای ثبت، پیگیری و مدیریت درخواست‌های آموزشی که فرآیند دریافت مدارک
+          دانشگاهی را ساده، سریع و کاملاً آنلاین می‌کند.
         </p>
 
-        <div class="flex flex-col xs:flex-row items-center gap-3 xs:gap-4 w-full xs:w-auto pt-1">
+        <div
+          v-motion
+          :initial="{ opacity: 0, y: 16 }"
+          :enter="{ opacity: 1, y: 0, transition: { delay: 400, duration: 600 } }"
+          class="flex flex-col xs:flex-row items-center gap-3 xs:gap-4 w-full xs:w-auto pt-1"
+        >
           <RouterLink to="/#services" class="w-full xs:w-auto order-2 xs:order-1">
-            <Button variant="outline" size="lg" class="w-full xs:w-auto"> مشاهده خدمات </Button>
+            <Button
+              v-motion
+              :initial="{ scale: 1 }"
+              :hovered="{ scale: 1.04 }"
+              :tapped="{ scale: 0.97 }"
+              variant="outline"
+              size="lg"
+              class="w-full xs:w-auto"
+            >
+              مشاهده خدمات
+            </Button>
           </RouterLink>
           <RouterLink to="/login" class="w-full xs:w-auto order-1 xs:order-2">
-            <Button variant="default" size="lg" class="w-full xs:w-auto gap-2">
+            <Button
+              v-motion
+              :initial="{ scale: 1 }"
+              :hovered="{ scale: 1.04 }"
+              :tapped="{ scale: 0.97 }"
+              variant="default"
+              size="lg"
+              class="w-full xs:w-auto gap-2"
+            >
               ثبت درخواست جدید
-              <span aria-hidden="true">←</span>
+              <ArrowLeft class="size-4" aria-hidden="true" />
             </Button>
           </RouterLink>
         </div>
 
-        <ul class="flex flex-wrap justify-center lg:justify-start gap-x-5 gap-y-2 pt-2">
+        <ul
+          v-motion
+          :initial="{ opacity: 0, y: 16 }"
+          :enter="{ opacity: 1, y: 0, transition: { delay: 500, duration: 600 } }"
+          class="flex flex-wrap justify-center lg:justify-start gap-x-5 gap-y-2 pt-2"
+        >
           <li class="flex items-center gap-1.5 text-xs xs:text-sm text-muted-foreground">
             مورد تأیید رسمی دانشگاه
             <IconSolarCheckCircleBold class="size-4 text-emerald-500 shrink-0" />
@@ -62,7 +135,13 @@ import IconSolarCheckCircleBold from "~icons/solar/check-circle-bold";
         </ul>
       </div>
 
-      <div class="w-full flex justify-center lg:justify-end pt-4 lg:pt-0" aria-hidden="true">
+      <div
+        v-motion
+        :initial="{ opacity: 0, scale: 0.92 }"
+        :enter="{ opacity: 1, scale: 1, transition: { delay: 250, duration: 700 } }"
+        class="w-full flex justify-center lg:justify-end pt-4 lg:pt-0"
+        aria-hidden="true"
+      >
         <div
           class="floating-card w-full sm:w-[80%] lg:max-w-md aspect-square lg:aspect-[4/5] flex flex-col rounded-2xl border border-border bg-white p-5 xs:p-7"
         >
