@@ -10,7 +10,6 @@ import IconSolarMenuDotsBold from "~icons/solar/menu-dots-bold";
 import IconSolarCheckCircleBold from "~icons/solar/check-circle-bold";
 import { ArrowLeft } from "@lucide/vue";
 
-// typewriter-effect needs a real DOM element to type into — grab it via template ref.
 const typedTargetEl = ref<HTMLElement | null>(null);
 let typewriterInstance: InstanceType<typeof Typewriter> | null = null;
 
@@ -18,8 +17,8 @@ onMounted(() => {
   if (!typedTargetEl.value) return;
 
   typewriterInstance = new Typewriter(typedTargetEl.value, {
-    delay: 65, // ms per character while typing — not too fast to read
-    deleteSpeed: 35, // faster while deleting, feels natural
+    delay: 65,
+    deleteSpeed: 35,
     loop: true,
   });
 
@@ -27,7 +26,7 @@ onMounted(() => {
     .typeString(
       'مدارک دانشگاهی شما، <span class="text-brand-primary-500">بدون صف و بدون کاغذبازی</span>',
     )
-    .pauseFor(2200) // pause on the finished sentence before it starts deleting
+    .pauseFor(2200)
     .deleteAll()
     .typeString("از درخواست تا دریافت مدرک، همه‌چیز فقط چند کلیک فاصله دارد")
     .pauseFor(2200)
@@ -36,8 +35,6 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
-  // Always stop the instance on unmount, or its internal animation-frame loop
-  // keeps running against a DOM node that no longer exists.
   typewriterInstance?.stop();
 });
 </script>
