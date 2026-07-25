@@ -18,7 +18,7 @@ onMounted(() => {
 
   typewriterInstance = new Typewriter(typedTargetEl.value, {
     delay: 65,
-    deleteSpeed: 35,
+    deleteSpeed: 55,
     loop: true,
   });
 
