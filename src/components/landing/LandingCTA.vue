@@ -11,7 +11,7 @@ import IconSolarShieldCheckOutline from "~icons/solar/shield-check-outline";
     <div
       v-motion
       :initial="{ opacity: 0, scale: 0.95 }"
-      :visible="{ opacity: 1, scale: 1, transition: { duration: 600 } }"
+      :visible-once="{ opacity: 1, scale: 1, transition: { duration: 600 } }"
       class="cta-banner relative w-full max-w-5xl rounded-[2.5rem] bg-brand-primary-600 p-8 md:p-12 lg:p-16 flex flex-col items-center text-center overflow-hidden"
     >
       <div
@@ -33,7 +33,7 @@ import IconSolarShieldCheckOutline from "~icons/solar/shield-check-outline";
         </div>
 
         <h2
-          class="text-white text-3xl sm:text-4xl md:text-5xl font-bold leading-tight md:leading-tight max-w-3xl mb-4 md:mb-6"
+          class="text-white text-2xl sm:text-3xl md:text-4xl font-bold leading-tight md:leading-tight max-w-3xl mb-4 md:mb-6"
         >
           همین امروز فرآیندهای دانشگاهی خود را متحول کنید
         </h2>

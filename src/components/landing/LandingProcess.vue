@@ -59,7 +59,7 @@ const steps = [
       :key="isSectionVisible ? 'in-view' : 'out-of-view'"
       v-motion
       :initial="{ opacity: 0, y: 20 }"
-      :visible="{ opacity: 1, y: 0, transition: { duration: 600 } }"
+      :visible-once="{ opacity: 1, y: 0, transition: { duration: 600 } }"
       class="max-w-5xl mx-auto text-center mb-14 lg:mb-16"
     >
       <p class="text-xs xs:text-sm font-medium text-brand-primary-600 mb-2">فرآیند صدور نامه</p>
@@ -77,7 +77,7 @@ const steps = [
       <div
         v-motion
         :initial="{ scaleX: 0 }"
-        :visible="{ scaleX: 1, transition: { duration: 900, delay: 200 } }"
+        :visible-once="{ scaleX: 1, transition: { duration: 900, delay: 200 } }"
         class="hidden lg:block absolute top-8 left-[12.5%] right-[12.5%] border-t border-brand-primary-700 origin-right"
       ></div>
 
@@ -87,7 +87,7 @@ const steps = [
           :key="step.title"
           v-motion
           :initial="{ opacity: 0, y: 30 }"
-          :visible="{ opacity: 1, y: 0, transition: { duration: 500, delay: index * 130 } }"
+          :visible-once="{ opacity: 1, y: 0, transition: { duration: 500, delay: index * 130 } }"
           class="flex flex-col items-center text-center gap-4"
         >
           <div class="relative">

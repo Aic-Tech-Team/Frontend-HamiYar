@@ -37,7 +37,7 @@ const whyUsItems = [
     <div
       v-motion
       :initial="{ opacity: 0, y: 20 }"
-      :visible="{ opacity: 1, y: 0, transition: { duration: 600 } }"
+      :visible-once="{ opacity: 1, y: 0, transition: { duration: 600 } }"
       class="max-w-3xl mx-auto text-center mb-14"
     >
       <h2 class="text-3xl md:text-4xl font-bold text-brand-primary-700 mb-5">چرا سامانه حامیار؟</h2>
@@ -55,7 +55,7 @@ const whyUsItems = [
         :key="item.title"
         v-motion
         :initial="{ opacity: 0, y: 30 }"
-        :visible="{ opacity: 1, y: 0, transition: { duration: 500, delay: index * 100 } }"
+        :visible-once="{ opacity: 1, y: 0, transition: { duration: 500, delay: index * 100 } }"
         class="flex flex-col items-center text-center"
       >
         <div

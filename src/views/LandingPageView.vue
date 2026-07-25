@@ -17,9 +17,9 @@ import SupportSection from "@/components/SupportSection.vue";
     <div
       v-motion
       :initial="{ opacity: 0, scale: 0.95 }"
-      :visible="{ opacity: 1, scale: 1, transition: { duration: 600 } }"
+      :visible-once="{ opacity: 1, scale: 1, transition: { duration: 600 } }"
     >
-      <SupportSection class="w-full bg-brand-primary-50/40 py-16 mt-12 custom-landing-support" />
+      <SupportSection class="w-full bg-brand-primary-50/40 lg:py-20 py-24 custom-landing-support" />
     </div>
   </div>
 </template>
