@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { RouterLink } from "vue-router";
+import { ArrowLeft } from "@lucide/vue";
 import { Button } from "@/components/ui/button";
 
 import IconSolarShieldCheckOutline from "~icons/solar/shield-check-outline";
@@ -8,6 +9,9 @@ import IconSolarShieldCheckOutline from "~icons/solar/shield-check-outline";
 <template>
   <section class="w-full py-12 lg:py-20 flex-center container-padding">
     <div
+      v-motion
+      :initial="{ opacity: 0, scale: 0.95 }"
+      :visible="{ opacity: 1, scale: 1, transition: { duration: 600 } }"
       class="cta-banner relative w-full max-w-5xl rounded-[2.5rem] bg-brand-primary-600 p-8 md:p-12 lg:p-16 flex flex-col items-center text-center overflow-hidden"
     >
       <div
@@ -42,11 +46,15 @@ import IconSolarShieldCheckOutline from "~icons/solar/shield-check-outline";
 
         <RouterLink to="/login">
           <Button
+            v-motion
+            :initial="{ scale: 1 }"
+            :hovered="{ scale: 1.04 }"
+            :tapped="{ scale: 0.97 }"
             size="lg"
             class="bg-white hover:bg-brand-primary-50 text-brand-primary-600 rounded-full px-8 h-12 sm:h-14 text-sm sm:text-base font-bold flex-center gap-2 transition-all active:scale-95 shadow-[0_8px_20px_rgba(0,0,0,0.12)] hover:shadow-[0_12px_24px_rgba(0,0,0,0.18)]"
           >
             عضویت در سامانه
-            <span aria-hidden="true" class="text-lg leading-none">&larr;</span>
+            <ArrowLeft class="size-4 sm:size-5" aria-hidden="true" />
           </Button>
         </RouterLink>
       </div>
