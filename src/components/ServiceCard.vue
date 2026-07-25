@@ -66,8 +66,8 @@ const emit = defineEmits<{
       <Button
         @click="emit('start-service')"
         class="w-full border-2"
-        size="xl"
-        variant="subtle"
+        size="lg"
+        variant="outline"
         :disabled="!props.isActive"
       >
         <template v-if="props.isActive">
