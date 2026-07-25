@@ -60,6 +60,7 @@ const onSubmit = handleSubmit(async (values) => {
   isSubmitting.value = true;
 
   try {
+    // Simulate API delay
     await submitContact({
       phone: values.phone,
       email: values.email || undefined,
@@ -274,7 +275,15 @@ const contactInfo = [
 
             <!-- Action -->
             <div class="flex justify-end pt-4 mt-auto">
-              <Button type="submit" size="xl" :disabled="isSubmitting">
+              <Button
+                v-motion
+                :initial="{ scale: 1 }"
+                :hovered="{ scale: 1.04 }"
+                :tapped="{ scale: 0.97 }"
+                type="submit"
+                class="size-xl"
+                :disabled="isSubmitting"
+              >
                 <span>ارسال پیام</span>
                 <IconSolarRefreshCircleOutline v-if="isSubmitting" class="text-xl animate-spin" />
                 <IconSolarPlain2Outline v-else class="text-xl" />

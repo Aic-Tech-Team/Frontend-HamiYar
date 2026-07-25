@@ -151,16 +151,14 @@ function handleHashClick(to: string, event: Event) {
           <div
             class="flex flex-wrap items-center justify-center gap-1 text-xs xs:text-sm text-muted-foreground"
           >
-            <span>ساخته شده با</span>
-            <span class="inline-block animate-heartbeat text-brand-primary-600 text-base">💜</span>
-            <span>توسط</span>
+            <span> طراحی و توسعه توسط</span>
             <a
               :href="appConfig.aic.website"
               target="_blank"
               rel="noopener noreferrer"
               class="text-brand-primary-600 ms-0.5 hover:text-brand-primary-700 font-bold transition-colors duration-200"
             >
-              {{ appConfig.aic.nickname }}
+              {{ appConfig.aic.techTeam }}
             </a>
           </div>
 

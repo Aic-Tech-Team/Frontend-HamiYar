@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from "vue";
 import { RouterLink } from "vue-router";
+import { useMotion } from "@vueuse/motion";
 import { Button } from "@/components/ui/button";
 import { appConfig } from "@/config";
 import type { NavigationItem } from "@/types/navigationItems";
@@ -25,7 +26,6 @@ const emit = defineEmits<{
 
 const isMobileMenuOpen = ref(false);
 const isScrolled = ref(false);
-const isHidden = ref(false);
 
 function toggleMobileMenu() {
   isMobileMenuOpen.value = !isMobileMenuOpen.value;
@@ -39,24 +39,29 @@ function handleActionClick() {
   emit("actionClick");
 }
 
-function handleScroll() {
-  const currentScrollTop = window.scrollY;
+const headerEl = ref<HTMLElement | null>(null);
+const { variant: headerVariant } = useMotion(headerEl, {
+  top: {
+    backgroundColor: "rgba(255, 255, 255, 0.9)",
+    boxShadow: "0 0 0 rgba(0,0,0,0)",
+    transition: { duration: 250, type: "tween", ease: "easeInOut" },
+  },
+  scrolled: {
+    backgroundColor: "rgba(255, 255, 255, 0.95)",
+    boxShadow: "0 4px 12px rgba(0,0,0,0.06)",
+    transition: { duration: 250, type: "tween", ease: "easeInOut" },
+  },
+});
 
-  if (currentScrollTop > 200) {
-    isScrolled.value = true;
-    isHidden.value = false;
-  } else if (currentScrollTop > 60) {
-    isScrolled.value = false;
-    isHidden.value = true;
-    isMobileMenuOpen.value = false;
-  } else {
-    isScrolled.value = false;
-    isHidden.value = false;
-  }
+const COMPACT_THRESHOLD = 60;
+
+function handleScroll() {
+  isScrolled.value = window.scrollY > COMPACT_THRESHOLD;
+  headerVariant.value = isScrolled.value ? "scrolled" : "top";
 }
 
 onMounted(() => {
-  window.addEventListener("scroll", handleScroll);
+  window.addEventListener("scroll", handleScroll, { passive: true });
 });
 
 onUnmounted(() => {
@@ -66,13 +71,11 @@ onUnmounted(() => {
 
 <template>
   <header
-    class="fixed top-0 left-0 right-0 z-50 w-full transition-all duration-300 ease-in-out bg-white/90 backdrop-blur-sm"
-    :class="[
-      isHidden ? '-translate-y-full opacity-0' : 'translate-y-0 opacity-100',
-      isScrolled
-        ? 'shadow-md border-b border-brand-primary-100/60 bg-white/95'
-        : 'border-b border-brand-primary-100',
-    ]"
+    ref="headerEl"
+    class="fixed top-0 left-0 right-0 z-50 w-full backdrop-blur-sm"
+    :class="
+      isScrolled ? 'border-b border-brand-primary-100/60' : 'border-b border-brand-primary-100'
+    "
   >
     <nav
       class="flex items-center justify-between gap-4 px-4 sm:px-8 max-w-7xl mx-auto transition-all duration-300"
@@ -86,12 +89,22 @@ onUnmounted(() => {
             src="@/assets/images/logo.svg"
             alt="logo"
           />
-          <span
-            class="font-bold text-brand-primary-900 transition-all duration-300"
-            :class="isScrolled ? 'text-xl sm:text-sm' : 'text-2xl sm:text-base'"
-          >
-            {{ appConfig.app.name }}
-          </span>
+          <section class="min-w-0">
+            <span
+              class="font-bold text-brand-primary-900 transition-all duration-300"
+              :class="isScrolled ? 'text-lg sm:text-lg' : 'text-lg sm:text-xl'"
+            >
+              {{ appConfig.app.name }}
+            </span>
+            <p
+              class="mt-0.5 text-muted-foreground transition-all duration-300 ease-in-out"
+              :class="
+                isScrolled ? 'text-xs sm:text-xs leading-3' : 'text-xs sm:text-sm leading-4'
+              "
+            >
+              {{ appConfig.university.name }}
+            </p>
+          </section>
         </slot>
       </RouterLink>
 
@@ -114,6 +127,10 @@ onUnmounted(() => {
         <slot name="actions">
           <RouterLink :to="actionTo">
             <Button
+              v-motion
+              :initial="{ scale: 1 }"
+              :hovered="{ scale: 1.05 }"
+              :tapped="{ scale: 0.96 }"
               variant="default"
               class="sm:px-4! transition-all duration-300"
               :class="isScrolled ? 'h-8! sm:h-9!' : 'h-9! sm:h-11!'"
@@ -171,7 +188,15 @@ onUnmounted(() => {
         <div class="mt-4">
           <slot name="actions">
             <RouterLink :to="actionTo" class="block" @click="closeMobileMenu">
-              <Button variant="default" size="sm" class="w-full" @click="handleActionClick">
+              <Button
+                v-motion
+                :initial="{ scale: 1 }"
+                :tapped="{ scale: 0.96 }"
+                variant="default"
+                size="sm"
+                class="w-full"
+                @click="handleActionClick"
+              >
                 {{ actionLabel }}
               </Button>
             </RouterLink>
