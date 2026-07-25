@@ -1,6 +1,6 @@
 import { apiConfig } from "@/config";
 import axios from "axios";
-import createAuthRefreshInterceptor from "axios-auth-refresh";
+import createAuthRefresh from "axios-auth-refresh";
 
 import router from "@/router";
 import { useApiConfig } from "@/composables/api/useApiConfig";
@@ -68,7 +68,7 @@ async function doRefreshToken(failedRequest: AxiosError) {
 }
 
 // Setup auth refresh interceptor
-createAuthRefreshInterceptor(axiosInstance, doRefreshToken);
+createAuthRefresh(axiosInstance, doRefreshToken);
 
 // Response interceptor - handle errors
 axiosInstance.interceptors.response.use(

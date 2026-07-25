@@ -2,22 +2,13 @@
  * Router and route-related types
  */
 
-import 'vue-router';
-
-/**
- * Layout types for different page layouts
- */
-export type LayoutType = 'default' | 'blank';
-
-/**
- * Route access mode
- */
-export type RouteMode = 'public' | 'private';
+import "vue-router";
+import type { LayoutType } from "@/layouts";
 
 /**
  * Extended route meta interface with type safety
  */
-declare module 'vue-router' {
+declare module "vue-router" {
   interface RouteMeta {
     /**
      * Page title for document title
@@ -25,24 +16,29 @@ declare module 'vue-router' {
     title?: string;
 
     /**
-     * Layout type to use for this route
-     * - 'default': Standard layout with header/footer
-     * - 'blank': Minimal layout (for public forms, login, etc.)
+     * Layout type to use for this route (falls back to `default`)
+     * - 'default': Standard page shell
+     * - 'blank': Minimal shell (login, errors)
+     * - 'dashboard': Sidebar shell for admin/dashboard routes
+     * - 'form': A4 document shell (education / internship forms)
      */
     layout?: LayoutType;
 
     /**
-     * Route access mode
-     * - 'public': Accessible without authentication
-     * - 'private': Requires authentication (default if not specified)
+     * Require authentication (defaults to `true` — secure by default)
      */
-    mode?: RouteMode;
+    requiresAuth?: boolean;
 
     /**
-     * Only accessible to guests (not authenticated users)
-     * Redirects authenticated users to home
+     * If user is already authenticated, redirect to Dashboard
+     * (e.g. login page)
      */
-    guestOnly?: boolean;
+    redirectIfAuthenticated?: boolean;
+
+    /**
+     * Public print/document view (no edit chrome)
+     */
+    print?: boolean;
 
     /**
      * Use fixed viewport width (1024px) on mobile to zoom out
