@@ -24,11 +24,14 @@ onMounted(() => {
 
   typewriterInstance
     .typeString(
-      'مدارک دانشگاهی شما، <span class="text-brand-primary-500">بدون صف و بدون کاغذبازی</span>',
+      'صدور انواع گواهی و مدرک سازمان شما به صورت برخط',
     )
     .pauseFor(2200)
     .deleteAll()
-    .typeString("از درخواست تا دریافت مدرک، همه‌چیز فقط چند کلیک فاصله دارد")
+    .typeString("صدور انواع گواهی پایان دوره باامکان رهگیری آنلاین")
+    .pauseFor(2200)
+    .deleteAll()
+    .typeString("حمایت از محیط زیست با کاهش مصرف کاغذ")
     .pauseFor(2200)
     .deleteAll()
     .start();
