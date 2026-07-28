@@ -1,11 +1,29 @@
 <script setup lang="ts">
 import LoginForm from "@/components/LoginForm.vue";
 import { appConfig } from "@/config";
+import { RouterLink } from "vue-router";
+import { ArrowRight } from "@lucide/vue";
+import { Button } from "@/components/ui/button";
 </script>
 
 <template>
   <div class="grid min-h-svh lg:grid-cols-2">
     <div class="flex flex-col gap-4 p-4 xs:p-6 md:p-10">
+      <div class="flex justify-start">
+        <RouterLink to="/">
+          <Button
+            v-motion
+            :initial="{ scale: 1 }"
+            :hovered="{ scale: 1.04 }"
+            :tapped="{ scale: 0.97 }"
+            variant="default"
+            size="icon"
+            class="size-10 xs:size-11 rounded-full"
+          >
+            <ArrowRight class="size-4 xs:size-5" aria-hidden="true" />
+          </Button>
+        </RouterLink>
+      </div>
       <div class="flex flex-1 items-center justify-center">
         <div class="w-full max-w-sm min-w-0">
           <div class="flex flex-col items-center gap-2 text-center mb-4 xs:mb-6">
