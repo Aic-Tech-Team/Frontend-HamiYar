@@ -17,8 +17,8 @@ import { Button } from "@/components/ui/button";
             :hovered="{ scale: 1.04 }"
             :tapped="{ scale: 0.97 }"
             variant="default"
-            size="icon"
-            class="size-10 xs:size-11 rounded-full"
+            size="lg"
+            class="w-full xs:w-auto gap-2"
           >
             <ArrowRight class="size-4 xs:size-5" aria-hidden="true" />
           </Button>
