@@ -47,7 +47,7 @@ import { Button } from "@/components/ui/button";
     <div class="bg-muted relative hidden lg:block">
       <!-- This is the placeholder and the image has to change. This for showcasing the placeholder -->
       <img
-        src="@/assets/images/logo.svg"
+        src="@/assets/images/hamiyar_login_bg.png"
         alt="حامی یار"
         class="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
       />
