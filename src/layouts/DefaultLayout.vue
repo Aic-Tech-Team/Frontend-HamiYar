@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import AppHeader from "@/components/layout/AppHeader.vue";
 import AppFooter from "@/components/layout/AppFooter.vue";
+import LandingScrollToTop from "@/components/landing/LandingScrollToTop.vue";
 import type { NavigationItem } from "@/types/navigationItems";
 import type { FooterLink } from "@/components/layout/AppFooter.vue";
 import IconHome2Outline from "~icons/solar/home-2-outline";
@@ -31,5 +32,7 @@ const footerLinks: FooterLink[] = [
     </main>
 
     <AppFooter :links="footerLinks" />
+
+    <LandingScrollToTop />
   </div>
 </template>
