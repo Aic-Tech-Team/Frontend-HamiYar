@@ -1,12 +1,15 @@
 import type { Component } from "vue";
- 
+
 import IconSolarDiplomaVerifiedOutline from "~icons/solar/diploma-verified-outline";
 import IconSolarCaseOutline from "~icons/solar/case-outline";
 import IconSolarClipboardListOutline from "~icons/solar/clipboard-list-outline";
 import IconSolarHeadphonesRoundOutline from "~icons/solar/headphones-round-outline";
 import IconSolarLetterOutline from "~icons/solar/letter-outline";
 import IconSolarSquareAcademicCapOutline from "~icons/solar/square-academic-cap-outline";
- 
+import IconSolarDocumentTextOutline from "~icons/solar/document-text-outline";
+import IconSolarCodeSquareOutline from "~icons/solar/code-square-outline";
+import IconSolarDocumentsOutline from "~icons/solar/documents-outline";
+
 export interface ServiceItem {
   id: string;
   icon: Component;
@@ -15,7 +18,7 @@ export interface ServiceItem {
   isActive: boolean;
   isSupported: boolean;
 }
- 
+
 export const services: ServiceItem[] = [
   {
     id: "education",
@@ -62,6 +65,32 @@ export const services: ServiceItem[] = [
     icon: IconSolarSquareAcademicCapOutline,
     title: "گواهی فارغ‌التحصیلی موقت",
     description: "درخواست صدور گواهی موقت پس از اتمام تمامی واحدهای درسی مقطع مربوطه.",
+    isActive: false,
+    isSupported: false,
+  },
+  {
+    id: "course-completion-certificate",
+    icon: IconSolarDocumentTextOutline,
+    title: "گواهی پایان دوره آموزشی",
+    description:
+      "صدور گواهی رسمی پایان دوره آموزشی برای ارائه به سازمان‌ها، مراکز آموزشی و محل کار.",
+    isActive: false,
+    isSupported: false,
+  },
+  {
+    id: "creative-code-certificate",
+    icon: IconSolarCodeSquareOutline,
+    title: "گواهی کد خلاق",
+    description: "دریافت گواهی کد خلاق جهت تأیید فعالیت‌های آموزشی، پژوهشی و پروژه‌های ثبت‌شده.",
+    isActive: false,
+    isSupported: false,
+  },
+  {
+    id: "custom-documents",
+    icon: IconSolarDocumentsOutline,
+    title: "انواع اسناد سفارشی",
+    description:
+      "ثبت درخواست و صدور انواع اسناد و گواهی‌های سفارشی متناسب با نیاز دانشجویان و سازمان‌ها.",
     isActive: false,
     isSupported: false,
   },

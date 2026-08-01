@@ -105,21 +105,21 @@ watch(isMobileMenuOpen, (open) => {
           <slot name="logo">
             <img
               class="transition-all duration-300 h-auto"
-              :class="isScrolled ? 'w-10 xs:w-12 sm:w-[50px]' : 'w-12 xs:w-14 sm:w-[65px]'"
+              :class="isScrolled ? 'w-10 xs:w-12 sm:w-[45px]' : 'w-12 xs:w-14 sm:w-[65px]'"
               src="@/assets/images/logo.svg"
               alt="logo"
             />
             <section class="min-w-0">
               <span
                 class="font-bold text-brand-primary-900 transition-all duration-300"
-                :class="isScrolled ? 'text-lg sm:text-lg' : 'text-lg sm:text-xl'"
+                :class="isScrolled ? 'text-base sm:text-base' : 'text-lg sm:text-xl'"
               >
                 {{ appConfig.app.name }}
               </span>
               <p
                 class="mt-0.5 text-muted-foreground transition-all duration-300 ease-in-out"
                 :class="
-                  isScrolled ? 'text-xs sm:text-xs leading-3' : 'text-xs sm:text-sm leading-4'
+                  isScrolled ? 'text-[0.70rem] sm:text-[0.70rem] leading-3' : 'text-xs sm:text-sm leading-4'
                 "
               >
                 {{ appConfig.university.name }}

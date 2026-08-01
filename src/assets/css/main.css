@@ -80,6 +80,7 @@
 
 @theme {
   --font-vazir: "Vazir", sans-serif;
+  --font-iranyekan: "IranYekan", sans-serif;
 
   /* *Custom font weights for typography styling */
   --font-weight-extrablack: 950;
@@ -286,7 +287,7 @@
     overflow-x: hidden;
   }
   html[dir="rtl"] {
-    font-family: var(--font-vazir);
+    font-family: var(--font-iranyekan);
   }
 
   body {

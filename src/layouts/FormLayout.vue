@@ -20,7 +20,7 @@ function handleExitPage() {
 </script>
 
 <template>
-  <div class="relative form-print-root">
+  <div class="relative form-print-root font-vazir">
     <ConfirmDialog
       v-if="showExitConfirm"
       title="تأیید خروج از صفحه"
