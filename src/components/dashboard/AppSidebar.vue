@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Bot, Settings2, SquareTerminal } from "@lucide/vue";
+import { LayoutDashboard, LayoutGrid } from "@lucide/vue";
 import NavMain from "@/components/dashboard/NavMain.vue";
 import NavUser from "@/components/dashboard/NavUser.vue";
 import HeaderSideBar from "@/components/dashboard/HeaderSideBar.vue";
@@ -11,6 +11,7 @@ import {
   SidebarHeader,
   SidebarRail,
 } from "@/components/ui/sidebar";
+
 const props = withDefaults(
   defineProps<{
     side?: "left" | "right";
@@ -22,32 +23,27 @@ const props = withDefaults(
     collapsible: "icon",
   },
 );
-// This is sample data.
-const data = {
-  user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
-  },
-  navMain: [
-    {
-      title: "Playground",
-      url: "#",
-      icon: SquareTerminal,
-      isActive: true,
-    },
-    {
-      title: "Models",
-      url: "#",
-      icon: Bot,
-    },
-    {
-      title: "Settings",
-      url: "#",
-      icon: Settings2,
-    },
-  ],
+
+// this is a type for user for navUser
+const user = {
+  name: "کاربر",
+  email: "",
+  avatar: "",
 };
+
+
+const navMain = [
+  {
+    title: "نمای کلی",
+    to: "/dashboard",
+    icon: LayoutDashboard,
+  },
+  {
+    title: "خدمات سامانه",
+    to: "/dashboard/services",
+    icon: LayoutGrid,
+  },
+];
 </script>
 
 <template>
@@ -56,10 +52,10 @@ const data = {
       <HeaderSideBar />
     </SidebarHeader>
     <SidebarContent>
-      <NavMain :items="data.navMain" />
+      <NavMain :items="navMain" />
     </SidebarContent>
     <SidebarFooter>
-      <NavUser :user="data.user" />
+      <NavUser :user="user" />
     </SidebarFooter>
     <SidebarRail />
   </Sidebar>
