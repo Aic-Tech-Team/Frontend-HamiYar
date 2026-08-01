@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import PersonModal from "@/components/PersonModal.vue";
-import ServiceCard from "@/components/ServiceCard.vue";
+import ServiceCard from "@/components/dashboard/ServiceCard.vue";
  
 import { ref, computed } from "vue";
 import { toast } from "vue-sonner";
