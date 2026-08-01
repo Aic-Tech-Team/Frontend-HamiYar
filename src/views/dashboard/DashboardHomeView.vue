@@ -1,54 +1,59 @@
-<script lang="ts">
-export const description
-  = "A sidebar that collapses to icons."
-export const iframeHeight = "800px"
-export const containerClass = "w-full h-full"
-</script>
-
 <script setup lang="ts">
-import AppSidebar from "@/components/dashboard/AppSidebar.vue"
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb"
-import { Separator } from "@/components/ui/separator"
-import {
-  SidebarInset,
-  SidebarProvider,
-  SidebarTrigger,
-} from "@/components/ui/sidebar"
+import { FileText, Clock, CheckCircle2, Users } from "@lucide/vue";
+
+const stats = [
+  {
+    label: "درخواست‌های امروز",
+    value: "۱۲",
+    icon: FileText,
+    accent: "bg-brand-primary-100 text-brand-primary-600",
+  },
+  {
+    label: "در حال بررسی",
+    value: "۵",
+    icon: Clock,
+    accent: "bg-amber-100 text-amber-600",
+  },
+  {
+    label: "تکمیل‌شده این ماه",
+    value: "۱۸۴",
+    icon: CheckCircle2,
+    accent: "bg-emerald-100 text-emerald-600",
+  },
+  {
+    label: "دانشجویان فعال",
+    value: "۹۶۰",
+    icon: Users,
+    accent: "bg-sky-100 text-sky-600",
+  },
+];
 </script>
 
 <template>
-  <SidebarProvider>
-    <AppSidebar />
-    <SidebarInset>
-      <header class="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
-        <div class="flex items-center gap-2 px-4">
-          <SidebarTrigger class="-ml-1" />
-          <Separator
-            orientation="vertical"
-            class="mr-2 data-[orientation=vertical]:h-4"
-          />
-          <Breadcrumb>
-            <BreadcrumbList>
-              <!-- Breadcrumb Items should be here --> 
-            </BreadcrumbList>
-          </Breadcrumb>
+  <div>
+    <div class="w-full max-w-max mb-10 flex-col-center items-start gap-4 text-start">
+      <h1 class="text-2xl xs:text-3xl font-bold text-foreground">نمای کلی</h1>
+      <p class="text-muted-foreground">خلاصه‌ای از وضعیت سامانه در یک نگاه.</p>
+      <hr class="w-full h-1 bg-brand-primary-500 border-none rounded-full" />
+    </div>
+
+    <div class="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div
+        v-for="stat in stats"
+        :key="stat.label"
+        class="rounded-2xl border border-border bg-card p-5 flex items-center gap-4"
+      >
+        <div
+          class="size-11 rounded-xl flex items-center justify-center shrink-0"
+          :class="stat.accent"
+        >
+          <component :is="stat.icon" class="size-5" />
         </div>
-      </header>
-      <div class="flex flex-1 flex-col gap-4 p-4 pt-0">
-        <div class="grid auto-rows-min gap-4 md:grid-cols-3">
-          <div class="bg-muted/50 aspect-video rounded-xl" />
-          <div class="bg-muted/50 aspect-video rounded-xl" />
-          <div class="bg-muted/50 aspect-video rounded-xl" />
+        <div class="min-w-0">
+          <p class="text-2xl font-bold text-foreground">{{ stat.value }}</p>
+          <p class="text-xs text-muted-foreground mt-0.5">{{ stat.label }}</p>
         </div>
-        <div class="bg-muted/50 min-h-[100vh] flex-1 rounded-xl md:min-h-min" />
       </div>
-    </SidebarInset>
-  </SidebarProvider>
+    </div>
+  </div>
 </template>
