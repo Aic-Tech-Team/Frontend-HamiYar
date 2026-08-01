@@ -24,9 +24,9 @@ const pageTitle = computed(() => {
     <AppSidebar />
     <SidebarInset>
       <header
-        class="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12"
+        class=" flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12"
       >
-        <div class="flex items-center gap-2 px-4">
+        <div class="max-w-7xl flex items-center gap-2 px-4">
           <SidebarTrigger class="-ml-1" />
           <Separator orientation="vertical" class="me-2 data-[orientation=vertical]:h-4" />
           <Breadcrumb>
@@ -38,7 +38,7 @@ const pageTitle = computed(() => {
           </Breadcrumb>
         </div>
       </header>
-      <div class="flex flex-1 flex-col">
+      <div class="flex flex-1 flex-col mx-5">
         <slot />
       </div>
     </SidebarInset>
