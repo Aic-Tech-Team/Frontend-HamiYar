@@ -1,8 +1,8 @@
 <script setup lang="ts">
+import { computed } from "vue";
 import type { Component } from "vue";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 
 import IconMdiArrowLeft from "~icons/mdi/arrow-left";
 
@@ -11,11 +11,19 @@ interface Props {
   title: string;
   description: string;
   isActive?: boolean;
+  isSupported?: boolean;
 }
 
 const props = withDefaults(defineProps<Props>(), {
   isActive: true,
+  isSupported: true,
 });
+
+// "فعال" only when BOTH flags are true. If exactly one is true, it's
+// "به زودی". Cards where both are false are filtered out entirely by the
+// parent (see ServicesSection.vue) — this component never has to handle
+// that case itself.
+const isFullyActive = computed(() => props.isActive && props.isSupported);
 
 const emit = defineEmits<{
   "start-service": [];
@@ -23,59 +31,67 @@ const emit = defineEmits<{
 </script>
 
 <template>
-  <Card
-    class="group rounded-2xl xs:rounded-3xl transition-all duration-300 border-2 w-full min-w-0 relative"
-    :class="{
-      'hover:shadow-md hover:-translate-y-1': props.isActive,
-      'opacity-70 pointer-events-none': !props.isActive,
-    }"
+  <article
+    class="service-card w-full rounded-2xl bg-brand-primary-50/40 border border-border shadow-sm p-4 xs:p-5 flex flex-col xs:flex-row xs:items-center gap-4"
+    :class="{ 'opacity-70': !isFullyActive }"
   >
-    <Badge
-      v-if="!props.isActive"
-      variant="destructive"
-      class="absolute top-4 left-4 z-10 opacity-90"
+    <div
+      class="size-12 xs:size-14 rounded-xl bg-brand-primary-100/60 flex items-center justify-center shrink-0"
+      :class="{ grayscale: !isFullyActive }"
     >
-      غیر فعال
-    </Badge>
+      <component :is="props.icon" class="size-6 xs:size-7 text-brand-primary-600" />
+    </div>
 
-    <CardHeader class="text-center" :class="{ grayscale: !props.isActive }">
-      <div
-        class="p-4 xs:p-5 w-max mx-auto rounded-2xl xs:rounded-3xl bg-brand-primary-50 mb-4 -mt-14 xs:-mt-16 transition-colors duration-300 border-2"
-      >
-        <component
-          :is="props.icon"
-          class="size-12 xs:size-15 text-primary transition-all duration-300"
-          :class="{
-            'group-hover:rotate-12 group-hover:scale-110': props.isActive,
-          }"
-        />
+    <div class="flex-1 min-w-0">
+      <div class="flex items-center gap-2 flex-wrap">
+        <h3 class="text-sm xs:text-base font-semibold text-brand-primary-700">
+          {{ props.title }}
+        </h3>
+        <Badge v-if="isFullyActive" class="bg-emerald-100 text-emerald-700 border-emerald-200">
+          فعال
+        </Badge>
+        <Badge v-else variant="secondary"> به زودی </Badge>
       </div>
-
-      <CardTitle class="text-lg xs:text-xl">
-        {{ props.title }}
-      </CardTitle>
-    </CardHeader>
-
-    <CardContent :class="{ grayscale: !props.isActive }">
-      <p class="text-muted-foreground text-sm">
+      <p class="text-xs xs:text-sm text-muted-foreground mt-1 leading-relaxed">
         {{ props.description }}
       </p>
-    </CardContent>
+    </div>
 
-    <CardFooter class="pt-0" :class="{ grayscale: !props.isActive }">
-      <Button
-        @click="emit('start-service')"
-        class="w-full border-2"
-        size="lg"
-        variant="outline"
-        :disabled="!props.isActive"
-      >
-        <template v-if="props.isActive">
-          شروع درخواست
-          <IconMdiArrowLeft class="size-5 mr-2" />
-        </template>
-        <template v-else> به زودی... </template>
-      </Button>
-    </CardFooter>
-  </Card>
+    <Button
+      size="lg"
+      variant="outline"
+      class="w-full xs:w-auto shrink-0 border-2"
+      :disabled="!isFullyActive"
+      @click="emit('start-service')"
+    >
+      <template v-if="isFullyActive">
+        شروع درخواست
+        <IconMdiArrowLeft class="size-5" />
+      </template>
+      <template v-else> به زودی... </template>
+    </Button>
+  </article>
 </template>
+
+<style scoped>
+.service-card {
+  transition:
+    transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.3s ease;
+}
+
+.service-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .service-card {
+    transition: none;
+  }
+
+  .service-card:hover {
+    transform: none;
+  }
+}
+</style>
