@@ -90,6 +90,14 @@ const router = createRouter({
             title: `مثال | ${appName}`,
           },
         },
+        {
+          path: "services",
+          name: "DashboardServices",
+          component: () => import("@/views/dashboard/DashboardServicesView.vue"),
+          meta: {
+            title: `خدمات سامانه | ${appName}`,
+          },
+        },
       ],
     },
 
