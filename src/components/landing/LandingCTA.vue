@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { RouterLink } from "vue-router";
-import { Phone  } from "@lucide/vue";
+import { ArrowLeft } from "@lucide/vue";
 import { Button } from "@/components/ui/button";
 
 import IconSolarShieldCheckOutline from "~icons/solar/shield-check-outline";
@@ -27,22 +27,24 @@ import IconSolarShieldCheckOutline from "~icons/solar/shield-check-outline";
           class="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 mb-6 md:mb-8"
         >
           <IconSolarShieldCheckOutline class="size-4 text-white" />
-          <span class="text-xs md:text-sm font-medium text-white"> بدون نیاز به حضور فیزیکی </span>
+          <span class="text-xs md:text-sm font-medium text-white">
+            رایگان – بدون نیاز به حضور فیزیکی
+          </span>
         </div>
 
         <h2
           class="text-white text-2xl sm:text-3xl md:text-4xl font-bold leading-tight md:leading-tight max-w-3xl mb-4 md:mb-6"
         >
-          همین امروز فرآیندهای اداری خود را متحول کنید
+          همین امروز فرآیندهای دانشگاهی خود را متحول کنید
         </h2>
 
         <p
           class="text-white/80 text-sm sm:text-base md:text-lg max-w-2xl mb-8 md:mb-12 leading-relaxed"
         >
-          همین حالا به خانواده حامی یار بپیوندید و در سازمان تان بهره ببرید
+          به بیش از ۵۰,۰۰۰ دانشجوی فعال در سامانه حامی یار بپیوندید و تجربه ای نوین داشته باشید.
         </p>
 
-        <RouterLink to="#support">
+        <RouterLink to="/login">
           <Button
             v-motion
             :initial="{ scale: 1 }"
@@ -51,8 +53,8 @@ import IconSolarShieldCheckOutline from "~icons/solar/shield-check-outline";
             size="lg"
             class="bg-white hover:bg-brand-primary-50 text-brand-primary-600 rounded-full px-8 h-12 sm:h-14 text-sm sm:text-base font-bold flex-center gap-2 transition-all active:scale-95 shadow-[0_8px_20px_rgba(0,0,0,0.12)] hover:shadow-[0_12px_24px_rgba(0,0,0,0.18)]"
           >
-            درخواست تماس 
-            <Phone  class="size-4 sm:size-5" aria-hidden="true" />
+            عضویت در سامانه
+            <ArrowLeft class="size-4 sm:size-5" aria-hidden="true" />
           </Button>
         </RouterLink>
       </div>
