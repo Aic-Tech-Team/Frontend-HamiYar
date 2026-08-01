@@ -14,9 +14,7 @@ import { services } from "@/constants/services";
       <h2 class="text-2xl xs:text-3xl md:text-4xl font-bold text-brand-primary-700 mb-4">
         هر مدرکی که نیاز دارید، یک‌جا
       </h2>
-      <p
-        class="text-sm xs:text-base text-muted-foreground max-w-2xl mx-auto px-2 sm:px-0 leading-relaxed"
-      >
+      <p class="text-sm xs:text-base text-muted-foreground max-w-2xl mx-auto leading-relaxed">
         دسترسی سریع و آسان به تمامی اسناد تحصیلی مورد نیاز شما در یک پلتفرم جامع.
       </p>
     </div>
