@@ -14,7 +14,7 @@ export const useElaApi = () => {
     if (!trimmed) throw new Error("Invalid tracking number");
 
     const response = await $api.get<EtelaCertificateResponse>(
-      apiEndpoints.requests.ela.get(trimmed),
+      apiEndpoints.requests.etela.get(trimmed),
     );
     if (!response.data) throw new Error("No data received from API");
     return response.data;
@@ -24,7 +24,7 @@ export const useElaApi = () => {
     requestData: EtelaCertificateRequestModel,
   ): Promise<string> {
     const response = await $api.post<SubmitFormResponse>(
-      apiEndpoints.requests.ela.submit,
+      apiEndpoints.requests.etela.submit,
       requestData,
     );
     if (!response.data) throw new Error("No data received from API");
