@@ -29,7 +29,7 @@ export const services: ServiceItem[] = [
     isSupported: true,
   },
   {
-    id: "ela",
+    id: "etela",
     icon: IconSolarMedalRibbonsStarOutline, //
     title: "گواهی طرح اعتلا",
     description: "صدور گواهی گذراندن دوره ۸ ساعته طرح ملی اعتلا، ویژه دستیاران آموزشی.",
