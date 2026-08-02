@@ -6,10 +6,10 @@ import type {
 } from "@/types/requests/etela";
 import type { SubmitFormResponse } from "@/types/requests/common";
 
-export const useElaApi = () => {
+export const useEtelaApi = () => {
   const { apiEndpoints } = useApiConfig();
 
-  async function getElaCertificate(trackingNumber: string): Promise<EtelaCertificateResponse> {
+  async function getEtelaCertificate(trackingNumber: string): Promise<EtelaCertificateResponse> {
     const trimmed = trackingNumber?.trim();
     if (!trimmed) throw new Error("Invalid tracking number");
 
@@ -20,7 +20,7 @@ export const useElaApi = () => {
     return response.data;
   }
 
-  async function submitElaCertificate(
+  async function submitEtelaCertificate(
     requestData: EtelaCertificateRequestModel,
   ): Promise<string> {
     const response = await $api.post<SubmitFormResponse>(
@@ -33,7 +33,7 @@ export const useElaApi = () => {
   }
 
   return {
-    getElaCertificate,
-    submitElaCertificate,
+    getEtelaCertificate,
+    submitEtelaCertificate,
   };
 };

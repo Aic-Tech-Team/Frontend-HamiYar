@@ -66,7 +66,7 @@ function transformApiResponseToFormData(apiResponse: EtelaCertificateResponse): 
   };
 }
 
-export const useElaFormStore = defineStore("elaForm", () => {
+export const useEtelaFormStore = defineStore("etelaForm", () => {
   // Private state
   const _formData = ref<EtelaFormData | null>(null);
   const _rawApiResponse = ref<EtelaCertificateResponse | null>(null);

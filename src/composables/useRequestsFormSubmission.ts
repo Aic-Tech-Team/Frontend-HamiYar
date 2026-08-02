@@ -6,22 +6,27 @@ import { useEducationFormStore } from "@/stores/education/useEducationFormStore"
 import { useInternshipFormStore } from "@/stores/internship/useInternshipFormStore";
 import type { EducationFormData } from "@/types/requests/education";
 import type { InternshipFormData } from "@/types/requests/internship";
+import { useEtelaApi } from "@/composables/api/useEtelaApi";
+import { useEtelaFormStore } from "@/stores/etela/useEtelaFromStore";
+import type { EtelaFormData } from "@/types/requests/etela";
 
 export function useRequestsFormSubmission(
   validateForm: () => boolean,
-  requestType: "education" | "internship",
+  requestType: "education" | "internship" | "etela",
 ) {
   const isEditMode = ref(true);
   const isSubmitted = ref(false);
   const isSubmitting = ref(false);
   const isFormValid = computed(() => validateForm());
 
+  const etelaFormStore = useEtelaFormStore();
+  const { submitEtelaCertificate } = useEtelaApi();
   const educationFormStore = useEducationFormStore();
   const internshipFormStore = useInternshipFormStore();
   const { submitEducationCertificate } = useEducationApi();
   const { submitInternshipLetter } = useInternshipApi();
 
-  async function handleSubmit(formData?: EducationFormData | InternshipFormData) {
+  async function handleSubmit(formData?: EducationFormData | InternshipFormData | EtelaFormData) {
     if (!isFormValid.value || isSubmitting.value || !formData) return;
 
     isSubmitting.value = true;
@@ -42,7 +47,12 @@ export function useRequestsFormSubmission(
           );
           internshipFormStore.setTrackingNumber(trackingNumber);
           break;
-
+        case "etela":
+          trackingNumber = await submitEtelaCertificate(
+            etelaFormStore.transformFormDataToRequest(formData as EtelaFormData),
+          );
+          etelaFormStore.setTrackingNumber(trackingNumber);
+          break;
         default:
           throw new Error("Invalid request type");
       }
