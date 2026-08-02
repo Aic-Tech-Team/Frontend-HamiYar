@@ -33,7 +33,7 @@ export const services: ServiceItem[] = [
     icon: IconSolarMedalRibbonsStarOutline, //
     title: "گواهی طرح اعتلا",
     description: "صدور گواهی گذراندن دوره ۸ ساعته طرح ملی اعتلا، ویژه دستیاران آموزشی.",
-    isActive: true, // frontend built, backend not ready — flip once it is
+    isActive: true, 
     isSupported: true,
   },
   {
