@@ -23,6 +23,11 @@ export const useApiConfig = () => {
         get: (trackingNumber: string) => `${baseUrl}/intern/${trackingNumber}/`,
         submit: `${baseUrl}/intern/`,
       },
+      //Etela request endpoint
+      etela: {
+        get: (trackingNumber: string) => `${baseUrl}/etela/${trackingNumber}/`,
+        submit: `${baseUrl}/etela/`,
+      },
     },
 
     contact: {

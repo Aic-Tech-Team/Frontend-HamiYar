@@ -50,7 +50,7 @@ const emit = defineEmits<{
         <Badge v-if="isFullyActive" class="bg-emerald-100 text-emerald-700 border-emerald-200">
           فعال
         </Badge>
-        <Badge v-else variant="secondary"> به زودی </Badge>
+        <Badge v-else variant="secondary" class="bg-blue-100 text-blue-700 border-blue-200"> به زودی </Badge>
       </div>
       <p class="text-xs xs:text-sm text-muted-foreground mt-1 leading-relaxed">
         {{ props.description }}

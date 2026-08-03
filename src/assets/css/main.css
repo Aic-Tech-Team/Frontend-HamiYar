@@ -431,6 +431,10 @@
     print-color-adjust: exact !important;
   }
 
+  .print-hidden {
+    display: none !important;
+  }
+
   /* Hide toast notifications when printing */
   [data-sonner-toaster],
   [data-sonner-toaster] *,
