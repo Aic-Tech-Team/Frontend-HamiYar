@@ -37,5 +37,5 @@ export interface EtelaFormData {
     title: string;
     name: string;
     imageUrl: string;
-  };
+  }[];
 }
