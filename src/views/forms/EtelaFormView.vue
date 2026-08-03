@@ -21,7 +21,7 @@ const { formatIsoToJalali, formatDateString } = useDate();
 const elaFormStore = useEtelaFormStore();
 const globalLoading = useGlobalLoadingStore();
 const studentStore = useStudentStore();
-const { getElaCertificate } = useEtelaApi();
+const { getEtelaCertificate } = useEtelaApi();
 
 const isPrintView = computed(() => route.meta.print === true);
 const qrImageSrc = computed(() => elaFormStore.rawApiResponse?.qr_code_image);
@@ -47,7 +47,7 @@ async function loadPublicData() {
   }
 
   try {
-    const apiResponse = await getElaCertificate(trackingNumber);
+    const apiResponse = await getEtelaCertificate(trackingNumber);
 
     elaFormStore.setFormDataFromApi(apiResponse);
 
