@@ -48,7 +48,7 @@ function transformApiResponseToFormData(apiResponse: EtelaCertificateResponse): 
       university: student.university?.name || "",
       city: student.university?.city || "",
       date: formatIsoToJalali(apiResponse.date) || "-",
-      number: apiResponse.tracking_number || "-",
+      number: apiResponse.tracking_number?.replace(/^ETELA-/, "") || "-",
       attachment: "-",
     },
     student: {
