@@ -9,12 +9,21 @@ import { useStudentApi } from "@/composables/api/useStudentApi";
 import { useStudentStore } from "@/stores/student/useStudentStore";
 import { services } from "@/constants/services";
 
-type ServiceType = "education" | "internship";
+type ServiceType = "education" | "internship" | "etela";
 
 interface UserIdentifier {
   type: "national" | "student";
   value: string;
 }
+
+// One explicit place mapping each service to its destination — a ternary
+// can't safely express three outcomes, a map always can, no matter how
+// many more get added later.
+const SERVICE_ROUTES: Record<ServiceType, string> = {
+  education: "/education",
+  internship: "/internship",
+  etela: "/etela",
+};
 
 const systemServices = computed(() =>
   services.filter((service) => service.isActive || service.isSupported),
@@ -56,7 +65,7 @@ async function handleServiceRequest(identifier: UserIdentifier): Promise<void> {
     identifier.value = "";
     isModalOpen.value = false;
     currentServiceType.value = null;
-    router.push(serviceType === "education" ? "/education" : "/internship");
+    router.push(SERVICE_ROUTES[serviceType]);
   } catch (error: any) {
     console.error("Error checking student:", error);
 

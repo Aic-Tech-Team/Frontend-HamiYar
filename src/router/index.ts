@@ -4,7 +4,6 @@ import { appConfig } from "@/config";
 import { useAuthJwtStore } from "@/stores/account/useAuthJwtStore";
 import LandingPageView from "@/views/LandingPageView.vue";
 
-
 const appName = appConfig.app.name;
 
 const router = createRouter({
@@ -127,6 +126,24 @@ const router = createRouter({
             requiresAuth: false,
             print: true,
           },
+        },
+      ],
+    },
+    {
+      path: "/etela",
+      meta: { layout: "form", fixedViewport: true },
+      children: [
+        {
+          path: "",
+          name: "Etela",
+          component: () => import("@/views/forms/EtelaFormView.vue"),
+          meta: { title: `گواهی طرح اعتلا | ${appName}`, requiresAuth: true },
+        },
+        {
+          path: ":trackingNumber",
+          name: "EtelaPublic",
+          component: () => import("@/views/forms/EtelaFormView.vue"),
+          meta: { title: `گواهی طرح اعتلا | ${appName}`, requiresAuth: false, print: true },
         },
       ],
     },

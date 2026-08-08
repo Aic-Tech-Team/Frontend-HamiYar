@@ -10,9 +10,7 @@ const route = useRoute();
 const router = useRouter();
 
 const showExitConfirm = computed(() => !route.meta.print);
-const sheetHeightClass = computed(() =>
-  route.meta.print ? "h-[297mm]" : "min-h-[297mm]",
-);
+const sheetHeightClass = computed(() => (route.meta.print ? "h-[297mm]" : "min-h-[297mm]"));
 
 function handleExitPage() {
   router.push({ name: "Dashboard" });
