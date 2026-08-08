@@ -31,7 +31,7 @@ function handlePrint() {
 </script>
 
 <template>
-  <div class="mt-auto flex gap-3 justify-end print-hidden">
+  <div class="mt-auto flex gap-3 justify-end print:hidden">
     <template v-if="!isSubmitted">
       <Button
         variant="default"

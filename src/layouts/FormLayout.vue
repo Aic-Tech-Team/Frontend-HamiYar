@@ -61,30 +61,6 @@ function handleExitPage() {
 @reference "@/assets/css/main.css";
 
 @media print {
-  @page {
-    size: 210mm 297mm;
-    margin: 0;
-  }
-
-  html,
-  body {
-    margin: 0 !important;
-    padding: 0 !important;
-    width: 210mm !important;
-    height: 297mm !important;
-    max-height: 297mm !important;
-    overflow: hidden !important;
-    background: white;
-  }
-
-  button {
-    display: none !important;
-  }
-
-  .print-hidden {
-    display: none !important;
-  }
-
   .form-print-root {
     position: relative !important;
     width: 210mm !important;
