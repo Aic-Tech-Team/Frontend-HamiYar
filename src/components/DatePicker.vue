@@ -58,7 +58,7 @@ const formattedDate = computed(() => {
         :disabled="props.disabled"
         :class="
           cn(
-            'w-[240px] justify-start text-left font-normal',
+            'mx-1 w-[240px] align-middle justify-start text-start font-normal',
             !calendarDate && 'text-muted-foreground',
             props.highlight && isEmpty && 'border-brand-primary-500',
             props.triggerClass,
@@ -72,28 +72,24 @@ const formattedDate = computed(() => {
         <span v-else :class="triggerPlaceholderClass">انتخاب تاریخ</span>
       </Button>
     </PopoverTrigger>
-    <PopoverContent class="w-auto p-0" align="start">
-      <div
-        class="**:data-[slot=native-select-icon]:right-[unset] **:data-[slot=native-select-icon]:left-3.5"
+    <PopoverContent class="w-auto p-0" align="start" dir="rtl">
+      <Calendar
+        v-model="calendarDate"
+        :default-placeholder="defaultPlaceholder"
+        locale="fa-IR"
+        layout="month-and-year"
+        class="rounded-md border shadow-sm"
+        dir="rtl"
+        initial-focus
+        @update:model-value="close"
       >
-        <Calendar
-          v-model="calendarDate"
-          :default-placeholder="defaultPlaceholder"
-          locale="fa-IR"
-          layout="month-and-year"
-          class="rounded-md border shadow-sm"
-          dir="rtl"
-          initial-focus
-          @update:model-value="close"
-        >
-          <template #calendar-next-icon>
-            <ChevronLeft />
-          </template>
-          <template #calendar-prev-icon>
-            <ChevronRight />
-          </template>
-        </Calendar>
-      </div>
+        <template #calendar-next-icon>
+          <ChevronLeft />
+        </template>
+        <template #calendar-prev-icon>
+          <ChevronRight />
+        </template>
+      </Calendar>
     </PopoverContent>
   </Popover>
 </template>

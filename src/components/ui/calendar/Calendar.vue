@@ -44,46 +44,42 @@ const forwarded = useForwardPropsEmits(delegatedProps, emits)
 
 <template>
   <DefineMonthTemplate v-slot="{ date }">
-    <div class="**:data-[slot=native-select-icon]:right-1">
-      <div class="relative">
-        <div class="absolute inset-0 flex h-full items-center text-sm pl-2 pointer-events-none">
-          {{ formatter.custom(toDate(date), { month: 'short' }) }}
-        </div>
-        <NativeSelect
-          class="text-xs h-8 pr-6 pl-2 text-transparent relative"
-          @change="(e: Event) => {
-            placeholder = placeholder.set({
-              month: Number((e?.target as any)?.value),
-            })
-          }"
-        >
-          <NativeSelectOption v-for="(month) in createYear({ dateObj: date })" :key="month.toString()" :value="month.month" :selected="date.month === month.month">
-            {{ formatter.custom(toDate(month), { month: 'short' }) }}
-          </NativeSelectOption>
-        </NativeSelect>
+    <div class="relative">
+      <div class="absolute inset-0 flex h-full items-center justify-start text-sm ps-2 pe-7 pointer-events-none">
+        {{ formatter.custom(toDate(date), { month: 'short' }) }}
       </div>
+      <NativeSelect
+        class="text-xs h-8 ps-2 pe-7 text-transparent relative"
+        @change="(e: Event) => {
+          placeholder = placeholder.set({
+            month: Number((e?.target as any)?.value),
+          })
+        }"
+      >
+        <NativeSelectOption v-for="(month) in createYear({ dateObj: date })" :key="month.toString()" :value="month.month" :selected="date.month === month.month">
+          {{ formatter.custom(toDate(month), { month: 'short' }) }}
+        </NativeSelectOption>
+      </NativeSelect>
     </div>
   </DefineMonthTemplate>
 
   <DefineYearTemplate v-slot="{ date }">
-    <div class="**:data-[slot=native-select-icon]:right-1">
-      <div class="relative">
-        <div class="absolute inset-0 flex h-full items-center text-sm pl-2 pointer-events-none">
-          {{ formatter.custom(toDate(date), { year: 'numeric' }) }}
-        </div>
-        <NativeSelect
-          class="text-xs h-8 pr-6 pl-2 text-transparent relative"
-          @change="(e: Event) => {
-            placeholder = placeholder.set({
-              year: Number((e?.target as any)?.value),
-            })
-          }"
-        >
-          <NativeSelectOption v-for="(year) in yearRange" :key="year.toString()" :value="year.year" :selected="date.year === year.year">
-            {{ formatter.custom(toDate(year), { year: 'numeric' }) }}
-          </NativeSelectOption>
-        </NativeSelect>
+    <div class="relative">
+      <div class="absolute inset-0 flex h-full items-center justify-start text-sm ps-2 pe-7 pointer-events-none">
+        {{ formatter.custom(toDate(date), { year: 'numeric' }) }}
       </div>
+      <NativeSelect
+        class="text-xs h-8 ps-2 pe-7 text-transparent relative"
+        @change="(e: Event) => {
+          placeholder = placeholder.set({
+            year: Number((e?.target as any)?.value),
+          })
+        }"
+      >
+        <NativeSelectOption v-for="(year) in yearRange" :key="year.toString()" :value="year.year" :selected="date.year === year.year">
+          {{ formatter.custom(toDate(year), { year: 'numeric' }) }}
+        </NativeSelectOption>
+      </NativeSelect>
     </div>
   </DefineYearTemplate>
 
