@@ -1,23 +1,36 @@
-// گواهی طرح اعتلا (Ela National Plan) certificate API types
 import type { Signer, CertificateStudent } from "./common";
+
+export type EtelaGender = "female" | "male";
 
 export interface EtelaCertificateResponse {
   student: CertificateStudent;
   signer: Signer;
-  completion_date: string; // ISO date: "2026-02-08"
+  gender: EtelaGender;
+  course_date: string;
+  expiration_date?: string;
+  certificate?: string | null;
+  description?: string | null;
   qr_code_image: string;
-  qr_url?: string;
-  date: string; // ISO date
+  qr_url?: string | null;
+  certificate_text?: string;
+  date: string;
   tracking_number?: string;
 }
 
-// Ela certificate POST request body
 export interface EtelaCertificateRequestModel {
   student_number: string;
-  completion_date: string;
+  gender: EtelaGender;
+  course_date: string;
+  certificate?: string;
+  description?: string;
 }
 
-// Form data structure matching ElaFormView for UI
+export interface EtelaCertificateCreateResponse {
+  message?: string;
+  ela_id?: number;
+  tracking_number: string;
+}
+
 export interface EtelaFormData {
   header: {
     university: string;
@@ -32,10 +45,13 @@ export interface EtelaFormData {
     idNumber: string;
     photoUrl: string;
   };
-  completionDate: string; // ISO date (YYYY-MM-DD) from DatePicker
+  gender: EtelaGender | "";
+  courseDate: string;
+  certificate: string;
+  description: string;
   signature: {
     title: string;
     name: string;
     imageUrl: string;
-  }[];
+  };
 }

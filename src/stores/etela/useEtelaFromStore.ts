@@ -10,9 +10,6 @@ import { useDate } from "@/composables/useDate";
 
 const { formatIsoToJalali } = useDate();
 
-/**
- * Get default form data structure
- */
 function getDefaultFormData(): EtelaFormData {
   return {
     header: {
@@ -28,7 +25,10 @@ function getDefaultFormData(): EtelaFormData {
       idNumber: "",
       photoUrl: "",
     },
-    completionDate: "",
+    gender: "",
+    courseDate: "",
+    certificate: "",
+    description: "",
     signature: {
       title: "",
       name: "",
@@ -37,9 +37,6 @@ function getDefaultFormData(): EtelaFormData {
   };
 }
 
-/**
- * Transform API response to form data structure
- */
 function transformApiResponseToFormData(apiResponse: EtelaCertificateResponse): EtelaFormData {
   const { student, signer } = apiResponse;
 
@@ -54,10 +51,13 @@ function transformApiResponseToFormData(apiResponse: EtelaCertificateResponse): 
     student: {
       code: student.student_number || "",
       fullName: `${student.first_name || ""} ${student.last_name || ""}`.trim(),
-      idNumber: student.certificate_number || student.national_id || "",
+      idNumber: student.national_id || student.certificate_number || "",
       photoUrl: "",
     },
-    completionDate: apiResponse.completion_date || "",
+    gender: apiResponse.gender || "",
+    courseDate: apiResponse.course_date || "",
+    certificate: apiResponse.certificate || student.certificate_number || "",
+    description: apiResponse.description || "",
     signature: {
       title: signer?.title || "",
       name: signer?.full_name || "",
@@ -67,7 +67,6 @@ function transformApiResponseToFormData(apiResponse: EtelaCertificateResponse): 
 }
 
 export const useEtelaFormStore = defineStore("etelaForm", () => {
-  // Private state
   const _formData = ref<EtelaFormData | null>(null);
   const _rawApiResponse = ref<EtelaCertificateResponse | null>(null);
   const _trackingNumber = ref<string | null>(null);
@@ -83,9 +82,16 @@ export const useEtelaFormStore = defineStore("etelaForm", () => {
   }
 
   function transformFormDataToRequest(formData: EtelaFormData): EtelaCertificateRequestModel {
+    if (formData.gender !== "female" && formData.gender !== "male") {
+      throw new Error("gender is required");
+    }
+
     return {
       student_number: formData.student.code || "",
-      completion_date: formData.completionDate || "",
+      gender: formData.gender,
+      course_date: formData.courseDate || "",
+      certificate: formData.certificate || undefined,
+      description: formData.description || undefined,
     };
   }
 

@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { computed, reactive, onMounted, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
-// import { Textarea } from "@/components/ui/textarea";
+import { Textarea } from "@/components/ui/textarea";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Label } from "@/components/ui/label";
 import DatePicker from "@/components/DatePicker.vue";
 import FormDocumentActions from "@/components/forms/FormDocumentActions.vue";
 import FormDocumentSignature from "@/components/forms/FormDocumentSignature.vue";
@@ -17,7 +19,7 @@ import IconSolarUserRoundedBold from "~icons/solar/user-rounded-bold";
 
 const route = useRoute();
 const router = useRouter();
-const { formatIsoToJalali, formatDateString } = useDate();
+const { formatDateString } = useDate();
 const elaFormStore = useEtelaFormStore();
 const globalLoading = useGlobalLoadingStore();
 const studentStore = useStudentStore();
@@ -36,7 +38,8 @@ function prefillFromStudent() {
   formData.student.code = student.student_number || "";
   formData.student.fullName =
     student.full_name || `${student.first_name || ""} ${student.last_name || ""}`.trim();
-  formData.student.idNumber = student.certificate_number || student.national_id || "";
+  formData.student.idNumber = student.national_id || student.certificate_number || "";
+  formData.certificate = student.certificate_number || "";
 }
 
 async function loadPublicData() {
@@ -90,9 +93,15 @@ watch(
 );
 
 function validateForm() {
-  const required = [formData.student.code, formData.completionDate];
+  const required = [formData.student.code, formData.courseDate, formData.gender];
   return required.every((f) => String(f || "").trim().length > 0);
 }
+
+const honorific = computed(() => {
+  if (formData.gender === "female") return "سرکار خانم";
+  if (formData.gender === "male") return "جناب آقای";
+  return "";
+});
 
 const {
   isEditMode,
@@ -168,7 +177,24 @@ const isInputDisabled = computed(() => isSubmitted.value || !isEditMode.value);
     <p class="font-bold text-sm mb-4">گواهی طرح اعتلا</p>
 
     <section :class="!isSubmitted ? 'leading-12' : 'leading-10'">
-      بدین وسیله گواهی می‌شود سرکار خانم / جناب آقای
+      بدین وسیله گواهی می‌شود
+      <RadioGroup
+        v-if="!isPrintView"
+        v-model="formData.gender"
+        :disabled="isInputDisabled"
+        class="inline-flex items-center gap-3 mx-1 align-middle"
+        :class="{ 'rounded-md border border-brand-primary-500 px-2 py-1': isEditMode && !formData.gender }"
+      >
+        <div class="flex items-center gap-1.5">
+          <RadioGroupItem id="etela-gender-female" value="female" />
+          <Label for="etela-gender-female" class="cursor-pointer">سرکار خانم</Label>
+        </div>
+        <div class="flex items-center gap-1.5">
+          <RadioGroupItem id="etela-gender-male" value="male" />
+          <Label for="etela-gender-male" class="cursor-pointer">جناب آقای</Label>
+        </div>
+      </RadioGroup>
+      <span v-else class="display-value">{{ honorific }}</span>
       <span class="display-value">{{ formData.student.fullName }}</span>
       با کد ملی
       <span class="display-value" dir="ltr">{{ formData.student.idNumber }}</span>
@@ -177,19 +203,19 @@ const isInputDisabled = computed(() => isSubmitted.value || !isEditMode.value);
 
       <DatePicker
         v-if="!isPrintView"
-        v-model:date="formData.completionDate"
+        v-model:date="formData.courseDate"
         :highlight="isEditMode"
         :disabled="isInputDisabled"
       />
       <span v-if="isPrintView" class="display-value">{{
-        formatDateString(formData.completionDate) || formData.completionDate
+        formatDateString(formData.courseDate) || formData.courseDate
       }}</span>
 
       ذیل آیین‌نامه دستیاری آموزشی به شماره ۱۰/۱۵۹۸ مورخ ۱۴۰۲/۰۵/۲۲ شده‌اند.
     </section>
   </section>
 
-  <!-- <section class="mt-4">
+  <section class="mt-4">
     <p class="font-bold text-sm">توضیحات {{ !isPrintView ? "(اختیاری)" : "" }} :</p>
     <div v-if="!isPrintView" class="mt-2">
       <Textarea
@@ -203,7 +229,7 @@ const isInputDisabled = computed(() => isSubmitted.value || !isEditMode.value);
     <div v-if="isPrintView" class="mt-2 min-h-20">
       <p class="text-xs leading-7">{{ formData.description }}</p>
     </div>
-  </section> -->
+  </section>
 
   <FormDocumentSignature
     v-if="isPrintView && formData.signature"
