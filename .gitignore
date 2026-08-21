@@ -18,6 +18,7 @@ coverage
 .vscode/*
 !.vscode/extensions.json
 .idea
+.cursor
 *.suo
 *.ntvs*
 *.njsproj
@@ -39,3 +40,4 @@ __screenshots__/
 .env*
 !.env.example
 
+swagger.yaml
