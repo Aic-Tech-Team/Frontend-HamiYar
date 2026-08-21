@@ -11,7 +11,7 @@ export const useStudentApi = () => {
     const trimmed = identifier?.trim();
     if (!trimmed) throw new Error("Invalid identifier");
 
-    const url = apiEndpoints.requests.checkStudent(trimmed);
+    const url = apiEndpoints.requests.students.checkStudent(trimmed);
 
     const response = await $api.get<CheckStudentResponse>(url);
     const checkStudentResponse = response.data;

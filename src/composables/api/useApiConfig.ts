@@ -14,7 +14,10 @@ export const useApiConfig = () => {
 
     // * Requests related Endpoints
     requests: {
-      checkStudent: (studentNumber: string) => `${baseUrl}/check-student/${studentNumber}/`,
+      students: {
+        checkStudent: (studentNumber: string) =>
+          `${baseUrl}/students/check-student/${studentNumber}/`,
+      },
       education: {
         get: (trackingNumber: string) => `${baseUrl}/education/${trackingNumber}/`,
         submit: `${baseUrl}/education/`,
@@ -23,10 +26,9 @@ export const useApiConfig = () => {
         get: (trackingNumber: string) => `${baseUrl}/intern/${trackingNumber}/`,
         submit: `${baseUrl}/intern/`,
       },
-      //Etela request endpoint
       etela: {
         get: (trackingNumber: string) => `${baseUrl}/etela/${trackingNumber}/`,
-        submit: `${baseUrl}/etela/`,
+        submit: `${baseUrl}/etela/create/`,
       },
     },
 
