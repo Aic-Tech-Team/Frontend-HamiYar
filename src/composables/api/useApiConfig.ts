@@ -18,18 +18,33 @@ export const useApiConfig = () => {
         checkStudent: (studentNumber: string) =>
           `${baseUrl}/students/check-student/${studentNumber}/`,
       },
-      education: {
-        get: (trackingNumber: string) => `${baseUrl}/education/${trackingNumber}/`,
-        submit: `${baseUrl}/education/`,
-      },
-      internship: {
-        get: (trackingNumber: string) => `${baseUrl}/intern/${trackingNumber}/`,
-        submit: `${baseUrl}/intern/`,
-      },
-      etela: {
-        get: (trackingNumber: string) => `${baseUrl}/etela/${trackingNumber}/`,
-        submit: `${baseUrl}/etela/create/`,
-      },
+      
+      education: (() => {
+        const base = `${baseUrl}/requests/education`;
+
+        return {
+          get: (trackingNumber: string) => `${base}/${trackingNumber}/`,
+          submit: `${base}/`,
+        };
+      })(),
+
+      internship: (() => {
+        const base = `${baseUrl}/intern`;
+
+        return {
+          get: (trackingNumber: string) => `${base}/${trackingNumber}/`,
+          submit: `${base}/`,
+        };
+      })(),
+
+      etela: (() => {
+        const base = `${baseUrl}/etela`;
+
+        return {
+          get: (trackingNumber: string) => `${base}/${trackingNumber}/`,
+          submit: `${base}/create/`,
+        };
+      })(),
     },
 
     contact: {
