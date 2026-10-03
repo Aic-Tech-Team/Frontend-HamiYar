@@ -18,13 +18,14 @@ export const useApiConfig = () => {
         checkStudent: (studentNumber: string) =>
           `${baseUrl}/students/check-student/${studentNumber}/`,
       },
-      
+
       education: (() => {
         const base = `${baseUrl}/requests/education`;
 
         return {
           get: (trackingNumber: string) => `${base}/${trackingNumber}/`,
           submit: `${base}/`,
+          overviewCount: `${base}/overview/count/`,
         };
       })(),
 
