@@ -1,32 +1,44 @@
 <script setup lang="ts">
-import { FileText, Clock, CheckCircle2, Users } from "@lucide/vue";
+import { ref, onMounted } from "vue";
+import { FileText, Loader2 } from "@lucide/vue";
+import { useOverviewApi } from "@/composables/api/useOverviewApi";
 
-const stats = [
+interface OverviewSource {
+  id: string;
+  label: string;
+  icon: typeof FileText;
+  fetchCount: () => Promise<number>;
+}
+
+// One entry per request type that actually has a real overview/count endpoint.
+// When internship/etela get their own endpoint later, add one more object here —
+// nothing else in this file needs to change.
+const { getEducationOverviewCount } = useOverviewApi();
+
+const overviewSources: OverviewSource[] = [
   {
-    label: "درخواست‌های امروز",
-    value: "۱۲",
+    id: "education",
+    label: "گواهی اشتغال به تحصیل",
     icon: FileText,
-    accent: "bg-brand-primary-100 text-brand-primary-600",
-  },
-  {
-    label: "در حال بررسی",
-    value: "۵",
-    icon: Clock,
-    accent: "bg-amber-100 text-amber-600",
-  },
-  {
-    label: "تکمیل‌شده این ماه",
-    value: "۱۸۴",
-    icon: CheckCircle2,
-    accent: "bg-emerald-100 text-emerald-600",
-  },
-  {
-    label: "دانشجویان فعال",
-    value: "۹۶۰",
-    icon: Users,
-    accent: "bg-sky-100 text-sky-600",
+    fetchCount: getEducationOverviewCount,
   },
 ];
+
+const counts = ref<Record<string, number | null>>({});
+const isLoading = ref(true);
+
+onMounted(async () => {
+  const results = await Promise.allSettled(
+    overviewSources.map((source) => source.fetchCount()),
+  );
+
+  results.forEach((result, index) => {
+    const source = overviewSources[index];
+    counts.value[source.id] = result.status === "fulfilled" ? result.value : null;
+  });
+
+  isLoading.value = false;
+});
 </script>
 
 <template>
@@ -38,19 +50,26 @@ const stats = [
 
   <div class="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-4 gap-4">
     <div
-      v-for="stat in stats"
-      :key="stat.label"
+      v-for="source in overviewSources"
+      :key="source.id"
       class="rounded-2xl border border-border bg-card p-5 flex items-center gap-4"
     >
       <div
-        class="size-11 rounded-xl flex items-center justify-center shrink-0"
-        :class="stat.accent"
+        class="size-11 rounded-xl flex items-center justify-center shrink-0 bg-brand-primary-100 text-brand-primary-600"
       >
-        <component :is="stat.icon" class="size-5" />
+        <component :is="source.icon" class="size-5" />
       </div>
       <div class="min-w-0">
-        <p class="text-2xl font-bold text-foreground">{{ stat.value }}</p>
-        <p class="text-xs text-muted-foreground mt-0.5">{{ stat.label }}</p>
+        <p v-if="isLoading" class="h-8 flex items-center">
+          <Loader2 class="size-5 text-muted-foreground animate-spin" />
+        </p>
+        <p v-else-if="counts[source.id] === null" class="text-2xl font-bold text-muted-foreground">
+          —
+        </p>
+        <p v-else class="text-2xl font-bold text-foreground">
+          {{ counts[source.id]?.toLocaleString("fa-IR") }}
+        </p>
+        <p class="text-xs text-muted-foreground mt-0.5">{{ source.label }}</p>
       </div>
     </div>
   </div>
