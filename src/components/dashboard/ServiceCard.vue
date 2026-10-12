@@ -21,8 +21,7 @@ const props = withDefaults(defineProps<Props>(), {
 
 // "فعال" only when BOTH flags are true. If exactly one is true, it's
 // "به زودی". Cards where both are false are filtered out entirely by the
-// parent (see ServicesSection.vue) — this component never has to handle
-// that case itself.
+// parent — this component never has to handle that case itself.
 const isFullyActive = computed(() => props.isActive && props.isSupported);
 
 const emit = defineEmits<{
@@ -32,43 +31,56 @@ const emit = defineEmits<{
 
 <template>
   <article
-    class="service-card w-full rounded-2xl bg-brand-primary-50/40 border border-border shadow-sm p-4 xs:p-5 flex flex-col xs:flex-row xs:items-center gap-4"
-    :class="{ 'opacity-70': !isFullyActive }"
+    class="service-card flex h-full flex-col gap-4 rounded-2xl border bg-white p-5"
+    :class="
+      isFullyActive
+        ? 'border-brand-primary-200 shadow-[0_1px_0_0_var(--color-brand-primary-100)]'
+        : 'border-dashed border-brand-primary-200/80 bg-transparent'
+    "
   >
-    <div
-      class="size-12 xs:size-14 rounded-xl bg-brand-primary-100/60 flex items-center justify-center shrink-0"
-      :class="{ grayscale: !isFullyActive }"
-    >
-      <component :is="props.icon" class="size-6 xs:size-7 text-brand-primary-600" />
+    <div class="flex items-start justify-between gap-3">
+      <div
+        class="flex size-12 shrink-0 items-center justify-center rounded-xl"
+        :class="
+          isFullyActive
+            ? 'bg-brand-primary-600 text-white'
+            : 'bg-brand-primary-100/70 text-brand-primary-400'
+        "
+      >
+        <component :is="props.icon" class="size-6" />
+      </div>
+      <Badge
+        v-if="isFullyActive"
+        class="border-emerald-200 bg-emerald-50 text-emerald-700"
+        variant="outline"
+      >
+        فعال
+      </Badge>
+      <Badge v-else variant="outline" class="border-amber-200 bg-amber-50 text-amber-700">
+        به زودی
+      </Badge>
     </div>
 
-    <div class="flex-1 min-w-0">
-      <div class="flex items-center gap-2 flex-wrap">
-        <h3 class="text-sm xs:text-base font-semibold text-brand-primary-700">
-          {{ props.title }}
-        </h3>
-        <Badge v-if="isFullyActive" class="bg-emerald-100 text-emerald-700 border-emerald-200">
-          فعال
-        </Badge>
-        <Badge v-else variant="secondary" class="bg-blue-100 text-blue-700 border-blue-200"> به زودی </Badge>
-      </div>
-      <p class="text-xs xs:text-sm text-muted-foreground mt-1 leading-relaxed">
+    <div class="flex-1">
+      <h3
+        class="text-base font-semibold"
+        :class="isFullyActive ? 'text-brand-primary-900' : 'text-brand-primary-800/70'"
+      >
+        {{ props.title }}
+      </h3>
+      <p class="mt-1.5 text-sm leading-7 text-muted-foreground">
         {{ props.description }}
       </p>
     </div>
 
     <Button
+      v-if="isFullyActive"
       size="lg"
-      variant="outline"
-      class="w-full xs:w-auto shrink-0 border-2"
-      :disabled="!isFullyActive"
+      class="w-full justify-between"
       @click="emit('start-service')"
     >
-      <template v-if="isFullyActive">
-        شروع درخواست
-        <IconMdiArrowLeft class="size-5" />
-      </template>
-      <template v-else> به زودی... </template>
+      شروع درخواست
+      <IconMdiArrowLeft class="size-5" />
     </Button>
   </article>
 </template>
@@ -76,22 +88,18 @@ const emit = defineEmits<{
 <style scoped>
 .service-card {
   transition:
-    transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
-    box-shadow 0.3s ease;
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .service-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.1);
+  border-color: var(--color-brand-primary-400);
+  box-shadow: 0 8px 24px -12px rgb(83 33 180 / 0.35);
 }
 
 @media (prefers-reduced-motion: reduce) {
   .service-card {
     transition: none;
-  }
-
-  .service-card:hover {
-    transform: none;
   }
 }
 </style>

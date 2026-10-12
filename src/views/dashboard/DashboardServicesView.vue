@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import PersonModal from "@/components/PersonModal.vue";
 import ServiceCard from "@/components/dashboard/ServiceCard.vue";
+import PageHeader from "@/components/dashboard/PageHeader.vue";
 
 import { ref, computed } from "vue";
 import { toast } from "vue-sonner";
@@ -27,6 +28,13 @@ const SERVICE_ROUTES: Record<ServiceType, string> = {
 
 const systemServices = computed(() =>
   services.filter((service) => service.isActive || service.isSupported),
+);
+
+const activeServices = computed(() =>
+  systemServices.value.filter((service) => service.isActive && service.isSupported),
+);
+const upcomingServices = computed(() =>
+  systemServices.value.filter((service) => service.isSupported && !service.isActive),
 );
 
 const currentServiceType = ref<ServiceType | null>(null);
@@ -86,14 +94,19 @@ async function handleServiceRequest(identifier: UserIdentifier): Promise<void> {
 
 <template>
   <div>
-    <div class="w-full mb-10 max-w-max flex-col-center items-start gap-4 text-start">
-      <h1 class="text-2xl xs:text-3xl font-bold text-foreground">خدمات قابل دسترس</h1>
-      <hr class="w-full h-1 bg-brand-primary-500 border-none rounded-full" />
-    </div>
+    <PageHeader
+      title="خدمات سامانه"
+      description="خدمت مورد نظر را انتخاب کنید و با شماره دانشجویی یا کد ملی، درخواست را برای دانشجو ثبت کنید."
+    />
 
-    <div class="flex flex-col gap-4 w-full">
-      <div v-for="service in systemServices" :key="service.id" class="w-full">
+    <section aria-labelledby="active-services">
+      <h2 id="active-services" class="mb-4 text-sm font-semibold text-brand-primary-700">
+        آماده ثبت درخواست
+      </h2>
+      <div class="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
         <ServiceCard
+          v-for="service in activeServices"
+          :key="service.id"
           :icon="service.icon"
           :title="service.title"
           :description="service.description"
@@ -102,7 +115,24 @@ async function handleServiceRequest(identifier: UserIdentifier): Promise<void> {
           @start-service="openServiceModal(service.id as ServiceType)"
         />
       </div>
-    </div>
+    </section>
+
+    <section v-if="upcomingServices.length" class="mt-10" aria-labelledby="upcoming-services">
+      <h2 id="upcoming-services" class="mb-4 text-sm font-semibold text-brand-primary-700">
+        در دست راه‌اندازی
+      </h2>
+      <div class="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
+        <ServiceCard
+          v-for="service in upcomingServices"
+          :key="service.id"
+          :icon="service.icon"
+          :title="service.title"
+          :description="service.description"
+          :is-active="service.isActive"
+          :is-supported="service.isSupported"
+        />
+      </div>
+    </section>
 
     <PersonModal
       v-model:identifier="identifier"

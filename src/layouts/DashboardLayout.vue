@@ -2,13 +2,6 @@
 import { computed } from "vue";
 import { useRoute } from "vue-router";
 import AppSidebar from "@/components/dashboard/AppSidebar.vue";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbList,
-  BreadcrumbPage,
-} from "@/components/ui/breadcrumb";
-import { Separator } from "@/components/ui/separator";
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 
 const route = useRoute();
@@ -17,28 +10,31 @@ const pageTitle = computed(() => {
   const title = route.meta.title as string | undefined;
   return title?.split("|")[0]?.trim() ?? "";
 });
+
+const todayLabel = new Intl.DateTimeFormat("fa-IR", {
+  weekday: "long",
+  day: "numeric",
+  month: "long",
+  year: "numeric",
+}).format(new Date());
 </script>
 
 <template>
   <SidebarProvider>
     <AppSidebar />
-    <SidebarInset>
+    <SidebarInset class="bg-(--dashboard-canvas)!">
       <header
-        class=" flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12"
+        class="sticky top-0 z-10 flex h-16 shrink-0 items-center justify-between gap-3 border-b border-brand-primary-100 bg-(--dashboard-canvas)/90 px-4 backdrop-blur sm:px-8"
       >
-        <div class="max-w-7xl flex items-center gap-2 px-4">
-          <SidebarTrigger class="-ml-1" />
-          <Separator orientation="vertical" class="me-2 data-[orientation=vertical]:h-4" />
-          <Breadcrumb>
-            <BreadcrumbList>
-              <BreadcrumbItem>
-                <BreadcrumbPage>{{ pageTitle }}</BreadcrumbPage>
-              </BreadcrumbItem>
-            </BreadcrumbList>
-          </Breadcrumb>
+        <div class="flex items-center gap-3">
+          <SidebarTrigger class="text-brand-primary-700 hover:bg-brand-primary-100" />
+          <span class="h-5 w-px bg-brand-primary-200" aria-hidden="true" />
+          <span class="text-sm font-medium text-brand-primary-800">{{ pageTitle }}</span>
         </div>
+        <time class="hidden text-sm text-muted-foreground sm:block">{{ todayLabel }}</time>
       </header>
-      <div class="flex flex-1 flex-col mx-5">
+
+      <div class="mx-auto flex w-full max-w-5xl flex-1 flex-col px-4 py-8 sm:px-8 sm:py-10">
         <slot />
       </div>
     </SidebarInset>

@@ -9,13 +9,13 @@ import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui
       <SidebarMenuButton size="lg" as-child class="hover:bg-transparent active:bg-transparent">
         <RouterLink to="/">
           <div
-            class="flex aspect-square size-8 items-center justify-center rounded-lg text-sidebar-primary-foreground"
+            class="flex aspect-square size-9 items-center justify-center rounded-lg bg-white p-1 shadow-sm"
           >
-            <img src="@/assets/images/logo.svg" />
+            <img src="@/assets/images/logo.svg" alt="" />
           </div>
-          <div class="grid flex-1 text-right text-sm leading-tight">
-            <span class="truncate font-medium"> سامانه حامیار </span>
-            <span class="truncate text-xs">سامانه یکپارچه</span>
+          <div class="grid flex-1 text-start text-sm leading-tight">
+            <span class="truncate font-bold text-white">سامانه حامیار</span>
+            <span class="truncate text-xs text-brand-primary-200">میز کار کارکنان</span>
           </div>
         </RouterLink>
       </SidebarMenuButton>

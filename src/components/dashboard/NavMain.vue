@@ -9,7 +9,6 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { Separator } from "@/components/ui/separator";
 
 interface NavItem {
   title: string;
@@ -30,11 +29,15 @@ function isActiveRoute(to: string) {
 
 <template>
   <SidebarGroup>
-    <SidebarGroupContent class="flex flex-col gap-2">
-      <Separator />
-      <SidebarMenu>
+    <SidebarGroupContent>
+      <SidebarMenu class="gap-1">
         <SidebarMenuItem v-for="item in items" :key="item.title">
-          <SidebarMenuButton :tooltip="item.title" as-child :is-active="isActiveRoute(item.to)">
+          <SidebarMenuButton
+            :tooltip="item.title"
+            as-child
+            :is-active="isActiveRoute(item.to)"
+            class="relative h-10 data-[active=true]:before:absolute data-[active=true]:before:inset-y-2 data-[active=true]:before:end-0 data-[active=true]:before:w-1 data-[active=true]:before:rounded-full data-[active=true]:before:bg-brand-primary-300"
+          >
             <RouterLink :to="item.to">
               <component :is="item.icon" v-if="item.icon" />
               <span>{{ item.title }}</span>

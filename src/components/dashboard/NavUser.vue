@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { useAuthApi } from "@/composables/api/useAuthApi";
 import { ChevronsUpDown, LogOut, UserRound } from "@lucide/vue";
-import { Button } from "@/components/ui/button";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -12,22 +11,15 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-  useSidebar,
-} from "@/components/ui/sidebar";
+import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar";
 
-const props = defineProps<{
+defineProps<{
   user: {
     name: string;
     email: string;
     avatar: string;
   };
 }>();
-
-const { isMobile } = useSidebar();
 
 const { logoutAsync } = useAuthApi();
 
@@ -47,48 +39,46 @@ async function handleLogout() {
           >
             <Avatar class="h-8 w-8 rounded-lg">
               <AvatarImage :src="user.avatar" :alt="user.name" />
-              <AvatarFallback class="rounded-lg bg-brand-primary-100">
-                <UserRound class="size-4 text-brand-primary-600" />
+              <AvatarFallback class="rounded-lg bg-white/15">
+                <UserRound class="size-4 text-white" />
               </AvatarFallback>
             </Avatar>
-            <div class="grid flex-1 text-left text-sm leading-tight">
+            <div class="grid flex-1 text-start text-sm leading-tight">
               <span class="truncate font-medium">{{ user.name }}</span>
-              <span class="truncate text-xs">{{ user.email }}</span>
+              <span class="truncate text-xs text-brand-primary-200">{{ user.email }}</span>
             </div>
-            <ChevronsUpDown class="ml-auto size-4" />
+            <ChevronsUpDown class="ms-auto size-4" />
           </SidebarMenuButton>
         </DropdownMenuTrigger>
         <DropdownMenuContent
-          class="w-(--reka-dropdown-menu-trigger-width) min-w-56 rounded-lg"
-          :side="isMobile ? 'bottom' : 'right'"
-          align="end"
-          :side-offset="4"
+          class="dir-rtl w-(--reka-dropdown-menu-trigger-width) min-w-56 rounded-xl p-1.5"
+          side="top"
+          align="center"
+          :side-offset="8"
         >
           <DropdownMenuLabel class="p-0 font-normal">
-            <div class="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
-              <Avatar class="h-8 w-8 rounded-lg">
+            <div class="flex items-center gap-3 px-2 py-2 text-start">
+              <Avatar class="size-9 rounded-lg">
                 <AvatarImage :src="user.avatar" :alt="user.name" />
                 <AvatarFallback class="rounded-lg bg-brand-primary-100">
                   <UserRound class="size-4 text-brand-primary-600" />
                 </AvatarFallback>
               </Avatar>
-              <div class="grid flex-1 text-left text-sm leading-tight">
-                <span class="truncate font-semibold">{{ user.name }}</span>
-                <span class="truncate text-xs">{{ user.email }}</span>
+              <div class="grid min-w-0 flex-1 leading-tight">
+                <span class="truncate text-sm font-semibold text-foreground">{{ user.name }}</span>
+                <span v-if="user.email" class="truncate text-xs text-muted-foreground">
+                  {{ user.email }}
+                </span>
               </div>
             </div>
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuItem class="cursor-pointer p-0 dir-rtl">
-            <Button
-              variant="ghost"
-              size="sm"
-              class="w-full justify-start gap-2 text-red-600 hover:bg-red-50 hover:text-red-700 transition-colors duration-200"
-              @click="handleLogout"
-            >
-              <LogOut class="size-4" />
-              خروج از حساب
-            </Button>
+          <DropdownMenuItem
+            class="cursor-pointer gap-2 px-2 py-2 text-sm text-red-600 focus:bg-red-50 focus:text-red-700"
+            @select="handleLogout"
+          >
+            <LogOut class="size-4 text-current" />
+            خروج از حساب
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
