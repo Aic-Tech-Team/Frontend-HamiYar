@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, reactive, onMounted, watch } from "vue";
+import { computed, reactive, onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -8,6 +8,13 @@ import { Label } from "@/components/ui/label";
 import FormDocumentActions from "@/components/forms/FormDocumentActions.vue";
 import FormDocumentSignature from "@/components/forms/FormDocumentSignature.vue";
 import FormDocumentPrintMarks from "@/components/forms/FormDocumentPrintMarks.vue";
+import MobileEntryForm from "@/components/forms/MobileEntryForm.vue";
+import type { MobileSummaryRow } from "@/components/forms/MobileEntryForm.vue";
+import FormSubmissionBanner from "@/components/forms/FormSubmissionBanner.vue";
+import FormDocumentNotFound from "@/components/forms/FormDocumentNotFound.vue";
+import FormPaperFrame from "@/components/forms/FormPaperFrame.vue";
+import MobileField from "@/components/forms/MobileField.vue";
+import { useMobileEntryMode } from "@/composables/useMobileEntryMode";
 import { getInputSize } from "@/utils/formUtils";
 import { useInternshipFormStore } from "@/stores/internship/useInternshipFormStore";
 import { useGlobalLoadingStore } from "@/stores/useGlobalLoadingStore";
@@ -22,6 +29,7 @@ const globalLoading = useGlobalLoadingStore();
 const studentStore = useStudentStore();
 const { getInternshipLetter } = useInternshipApi();
 
+const loadFailed = ref(false);
 const isPrintView = computed(() => route.meta.print === true);
 const qrImageSrc = computed(() => internshipFormStore.rawApiResponse?.qr_code_image);
 const formData = reactive(internshipFormStore.getDefaultFormData());
@@ -58,6 +66,10 @@ async function loadPublicData() {
     }
   } catch (error: unknown) {
     const status = (error as { response?: { status?: number } })?.response?.status ?? 404;
+    if (status === 404) {
+      loadFailed.value = true;
+      return;
+    }
     router.replace({ name: "Error", params: { code: String(status) } });
   }
 }
@@ -91,27 +103,43 @@ watch(
   { immediate: false },
 );
 
-function validateForm() {
-  const required = [
+function requiredValues() {
+  return [
     formData.student.code,
     formData.internship.companyName,
     formData.internship.address,
     formData.internship.postalCode,
+    formData.internship.course,
     formData.internship.duration,
     formData.internship.instructor,
     formData.internship.department,
   ];
-  return required.every((f) => String(f || "").trim().length > 0);
 }
+
+const isFilled = (value: unknown) => String(value || "").trim().length > 0;
+
+function validateForm() {
+  return requiredValues().every(isFilled);
+}
+
+const missingCount = computed(() => requiredValues().filter((v) => !isFilled(v)).length);
+
+const mobileSummary = computed<MobileSummaryRow[]>(() => [
+  { label: "نام و نام خانوادگی", value: formData.student.fullName },
+  { label: "شماره دانشجویی", value: formData.student.code },
+  { label: "رشته", value: formData.education.field },
+  { label: "مقطع", value: formData.education.degreeType },
+  { label: "ورودی", value: formData.education.entryAcademicYear },
+]);
 
 const {
   isEditMode,
   isSubmitted,
   isSubmitting,
-  isFormValid,
   handleSubmit: submitForm,
-  resetForm,
 } = useRequestsFormSubmission(validateForm, "internship");
+
+const { isMobileEntry, isDesktopEntry, showStatic } = useMobileEntryMode(isSubmitted, isPrintView);
 
 function handleSubmit() {
   submitForm(formData);
@@ -124,8 +152,16 @@ function handleIssuance() {
     name: "InternshipPublic",
     params: { trackingNumber: tn },
   });
-  window.open(routeData.href, "_blank");
+  // Same tab, replacing this entry: going back must not land on an empty form that could be re-submitted.
+  router.replace(routeData);
 }
+
+const documentLink = computed(() => {
+  const tn = internshipFormStore.trackingNumber;
+  if (!tn) return "";
+  const href = router.resolve({ name: "InternshipPublic", params: { trackingNumber: tn } }).href;
+  return new URL(href, window.location.origin).href;
+});
 
 const isInputDisabled = computed(() => isSubmitted.value || !isEditMode.value);
 const disciplinaryCaseValue = computed({
@@ -138,9 +174,115 @@ const disciplinaryCaseValue = computed({
 
 <template>
   <div
-    class="flex flex-col grow w-full h-full min-h-0"
+    :class="isDesktopEntry ? 'grid grid-cols-[minmax(0,26rem)_minmax(0,1fr)] items-start gap-8' : 'flex flex-col grow w-full'"
     :data-submitted="isSubmitted ? '' : undefined"
   >
+  <MobileEntryForm
+    v-if="isMobileEntry || isDesktopEntry"
+    :variant="isDesktopEntry ? 'desktop' : 'phone'"
+    title="نامه معرفی کارآموزی"
+    description="اطلاعات دانشجو از پرونده او خوانده شده است. مشخصات محل کارآموزی را وارد کنید."
+    :summary="mobileSummary"
+    :missing-count="missingCount"
+    :is-submitting="isSubmitting"
+    @submit="handleSubmit"
+  >
+    <MobileField label="نام شرکت یا سازمان" for="m-company" required>
+      <Input
+        id="m-company"
+        v-model="formData.internship.companyName"
+        class="h-12 text-base"
+        placeholder="نام شرکت"
+        autocomplete="off"
+      />
+    </MobileField>
+    <MobileField label="دپارتمان / واحد" for="m-department" required>
+      <Input
+        id="m-department"
+        v-model="formData.internship.department"
+        class="h-12 text-base"
+        placeholder="دپارتمان / واحد"
+        autocomplete="off"
+      />
+    </MobileField>
+    <MobileField label="آدرس محل کارآموزی" for="m-address" required>
+      <Textarea
+        id="m-address"
+        v-model="formData.internship.address"
+        class="min-h-24 resize-none text-base"
+        placeholder="آدرس را اینجا وارد کنید..."
+      />
+    </MobileField>
+    <MobileField label="کدپستی" for="m-postal" required>
+      <Input
+        id="m-postal"
+        v-model="formData.internship.postalCode"
+        class="h-12 text-base"
+        placeholder="کد پستی ۱۰ رقمی"
+        inputmode="numeric"
+        dir="ltr"
+        autocomplete="postal-code"
+      />
+    </MobileField>
+    <MobileField label="عنوان دوره کارآموزی" for="m-course" required>
+      <Input
+        id="m-course"
+        v-model="formData.internship.course"
+        class="h-12 text-base"
+        placeholder="دوره کارآموزی"
+        autocomplete="off"
+      />
+    </MobileField>
+    <MobileField label="مدت کارآموزی (ساعت)" for="m-duration" required>
+      <Input
+        id="m-duration"
+        v-model="formData.internship.duration"
+        class="h-12 text-base"
+        placeholder="مثلاً ۲۴۰"
+        inputmode="numeric"
+        dir="ltr"
+        autocomplete="off"
+      />
+    </MobileField>
+    <MobileField label="استاد درس کارآموزی" for="m-instructor" required>
+      <Input
+        id="m-instructor"
+        v-model="formData.internship.instructor"
+        class="h-12 text-base"
+        placeholder="نام استاد"
+        autocomplete="off"
+      />
+    </MobileField>
+    <MobileField label="مورد انضباطی">
+      <RadioGroup v-model="disciplinaryCaseValue" class="grid grid-cols-2 gap-3">
+        <Label
+          for="m-disc-no"
+          class="flex h-12 cursor-pointer items-center gap-2 rounded-xl border border-input px-4 has-[[data-state=checked]]:border-brand-primary-500 has-[[data-state=checked]]:bg-brand-primary-50"
+        >
+          <RadioGroupItem id="m-disc-no" value="no" />
+          ندارد
+        </Label>
+        <Label
+          for="m-disc-yes"
+          class="flex h-12 cursor-pointer items-center gap-2 rounded-xl border border-input px-4 has-[[data-state=checked]]:border-brand-primary-500 has-[[data-state=checked]]:bg-brand-primary-50"
+        >
+          <RadioGroupItem id="m-disc-yes" value="yes" />
+          دارد
+        </Label>
+      </RadioGroup>
+    </MobileField>
+  </MobileEntryForm>
+
+  <FormSubmissionBanner
+    v-if="isSubmitted && !isPrintView && internshipFormStore.trackingNumber"
+    :tracking-number="internshipFormStore.trackingNumber"
+    :document-link="documentLink"
+    @issue="handleIssuance"
+  />
+
+  <FormDocumentNotFound v-if="loadFailed" />
+
+  <FormPaperFrame v-if="!isMobileEntry && !loadFailed" :preview="isDesktopEntry" :submitted="isSubmitted">
   <header class="flex justify-between items-start mb-16">
     <figure class="w-1/3">
       <img src="@/assets/images/azad-logo.png" alt="Logo" width="50" class="grayscale" />
@@ -171,7 +313,7 @@ const disciplinaryCaseValue = computed({
     <p class="font-bold mb-3">
       مدیریت محترم
       <Input
-        v-if="!isPrintView"
+        v-if="!showStatic"
         v-model="formData.internship.companyName"
         required
         :highlight="isEditMode"
@@ -181,7 +323,7 @@ const disciplinaryCaseValue = computed({
         :disabled="isInputDisabled"
         :readonly="isInputDisabled"
       />
-      <span v-if="isPrintView" class="display-value">{{ formData.internship.companyName }}</span>
+      <span v-if="showStatic" class="display-value">{{ formData.internship.companyName }}</span>
     </p>
     <p class="font-bold">سلام علیکم</p>
   </section>
@@ -197,7 +339,7 @@ const disciplinaryCaseValue = computed({
       <span class="display-value">{{ formData.student.code }}</span>
       جهت انجام
       <Input
-        v-if="!isPrintView"
+        v-if="!showStatic"
         v-model="formData.internship.course"
         required
         :highlight="isEditMode"
@@ -207,10 +349,10 @@ const disciplinaryCaseValue = computed({
         :disabled="isInputDisabled"
         :readonly="isInputDisabled"
       />
-      <span v-if="isPrintView" class="display-value">{{ formData.internship.course }}</span>
+      <span v-if="showStatic" class="display-value">{{ formData.internship.course }}</span>
       به مدت
       <Input
-        v-if="!isPrintView"
+        v-if="!showStatic"
         v-model="formData.internship.duration"
         required
         :highlight="isEditMode"
@@ -221,14 +363,14 @@ const disciplinaryCaseValue = computed({
         :disabled="isInputDisabled"
         :readonly="isInputDisabled"
       />
-      <span v-if="isPrintView" class="display-value">{{ formData.internship.duration }}</span>
+      <span v-if="showStatic" class="display-value">{{ formData.internship.duration }}</span>
       ساعت معرفی می نماید.
     </div>
 
     <div class="leading-10">
       استاد درس کارآموزی ایشان
       <Input
-        v-if="!isPrintView"
+        v-if="!showStatic"
         v-model="formData.internship.instructor"
         required
         :highlight="isEditMode"
@@ -238,7 +380,7 @@ const disciplinaryCaseValue = computed({
         :disabled="isInputDisabled"
         :readonly="isInputDisabled"
       />
-      <span v-if="isPrintView" class="display-value">{{ formData.internship.instructor }}</span>
+      <span v-if="showStatic" class="display-value">{{ formData.internship.instructor }}</span>
       عضو هیئت علمی این واحد دانشگاهی می باشد.
     </div>
 
@@ -259,7 +401,7 @@ const disciplinaryCaseValue = computed({
         <div>
           آدرس محل کارآموزی:
           <Textarea
-            v-if="!isPrintView"
+            v-if="!showStatic"
             v-model="formData.internship.address"
             required
             :highlight="isEditMode"
@@ -268,12 +410,12 @@ const disciplinaryCaseValue = computed({
             class="resize-none font-bold placeholder:font-medium mt-2"
             placeholder="آدرس را اینجا وارد کنید..."
           />
-          <span v-if="isPrintView" class="display-value">{{ formData.internship.address }}</span>
+          <span v-if="showStatic" class="display-value">{{ formData.internship.address }}</span>
         </div>
         <div>
           کدپستی:
           <Input
-            v-if="!isPrintView"
+            v-if="!showStatic"
             v-model="formData.internship.postalCode"
             required
             :highlight="isEditMode"
@@ -284,11 +426,11 @@ const disciplinaryCaseValue = computed({
             :disabled="isInputDisabled"
             :readonly="isInputDisabled"
           />
-          <span v-if="isPrintView" class="display-value">{{ formData.internship.postalCode }}</span>
+          <span v-if="showStatic" class="display-value">{{ formData.internship.postalCode }}</span>
         </div>
         <div>
           <Input
-            v-if="!isPrintView"
+            v-if="!showStatic"
             v-model="formData.internship.department"
             required
             :highlight="isEditMode"
@@ -298,13 +440,13 @@ const disciplinaryCaseValue = computed({
             :disabled="isInputDisabled"
             :readonly="isInputDisabled"
           />
-          <span v-if="isPrintView" class="display-value">{{ formData.internship.department }}</span>
+          <span v-if="showStatic" class="display-value">{{ formData.internship.department }}</span>
         </div>
       </section>
 
       <section class="flex items-center gap-4 mt-6">
         <span>مورد انضباطی :</span>
-        <div v-if="!isPrintView" class="flex items-center gap-4">
+        <div v-if="!showStatic" class="flex items-center gap-4">
           <RadioGroup
             v-model="disciplinaryCaseValue"
             :disabled="isInputDisabled"
@@ -349,22 +491,14 @@ const disciplinaryCaseValue = computed({
     :signature="formData.signature"
   />
 
-  <FormDocumentActions
-    :is-submitted="isSubmitted"
-    :is-submitting="isSubmitting"
-    :is-form-valid="isFormValid"
-    :is-print-view="isPrintView"
-    :show-edit-button="!isPrintView"
-    @submit="handleSubmit"
-    @edit="resetForm"
-    @issuance="handleIssuance"
-  />
+  <FormDocumentActions v-if="isPrintView" />
 
   <FormDocumentPrintMarks
     v-if="isPrintView"
     :qr-image-src="qrImageSrc"
     :university-name="formData.header.university"
   />
+  </FormPaperFrame>
   </div>
 </template>
 
@@ -372,6 +506,9 @@ const disciplinaryCaseValue = computed({
 @reference "@/assets/css/main.css";
 .input {
   @apply w-auto min-w-0 mx-1 font-bold placeholder:font-medium;
+}
+.display-value:empty {
+  @apply inline-block min-w-16 border-b border-dotted border-neutral-400;
 }
 .display-value {
   @apply font-bold text-sm mx-1;

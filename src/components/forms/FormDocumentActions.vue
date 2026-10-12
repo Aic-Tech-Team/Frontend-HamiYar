@@ -1,81 +1,92 @@
 <script setup lang="ts">
+import { computed } from "vue";
+import { RouterLink, useRoute } from "vue-router";
+import { useMediaQuery } from "@vueuse/core";
+import { toast } from "vue-sonner";
 import { Button } from "@/components/ui/button";
+import { useAuthJwtStore } from "@/stores/account/useAuthJwtStore";
 
-import IconMynauiSaveSolid from "~icons/mynaui/save-solid";
-import IconGgSpinner from "~icons/gg/spinner";
-import IconMdiPencil from "~icons/mdi/pencil";
 import IconMdiPrinter from "~icons/mdi/printer";
-import IconMdiFileDocumentCheck from "~icons/mdi/file-document-check";
+import IconMdiShareVariant from "~icons/mdi/share-variant-outline";
+import IconMdiContentCopy from "~icons/mdi/content-copy";
+import IconMdiViewDashboardOutline from "~icons/mdi/view-dashboard-outline";
 
-interface Props {
-  isSubmitted: boolean;
-  isSubmitting: boolean;
-  isFormValid: boolean;
-  isPrintView: boolean;
-  showEditButton?: boolean;
-}
+// Actions for the final, public document. They live outside the sheet so they
+// never print and, on phones, stay full size next to the scaled-down sheet.
+const route = useRoute();
+const authStore = useAuthJwtStore();
 
-withDefaults(defineProps<Props>(), {
-  showEditButton: true,
-});
+const isPhone = useMediaQuery("(max-width: 767px)");
+const canShare = typeof navigator !== "undefined" && typeof navigator.share === "function";
 
-const emit = defineEmits<{
-  submit: [];
-  edit: [];
-  issuance: [];
-}>();
+const trackingNumber = computed(() => String(route.params.trackingNumber ?? ""));
+const target = computed(() => (isPhone.value ? "#form-mobile-actions" : "#form-toolbar"));
 
 function handlePrint() {
   window.print();
 }
+
+async function copyLink() {
+  try {
+    await navigator.clipboard.writeText(window.location.href);
+    toast.success("لینک سند کپی شد.", { richColors: true });
+  } catch {
+    toast.error("کپی لینک انجام نشد.", { richColors: true });
+  }
+}
+
+async function handleShare() {
+  if (!canShare) return copyLink();
+  try {
+    await navigator.share({ title: document.title, url: window.location.href });
+  } catch {
+    // User dismissed the share sheet — nothing to do.
+  }
+}
 </script>
 
 <template>
-  <div class="mt-auto flex gap-3 justify-end print:hidden">
-    <template v-if="!isSubmitted">
-      <Button
-        variant="default"
-        size="lg"
-        class="text-base"
-        :disabled="!isFormValid || isSubmitting"
-        @click="emit('submit')"
-      >
-        <IconMynauiSaveSolid v-if="!isSubmitting" class="size-6" />
-        <IconGgSpinner v-else class="size-6 animate-spin" />
-        {{ isSubmitting ? "در حال ثبت..." : "ثبت اطلاعات" }}
-      </Button>
-    </template>
+  <Teleport :to="target" defer>
+    <div
+      class="flex w-full items-center gap-3 print:hidden"
+      :class="isPhone ? '' : 'mx-auto max-w-6xl px-8'"
+    >
+      <div v-if="!isPhone" class="min-w-0">
+        <p class="text-sm font-semibold text-brand-primary-900">سند نهایی</p>
+        <p v-if="trackingNumber" class="text-xs text-muted-foreground">
+          کد پیگیری:
+          <span dir="ltr" class="font-medium tabular-nums">{{ trackingNumber }}</span>
+        </p>
+      </div>
 
-    <template v-else>
-      <!-- TODO: enable edit later -->
-      <template v-if="false">
-        <Button
-          v-if="showEditButton"
-          variant="secondary"
-          size="lg"
-          class="text-base border-2"
-          @click="emit('edit')"
-        >
-          <IconMdiPencil class="size-6" />
-          ویرایش
+      <div class="flex gap-2" :class="isPhone ? 'w-full [&>*]:h-12 [&>*]:flex-1' : 'ms-auto'">
+        <RouterLink v-if="!isPhone && authStore.isAuthenticated" :to="{ name: 'Dashboard' }">
+          <Button variant="ghost" class="h-10">
+            <IconMdiViewDashboardOutline class="size-5" />
+            داشبورد
+          </Button>
+        </RouterLink>
+
+        <Button v-if="isPhone && canShare" variant="outline" @click="handleShare">
+          <IconMdiShareVariant class="size-5" />
+          اشتراک‌گذاری
         </Button>
-      </template>
+        <Button
+          v-else
+          variant="outline"
+          class="h-10"
+          :class="isPhone ? 'h-12' : ''"
+          @click="copyLink"
+        >
+          <IconMdiContentCopy class="size-5" />
+          کپی لینک
+        </Button>
 
-      <Button
-        v-if="isPrintView"
-        variant="default"
-        size="lg"
-        class="text-base"
-        @click="handlePrint"
-      >
-        <IconMdiPrinter class="size-6" />
-        چاپ
-      </Button>
-
-      <Button v-else variant="default" size="lg" class="text-base" @click="emit('issuance')">
-        <IconMdiFileDocumentCheck class="size-6" />
-        تولید سند نهایی
-      </Button>
-    </template>
-  </div>
+        <Button class="h-10" :class="isPhone ? 'h-12' : ''" @click="handlePrint">
+          <IconMdiPrinter class="size-5" />
+          چاپ
+        </Button>
+      </div>
+    </div>
+  </Teleport>
 </template>

@@ -105,7 +105,6 @@ const router = createRouter({
       path: "/education",
       meta: {
         layout: "form",
-        fixedViewport: true,
       },
       children: [
         {
@@ -131,7 +130,7 @@ const router = createRouter({
     },
     {
       path: "/etela",
-      meta: { layout: "form", fixedViewport: true },
+      meta: { layout: "form" },
       children: [
         {
           path: "",
@@ -153,7 +152,6 @@ const router = createRouter({
       path: "/internship",
       meta: {
         layout: "form",
-        fixedViewport: true,
       },
       children: [
         {
@@ -189,24 +187,10 @@ const router = createRouter({
   ],
 });
 
-const VIEWPORT_DEFAULT = "width=device-width, initial-scale=1.0";
-const VIEWPORT_FIXED = "width=1024";
-
-function setViewport(content: string) {
-  const meta = document.querySelector('meta[name="viewport"]');
-  if (meta) meta.setAttribute("content", content);
-}
-
 router.beforeEach((to, from, next) => {
   const authStore = useAuthJwtStore();
   const isAuthenticated = authStore.isAuthenticated;
   const requiresAuth = to.meta.requiresAuth ?? true;
-
-  if (to.meta.fixedViewport) {
-    setViewport(VIEWPORT_FIXED);
-  } else if (from?.meta?.fixedViewport) {
-    setViewport(VIEWPORT_DEFAULT);
-  }
 
   if (to.meta.title) {
     document.title = to.meta.title;

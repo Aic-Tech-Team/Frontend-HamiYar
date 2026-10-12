@@ -39,11 +39,5 @@ declare module "vue-router" {
      * Public print/document view (no edit chrome)
      */
     print?: boolean;
-
-    /**
-     * Use fixed viewport width (1024px) on mobile to zoom out
-     * and show desktop layout instead of responsive shrink
-     */
-    fixedViewport?: boolean;
   }
 }

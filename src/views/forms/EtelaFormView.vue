@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, reactive, onMounted, watch } from "vue";
+import { computed, reactive, onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { Textarea } from "@/components/ui/textarea";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
@@ -8,6 +8,13 @@ import DatePicker from "@/components/DatePicker.vue";
 import FormDocumentActions from "@/components/forms/FormDocumentActions.vue";
 import FormDocumentSignature from "@/components/forms/FormDocumentSignature.vue";
 import FormDocumentPrintMarks from "@/components/forms/FormDocumentPrintMarks.vue";
+import MobileEntryForm from "@/components/forms/MobileEntryForm.vue";
+import type { MobileSummaryRow } from "@/components/forms/MobileEntryForm.vue";
+import FormSubmissionBanner from "@/components/forms/FormSubmissionBanner.vue";
+import FormDocumentNotFound from "@/components/forms/FormDocumentNotFound.vue";
+import FormPaperFrame from "@/components/forms/FormPaperFrame.vue";
+import MobileField from "@/components/forms/MobileField.vue";
+import { useMobileEntryMode } from "@/composables/useMobileEntryMode";
 import { useEtelaFormStore } from "@/stores/etela/useEtelaFromStore";
 import { useGlobalLoadingStore } from "@/stores/useGlobalLoadingStore";
 import { useEtelaApi } from "@/composables/api/useEtelaApi";
@@ -25,6 +32,7 @@ const globalLoading = useGlobalLoadingStore();
 const studentStore = useStudentStore();
 const { getEtelaCertificate } = useEtelaApi();
 
+const loadFailed = ref(false);
 const isPrintView = computed(() => route.meta.print === true);
 const qrImageSrc = computed(() => elaFormStore.rawApiResponse?.qr_code_image);
 const formData = reactive(elaFormStore.getDefaultFormData());
@@ -59,6 +67,10 @@ async function loadPublicData() {
     }
   } catch (error: unknown) {
     const status = (error as { response?: { status?: number } })?.response?.status ?? 404;
+    if (status === 404) {
+      loadFailed.value = true;
+      return;
+    }
     router.replace({ name: "Error", params: { code: String(status) } });
   }
 }
@@ -92,10 +104,23 @@ watch(
   { immediate: false },
 );
 
-function validateForm() {
-  const required = [formData.student.code, formData.courseDate, formData.gender];
-  return required.every((f) => String(f || "").trim().length > 0);
+function requiredValues() {
+  return [formData.student.code, formData.courseDate, formData.gender];
 }
+
+const isFilled = (value: unknown) => String(value || "").trim().length > 0;
+
+function validateForm() {
+  return requiredValues().every(isFilled);
+}
+
+const missingCount = computed(() => requiredValues().filter((v) => !isFilled(v)).length);
+
+const mobileSummary = computed<MobileSummaryRow[]>(() => [
+  { label: "نام و نام خانوادگی", value: formData.student.fullName },
+  { label: "شماره دانشجویی", value: formData.student.code },
+  { label: "کد ملی", value: formData.student.idNumber },
+]);
 
 const honorific = computed(() => {
   if (formData.gender === "female") return "سرکار خانم";
@@ -107,10 +132,10 @@ const {
   isEditMode,
   isSubmitted,
   isSubmitting,
-  isFormValid,
   handleSubmit: submitForm,
-  resetForm,
 } = useRequestsFormSubmission(validateForm, "etela");
+
+const { isMobileEntry, isDesktopEntry, showStatic } = useMobileEntryMode(isSubmitted, isPrintView);
 
 function handleSubmit() {
   submitForm(formData);
@@ -123,17 +148,79 @@ function handleIssuance() {
     name: "EtelaPublic",  // was "ElaPublic"
     params: { trackingNumber: tn },
   });
-  window.open(routeData.href, "_blank");
+  // Same tab, replacing this entry: going back must not land on an empty form that could be re-submitted.
+  router.replace(routeData);
 }
+
+const documentLink = computed(() => {
+  const tn = elaFormStore.trackingNumber;
+  if (!tn) return "";
+  const href = router.resolve({ name: "EtelaPublic", params: { trackingNumber: tn } }).href;
+  return new URL(href, window.location.origin).href;
+});
 
 const isInputDisabled = computed(() => isSubmitted.value || !isEditMode.value);
 </script>
 
 <template>
   <div
-    class="flex flex-col grow w-full h-full min-h-0"
+    :class="isDesktopEntry ? 'grid grid-cols-[minmax(0,26rem)_minmax(0,1fr)] items-start gap-8' : 'flex flex-col grow w-full'"
     :data-submitted="isSubmitted ? '' : undefined"
   >
+  <MobileEntryForm
+    v-if="isMobileEntry || isDesktopEntry"
+    :variant="isDesktopEntry ? 'desktop' : 'phone'"
+    title="گواهی طرح اعتلا"
+    description="اطلاعات دانشجو از پرونده او خوانده شده است. جنسیت و تاریخ دوره را مشخص کنید."
+    :summary="mobileSummary"
+    :missing-count="missingCount"
+    :is-submitting="isSubmitting"
+    @submit="handleSubmit"
+  >
+    <MobileField label="عنوان در گواهی">
+      <RadioGroup v-model="formData.gender" class="grid grid-cols-2 gap-3">
+        <Label
+          for="m-etela-female"
+          class="flex h-12 cursor-pointer items-center gap-2 rounded-xl border border-input px-4 has-[[data-state=checked]]:border-brand-primary-500 has-[[data-state=checked]]:bg-brand-primary-50"
+        >
+          <RadioGroupItem id="m-etela-female" value="female" />
+          سرکار خانم
+        </Label>
+        <Label
+          for="m-etela-male"
+          class="flex h-12 cursor-pointer items-center gap-2 rounded-xl border border-input px-4 has-[[data-state=checked]]:border-brand-primary-500 has-[[data-state=checked]]:bg-brand-primary-50"
+        >
+          <RadioGroupItem id="m-etela-male" value="male" />
+          جناب آقای
+        </Label>
+      </RadioGroup>
+    </MobileField>
+    <MobileField label="تاریخ برگزاری دوره" required>
+      <DatePicker
+        v-model:date="formData.courseDate"
+        trigger-class="mx-0 h-12 w-full text-base"
+      />
+    </MobileField>
+    <MobileField label="توضیحات" for="m-etela-description">
+      <Textarea
+        id="m-etela-description"
+        v-model="formData.description"
+        class="min-h-28 resize-none text-base"
+        placeholder="توضیحات را اینجا وارد کنید..."
+      />
+    </MobileField>
+  </MobileEntryForm>
+
+  <FormSubmissionBanner
+    v-if="isSubmitted && !isPrintView && elaFormStore.trackingNumber"
+    :tracking-number="elaFormStore.trackingNumber"
+    :document-link="documentLink"
+    @issue="handleIssuance"
+  />
+
+  <FormDocumentNotFound v-if="loadFailed" />
+
+  <FormPaperFrame v-if="!isMobileEntry && !loadFailed" :preview="isDesktopEntry" :submitted="isSubmitted">
   <header class="flex justify-between items-start mb-6">
     <div class="text-right w-1/3 font-bold text-sm space-y-1">
       <h1>{{ formData.header.university }}</h1>
@@ -179,7 +266,7 @@ const isInputDisabled = computed(() => isSubmitted.value || !isEditMode.value);
     <section :class="!isSubmitted ? 'leading-12' : 'leading-10'">
       بدین وسیله گواهی می‌شود
       <RadioGroup
-        v-if="!isPrintView"
+        v-if="!showStatic"
         v-model="formData.gender"
         :disabled="isInputDisabled"
         class="inline-flex items-center gap-3 mx-1 align-middle"
@@ -202,12 +289,12 @@ const isInputDisabled = computed(() => isSubmitted.value || !isEditMode.value);
       تاریخ
 
       <DatePicker
-        v-if="!isPrintView"
+        v-if="!showStatic"
         v-model:date="formData.courseDate"
         :highlight="isEditMode"
         :disabled="isInputDisabled"
       />
-      <span v-if="isPrintView" class="display-value">{{
+      <span v-if="showStatic" class="display-value">{{
         formatDateString(formData.courseDate) || formData.courseDate
       }}</span>
 
@@ -216,8 +303,8 @@ const isInputDisabled = computed(() => isSubmitted.value || !isEditMode.value);
   </section>
 
   <section class="mt-4">
-    <p class="font-bold text-sm">توضیحات {{ !isPrintView ? "(اختیاری)" : "" }} :</p>
-    <div v-if="!isPrintView" class="mt-2">
+    <p class="font-bold text-sm">توضیحات {{ !showStatic ? "(اختیاری)" : "" }} :</p>
+    <div v-if="!showStatic" class="mt-2">
       <Textarea
         v-model="formData.description"
         :disabled="isInputDisabled"
@@ -226,7 +313,7 @@ const isInputDisabled = computed(() => isSubmitted.value || !isEditMode.value);
         placeholder="توضیحات را اینجا وارد کنید..."
       />
     </div>
-    <div v-if="isPrintView" class="mt-2 min-h-20">
+    <div v-if="showStatic" class="mt-2 min-h-20">
       <p class="text-xs leading-7">{{ formData.description }}</p>
     </div>
   </section>
@@ -236,22 +323,14 @@ const isInputDisabled = computed(() => isSubmitted.value || !isEditMode.value);
     :signature="formData.signature"
   />
 
-  <FormDocumentActions
-    :is-submitted="isSubmitted"
-    :is-submitting="isSubmitting"
-    :is-form-valid="isFormValid"
-    :is-print-view="isPrintView"
-    :show-edit-button="!isPrintView"
-    @submit="handleSubmit"
-    @edit="resetForm"
-    @issuance="handleIssuance"
-  />
+  <FormDocumentActions v-if="isPrintView" />
 
   <FormDocumentPrintMarks
     v-if="isPrintView"
     :qr-image-src="qrImageSrc"
     :university-name="formData.header.university"
   />
+  </FormPaperFrame>
   </div>
 </template>
 
@@ -259,6 +338,9 @@ const isInputDisabled = computed(() => isSubmitted.value || !isEditMode.value);
 @reference "@/assets/css/main.css";
 .input {
   @apply w-auto min-w-0 mx-1 font-bold placeholder:font-medium;
+}
+.display-value:empty {
+  @apply inline-block min-w-16 border-b border-dotted border-neutral-400;
 }
 .display-value {
   @apply font-bold text-sm mx-1;

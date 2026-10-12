@@ -12,7 +12,11 @@ const layout = computed(() => resolveLayout(route.meta.layout));
 
 <template>
   <component :is="layout">
-    <RouterView />
+    <!-- Keyed by route name so e.g. /education → /education/:trackingNumber
+         remounts the view (same component, different mode) and loads its data. -->
+    <RouterView v-slot="{ Component, route: viewRoute }">
+      <component :is="Component" :key="String(viewRoute.name ?? viewRoute.path)" />
+    </RouterView>
   </component>
 
   <GlobalLoadingOverlay />
