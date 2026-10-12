@@ -41,7 +41,7 @@ export const services: ServiceItem[] = [
     icon: IconSolarCaseOutline,
     title: "نامه کارآموزی",
     description: "هماهنگی و دریافت معرفی‌نامه جهت گذراندن دوره‌های کارآموزی در صنایع کشور.",
-    isActive: false,
+    isActive: true,
     isSupported: true,
   },
   {

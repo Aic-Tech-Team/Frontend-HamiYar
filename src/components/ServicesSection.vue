@@ -9,63 +9,66 @@ import { useStudentApi } from "@/composables/api/useStudentApi";
 import { useStudentStore } from "@/stores/student/useStudentStore";
 import { services } from "@/constants/services";
  
-type ServiceType = "education" | "internship";
- 
+type ServiceType = "education" | "internship" | "etela";
+
 interface UserIdentifier {
   type: "national" | "student";
   value: string;
 }
- 
-// for separating which services should be shown in authenticated home page
+
+const SERVICE_ROUTES: Record<ServiceType, string> = {
+  education: "/education",
+  internship: "/internship",
+  etela: "/etela",
+};
+
 const systemServices = computed(() => services.filter((service) => service.isSupported));
- 
+
 const currentServiceType = ref<ServiceType | null>(null);
 const isModalOpen = ref(false);
 const identifier = ref("");
 const isSubmitting = ref(false);
- 
+
 const { checkStudent } = useStudentApi();
 const studentStore = useStudentStore();
- 
+
 function openServiceModal(type: ServiceType) {
   currentServiceType.value = type;
   isModalOpen.value = true;
 }
- 
+
 async function handleServiceRequest(identifier: UserIdentifier): Promise<void> {
   if (!currentServiceType.value || isSubmitting.value) return;
- 
+
   const serviceType = currentServiceType.value;
   isSubmitting.value = true;
- 
+
   try {
-    // Call check-student API with selected identifier type
     const response = await checkStudent(identifier.value, identifier.type);
- 
+
     if (!response.exists || !response.student_info) {
       throw new Error("دانشجویی با این مشخصات یافت نشد");
     }
- 
-    // Store student info in a single store
+
     studentStore.setStudent(response.student_info);
- 
+
     toast.success("موفقیت آمیز!", {
       description: "اطلاعات مورد نظر یافت شد، درحال انتقال...",
       richColors: true,
     });
- 
+
     identifier.value = "";
     isModalOpen.value = false;
     currentServiceType.value = null;
-    router.push(serviceType === "education" ? "/education" : "/internship");
+    router.push(SERVICE_ROUTES[serviceType]);
   } catch (error: any) {
     console.error("Error checking student:", error);
- 
-    // Use the pre-extracted message from our interceptor
-    const errorMessage = error?.response?.status === 404
-      ? "کاربری با این مشخصات یافت نشد"
-      : error.extractedMessage || "خطا در ارتباط با سرور";
- 
+
+    const errorMessage =
+      error?.response?.status === 404
+        ? "کاربری با این مشخصات یافت نشد"
+        : error.extractedMessage || "خطا در ارتباط با سرور";
+
     toast.error("خطا!", {
       description: errorMessage,
       richColors: true,
