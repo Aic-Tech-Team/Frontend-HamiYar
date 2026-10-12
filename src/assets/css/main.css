@@ -296,7 +296,9 @@
 
   body {
     scroll-behavior: smooth; /* ? Enable smooth scrolling */
-    overflow-x: hidden; /* Disable horizontal scrollbar */
+    /* `clip` hides horizontal overflow without turning <body> into a scroll
+       container, which would silently break every `position: sticky` below it. */
+    overflow-x: clip;
     @apply bg-background text-foreground;
     font-family: inherit; /* Inherit font from html */
   }
