@@ -146,11 +146,11 @@ onUnmounted(() => {
           class="floating-card w-full sm:w-[80%] lg:max-w-md aspect-square lg:aspect-[4/5] flex flex-col rounded-2xl border border-border bg-white p-5 xs:p-7"
         >
           <div class="flex items-center justify-between mb-5">
-            <div class="flex items-center gap-1.5">
-              <span class="size-3 rounded-full bg-red-400"></span>
-              <span class="size-3 rounded-full bg-yellow-400"></span>
-              <span class="size-3 rounded-full bg-green-400"></span>
-            </div>
+            <span
+              class="rounded-full bg-emerald-50 px-3 py-1 text-xs font-medium text-emerald-700"
+            >
+              در حال بررسی
+            </span>
 
             <div class="flex items-center gap-2 rounded-full border border-border pe-1 ps-3 py-1.5">
               <span class="text-xs font-medium text-foreground">دانشگاه آزاد اسلامی</span>
@@ -178,10 +178,24 @@ onUnmounted(() => {
             </div>
           </div>
 
-          <div class="space-y-3 mb-8">
-            <div class="h-3 rounded-full bg-muted w-full"></div>
-            <div class="h-3 rounded-full bg-muted w-4/5"></div>
-          </div>
+          <ol class="mb-8 space-y-4">
+            <li class="flex items-center gap-3 text-sm text-foreground">
+              <span class="flex size-6 items-center justify-center rounded-full bg-brand-primary-600">
+                <IconSolarCheckCircleBold class="size-4 text-white" />
+              </span>
+              ثبت درخواست
+            </li>
+            <li class="flex items-center gap-3 text-sm text-foreground">
+              <span class="flex size-6 items-center justify-center rounded-full bg-brand-primary-600">
+                <IconSolarCheckCircleBold class="size-4 text-white" />
+              </span>
+              دریافت کد پیگیری
+            </li>
+            <li class="flex items-center gap-3 text-sm text-muted-foreground">
+              <span class="size-6 rounded-full border-2 border-dashed border-brand-primary-300"></span>
+              صدور مدرک
+            </li>
+          </ol>
 
           <div
             class="mt-auto flex items-center justify-between rounded-xl border border-brand-primary-100 bg-brand-primary-50 px-4 py-3"
