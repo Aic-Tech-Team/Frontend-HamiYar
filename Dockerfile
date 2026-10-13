@@ -23,7 +23,6 @@ RUN pnpm build
 FROM nginx:alpine
 
 COPY --from=builder /app/dist /usr/share/nginx/html
-COPY --from=builder /app/scripts/check-api.mjs ./scripts/check-api.mjs
 
 EXPOSE 80
 
