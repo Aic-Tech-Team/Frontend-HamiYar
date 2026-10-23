@@ -3,8 +3,8 @@ import { useApiConfig } from "@/composables/api/useApiConfig";
 import type {
   InternshipResponse,
   InternshipRequestModel,
+  InternshipCreateResponse,
 } from "@/types/requests/internship";
-import type { SubmitFormResponse } from "@/types/requests/common";
 
 export const useInternshipApi = () => {
   const { apiEndpoints } = useApiConfig();
@@ -23,11 +23,11 @@ export const useInternshipApi = () => {
   async function submitInternshipLetter(
     requestData: InternshipRequestModel,
   ): Promise<string> {
-    const response = await $api.post<SubmitFormResponse>(
+    const response = await $api.post<InternshipCreateResponse>(
       apiEndpoints.requests.internship.submit,
       requestData
     );
-    if (!response.data) throw new Error("No data received from API");
+    if (!response.data?.tracking_number) throw new Error("No data received from API");
 
     return response.data.tracking_number;
   }

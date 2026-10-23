@@ -74,14 +74,15 @@ function transformApiResponseToFormData(apiResponse: InternshipResponse): Intern
       system: student.education_system || "",
     },
     internship: {
-      course: apiResponse.course || "",
-      duration: apiResponse.time || "",
-      instructor: apiResponse.teacher || "",
-      companyName: apiResponse.company?.name || "",
-      address: apiResponse.company?.address || "",
-      postalCode: apiResponse.company?.postal_code || "",
-      department: apiResponse.company?.department || "",
-      disciplinarian: apiResponse.disciplinarian ?? false,
+      course: apiResponse.internship_title || "",
+      duration:
+        apiResponse.duration_hours != null ? String(apiResponse.duration_hours) : "",
+      instructor: apiResponse.internship_instructor || "",
+      companyName: apiResponse.company_name || "",
+      address: apiResponse.workplace_address || "",
+      postalCode: apiResponse.postal_code || "",
+      department: apiResponse.department || "",
+      disciplinarian: apiResponse.has_disciplinary_issue ?? false,
     },
     signature: {
       title: signer?.title || "",
@@ -108,16 +109,18 @@ export const useInternshipFormStore = defineStore("internshipForm", () => {
   }
 
   function transformFormDataToRequest(formData: InternshipFormData): InternshipRequestModel {
+    const durationHours = Number.parseInt(formData.internship.duration, 10);
+
     return {
       student_number: formData.student.code || "",
       company_name: formData.internship.companyName || "",
-      company_postal_code: formData.internship.postalCode || "",
-      company_address: formData.internship.address || "",
-      company_department: formData.internship.department || "",
-      time: formData.internship.duration || "",
-      course: formData.internship.course || "",
-      teacher: formData.internship.instructor || "",
-      disciplinarian: formData.internship.disciplinarian ?? false,
+      postal_code: formData.internship.postalCode || "",
+      workplace_address: formData.internship.address || "",
+      department: formData.internship.department || "",
+      duration_hours: Number.isFinite(durationHours) && durationHours >= 1 ? durationHours : 1,
+      internship_title: formData.internship.course || "",
+      internship_instructor: formData.internship.instructor || "",
+      has_disciplinary_issue: formData.internship.disciplinarian ?? false,
     };
   }
 

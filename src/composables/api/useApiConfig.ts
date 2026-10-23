@@ -30,11 +30,12 @@ export const useApiConfig = () => {
       })(),
 
       internship: (() => {
-        const base = `${baseUrl}/intern`;
+        const base = `${baseUrl}/internship`;
 
         return {
           get: (trackingNumber: string) => `${base}/${trackingNumber}/`,
-          submit: `${base}/`,
+          submit: `${base}/create/`,
+          overviewCount: `${base}/overview/count/`,
         };
       })(),
 
@@ -44,12 +45,14 @@ export const useApiConfig = () => {
         return {
           get: (trackingNumber: string) => `${base}/${trackingNumber}/`,
           submit: `${base}/create/`,
+          overviewCount: `${base}/overview/count/`,
         };
       })(),
     },
 
     contact: {
       create: `${baseUrl}/ticket/create/`,
+      overviewCount: `${baseUrl}/ticket/overview/count/`,
     },
   };
 
