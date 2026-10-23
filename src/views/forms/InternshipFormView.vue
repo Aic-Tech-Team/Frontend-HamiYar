@@ -34,6 +34,14 @@ const isPrintView = computed(() => route.meta.print === true);
 const qrImageSrc = computed(() => internshipFormStore.rawApiResponse?.qr_code_image);
 const formData = reactive(internshipFormStore.getDefaultFormData());
 
+/** City line only when not already inside university name (avoids «واحد کرج (واحد کرج)»). */
+const headerCityLine = computed(() => {
+  const university = formData.header.university?.trim() || "";
+  const city = formData.header.city?.trim() || "";
+  if (!city) return "";
+  return university.includes(city) ? "" : city;
+});
+
 function prefillFromStudent() {
   const student = studentStore.student;
   if (!student) return;
@@ -293,7 +301,8 @@ const disciplinaryCaseValue = computed({
         <p class="text-xs">سرمایه گذاری برای تولید</p>
       </section>
       <section class="font-bold text-sm space-y-1 text-center mt-5">
-        <h1>{{ formData.header.university }} ({{ formData.header.city }})</h1>
+        <h1>{{ formData.header.university }}</h1>
+        <h2 v-if="headerCityLine">{{ headerCityLine }}</h2>
       </section>
     </div>
     <div class="text-left w-1/3 text-xs space-y-1 *:flex *:justify-end *:gap-2 *:items-center">
@@ -462,25 +471,31 @@ const disciplinaryCaseValue = computed({
             </div>
           </RadioGroup>
         </div>
-        <div v-else class="flex items-center gap-4">
-          <label
-            class="flex items-center gap-2"
-            :class="{
-              'bg-neutral-200 py-1 px-2 rounded-md': !formData.internship.disciplinarian,
-            }"
+        <div v-else class="flex items-center gap-5">
+          <span
+            class="disciplinary-option"
+            :class="{ 'is-selected': !formData.internship.disciplinarian }"
           >
-            <span class="display-value">{{ formData.internship.disciplinarian ? "" : "✓" }}</span>
+            <span
+              class="disciplinary-box"
+              :aria-label="formData.internship.disciplinarian ? 'ندارد (انتخاب‌نشده)' : 'ندارد'"
+            >
+              <span v-if="!formData.internship.disciplinarian" aria-hidden="true">✓</span>
+            </span>
             <span>ندارد</span>
-          </label>
-          <label
-            class="flex items-center gap-2"
-            :class="{
-              'py-1 px-2 rounded-md': formData.internship.disciplinarian,
-            }"
+          </span>
+          <span
+            class="disciplinary-option"
+            :class="{ 'is-selected': formData.internship.disciplinarian }"
           >
-            <span class="display-value">{{ formData.internship.disciplinarian ? "✓" : "" }}</span>
+            <span
+              class="disciplinary-box"
+              :aria-label="formData.internship.disciplinarian ? 'دارد' : 'دارد (انتخاب‌نشده)'"
+            >
+              <span v-if="formData.internship.disciplinarian" aria-hidden="true">✓</span>
+            </span>
             <span>دارد</span>
-          </label>
+          </span>
         </div>
       </section>
     </div>
@@ -512,5 +527,16 @@ const disciplinaryCaseValue = computed({
 }
 .display-value {
   @apply font-bold text-sm mx-1;
+}
+.disciplinary-option {
+  @apply inline-flex items-center gap-1.5 rounded-sm px-1.5 py-0.5;
+}
+.disciplinary-option.is-selected {
+  @apply bg-neutral-200;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+.disciplinary-box {
+  @apply inline-flex size-[1.1em] shrink-0 items-center justify-center border border-neutral-900 text-[0.75em] font-bold leading-none;
 }
 </style>
