@@ -14,10 +14,11 @@ interface OverviewSource {
   fetchCount: () => Promise<number>;
 }
 
-// One entry per request type that actually has a real overview/count endpoint.
-// When internship/etela get their own endpoint later, add one more object here —
-// nothing else in this file needs to change.
-const { getEducationOverviewCount } = useOverviewApi();
+const {
+  getEducationOverviewCount,
+  getInternshipOverviewCount,
+  getEtelaOverviewCount,
+} = useOverviewApi();
 
 const overviewSources: OverviewSource[] = [
   {
@@ -25,6 +26,18 @@ const overviewSources: OverviewSource[] = [
     label: "گواهی اشتغال به تحصیل",
     icon: FileText,
     fetchCount: getEducationOverviewCount,
+  },
+  {
+    id: "internship",
+    label: "نامه کارآموزی",
+    icon: FileText,
+    fetchCount: getInternshipOverviewCount,
+  },
+  {
+    id: "etela",
+    label: "گواهی طرح اعتلا",
+    icon: FileText,
+    fetchCount: getEtelaOverviewCount,
   },
 ];
 
@@ -109,7 +122,7 @@ const upcomingServicesCount = computed(
     <h2 id="overview-counts" class="mb-4 text-sm font-semibold text-brand-primary-700">
       وضعیت سامانه
     </h2>
-    <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
       <div
         v-for="source in overviewSources"
         :key="source.id"
