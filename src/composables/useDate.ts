@@ -11,7 +11,8 @@ export const useDate = () => {
     });
   };
 
-  const formatIsoToJalali = (date: string) => {
+  const formatIsoToJalali = (date: string | null | undefined) => {
+    if (!date) return "-";
     try {
       const parsed = parseDate(date);
       return formatter.custom(toDate(parsed, getLocalTimeZone()), { numberingSystem: "latn" });

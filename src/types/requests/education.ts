@@ -5,14 +5,14 @@ export interface EducationCertificateResponse {
   student: CertificateStudent;
   signer: Signer;
   academic_term: string;
-  academic_year: string;
-  expiration_date: string; // ISO date: "2026-02-08"
-  certificate: string; // API typo - recipient/organization name
-  description: string;
+  academic_year?: string | null;
+  expiration_date?: string; // ISO date: "2026-02-08"
+  certificate?: string | null; // recipient/organization name
+  description?: string | null;
   qr_code_image: string;
-  qr_url?: string;
+  qr_url?: string | null;
   date: string; // ISO date
-  tracking_number?: string;
+  tracking_number: string;
 }
 
 // Education certificate POST request body
@@ -20,8 +20,14 @@ export interface EducationCertificateRequestModel {
   student_number: string;
   academic_term: string;
   academic_year: string;
-  certificate: string;
-  description: string;
+  certificate?: string;
+  description?: string;
+}
+
+export interface EducationCertificateCreateResponse {
+  message?: string;
+  education_id?: number;
+  tracking_number: string;
 }
 
 // Form data structure matching EducationFormView for UI

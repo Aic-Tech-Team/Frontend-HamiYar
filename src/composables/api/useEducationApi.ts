@@ -3,8 +3,8 @@ import { useApiConfig } from "@/composables/api/useApiConfig";
 import type {
   EducationCertificateResponse,
   EducationCertificateRequestModel,
+  EducationCertificateCreateResponse,
 } from "@/types/requests/education";
-import type { SubmitFormResponse } from "@/types/requests/common";
 
 export const useEducationApi = () => {
   const { apiEndpoints } = useApiConfig();
@@ -25,11 +25,11 @@ export const useEducationApi = () => {
   async function submitEducationCertificate(
     requestData: EducationCertificateRequestModel,
   ): Promise<string> {
-    const response = await $api.post<SubmitFormResponse>(
+    const response = await $api.post<EducationCertificateCreateResponse>(
       apiEndpoints.requests.education.submit,
       requestData,
     );
-    if (!response.data) throw new Error("No data received from API");
+    if (!response.data?.tracking_number) throw new Error("No data received from API");
 
     return response.data.tracking_number;
   }

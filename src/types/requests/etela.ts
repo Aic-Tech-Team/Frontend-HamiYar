@@ -5,16 +5,17 @@ export type EtelaGender = "female" | "male";
 export interface EtelaCertificateResponse {
   student: CertificateStudent;
   signer: Signer;
-  gender: EtelaGender;
+  /** Present on create request only; GET schema has no gender — prefer certificate_text */
+  gender?: EtelaGender;
   course_date: string;
   expiration_date?: string;
   certificate?: string | null;
   description?: string | null;
   qr_code_image: string;
   qr_url?: string | null;
-  certificate_text?: string;
+  certificate_text: string;
   date: string;
-  tracking_number?: string;
+  tracking_number: string;
 }
 
 export interface EtelaCertificateRequestModel {
