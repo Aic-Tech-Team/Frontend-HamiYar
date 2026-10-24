@@ -10,7 +10,7 @@ import FormDocumentSignature from "@/components/forms/FormDocumentSignature.vue"
 import FormDocumentPrintMarks from "@/components/forms/FormDocumentPrintMarks.vue";
 import MobileEntryForm from "@/components/forms/MobileEntryForm.vue";
 import type { MobileSummaryRow } from "@/components/forms/MobileEntryForm.vue";
-import FormSubmissionBanner from "@/components/forms/FormSubmissionBanner.vue";
+import InternshipPendingBanner from "@/components/forms/InternshipPendingBanner.vue";
 import FormDocumentNotFound from "@/components/forms/FormDocumentNotFound.vue";
 import FormPaperFrame from "@/components/forms/FormPaperFrame.vue";
 import MobileField from "@/components/forms/MobileField.vue";
@@ -30,6 +30,7 @@ const studentStore = useStudentStore();
 const { getInternshipLetter } = useInternshipApi();
 
 const loadFailed = ref(false);
+const waitingApproval = ref(false);
 const isPrintView = computed(() => route.meta.print === true);
 const qrImageSrc = computed(() => internshipFormStore.rawApiResponse?.qr_code_image);
 const formData = reactive(internshipFormStore.getDefaultFormData());
@@ -67,6 +68,10 @@ async function loadPublicData() {
   try {
     const apiResponse = await getInternshipLetter(trackingNumber);
 
+    if (apiResponse.status !== "issued") {
+      waitingApproval.value = true;
+      return;
+    }
     internshipFormStore.setFormDataFromApi(apiResponse);
 
     if (internshipFormStore.formData) {
@@ -74,6 +79,10 @@ async function loadPublicData() {
     }
   } catch (error: unknown) {
     const status = (error as { response?: { status?: number } })?.response?.status ?? 404;
+    if (status === 403) {
+      waitingApproval.value = true;
+      return;
+    }
     if (status === 404) {
       loadFailed.value = true;
       return;
@@ -87,7 +96,7 @@ onMounted(async () => {
     globalLoading.show();
     try {
       await loadPublicData();
-      isSubmitted.value = true;
+      isSubmitted.value = !loadFailed.value && !waitingApproval.value;
       isEditMode.value = false;
     } finally {
       globalLoading.hide();
@@ -163,13 +172,6 @@ function handleIssuance() {
   // Same tab, replacing this entry: going back must not land on an empty form that could be re-submitted.
   router.replace(routeData);
 }
-
-const documentLink = computed(() => {
-  const tn = internshipFormStore.trackingNumber;
-  if (!tn) return "";
-  const href = router.resolve({ name: "InternshipPublic", params: { trackingNumber: tn } }).href;
-  return new URL(href, window.location.origin).href;
-});
 
 const isInputDisabled = computed(() => isSubmitted.value || !isEditMode.value);
 const disciplinaryCaseValue = computed({
@@ -281,16 +283,20 @@ const disciplinaryCaseValue = computed({
     </MobileField>
   </MobileEntryForm>
 
-  <FormSubmissionBanner
+  <InternshipPendingBanner
     v-if="isSubmitted && !isPrintView && internshipFormStore.trackingNumber"
     :tracking-number="internshipFormStore.trackingNumber"
-    :document-link="documentLink"
-    @issue="handleIssuance"
+    @issued="handleIssuance"
   />
+
+  <section v-if="waitingApproval && isPrintView" class="mx-auto max-w-xl rounded-2xl border border-amber-200 bg-white p-8 text-center print:hidden">
+    <h1 class="text-lg font-bold text-brand-primary-900">سند قابل دریافت نیست</h1>
+    <p class="mt-2 text-sm leading-7 text-muted-foreground">این درخواست هنوز تایید نشده یا باطل شده است. صدور سند و QR Code فقط پس از تایید مدیر امکان‌پذیر است.</p>
+  </section>
 
   <FormDocumentNotFound v-if="loadFailed" />
 
-  <FormPaperFrame v-if="!isMobileEntry && !loadFailed" :preview="isDesktopEntry" :submitted="isSubmitted">
+  <FormPaperFrame v-if="!isMobileEntry && !loadFailed && !waitingApproval && !(isSubmitted && !isPrintView)" :preview="isDesktopEntry" :submitted="isSubmitted">
   <header class="flex justify-between items-start mb-16">
     <figure class="w-1/3">
       <img src="@/assets/images/azad-logo.png" alt="Logo" width="50" class="grayscale" />

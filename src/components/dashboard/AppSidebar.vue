@@ -1,5 +1,8 @@
 <script setup lang="ts">
-import { LayoutDashboard, LayoutGrid } from "@lucide/vue";
+import { LayoutDashboard, LayoutGrid, ClipboardCheck } from "@lucide/vue";
+import { computed, onMounted, watch } from "vue";
+import { useAuthJwtStore } from "@/stores/account/useAuthJwtStore";
+import { useInternshipManagerAccessStore } from "@/stores/internship/useInternshipManagerAccessStore";
 import NavMain from "@/components/dashboard/NavMain.vue";
 import NavUser from "@/components/dashboard/NavUser.vue";
 import HeaderSideBar from "@/components/dashboard/HeaderSideBar.vue";
@@ -32,7 +35,13 @@ const user = {
 };
 
 
-const navMain = [
+const authStore = useAuthJwtStore();
+const managerAccess = useInternshipManagerAccessStore();
+
+onMounted(() => managerAccess.check(authStore.accessToken));
+watch(() => authStore.accessToken, (token) => managerAccess.check(token));
+
+const navMain = computed(() => [
   {
     title: "نمای کلی",
     to: "/dashboard",
@@ -43,7 +52,12 @@ const navMain = [
     to: "/dashboard/services",
     icon: LayoutGrid,
   },
-];
+  ...(managerAccess.allowed ? [{
+    title: "تایید کارآموزی‌ها",
+    to: "/dashboard/internship-approvals",
+    icon: ClipboardCheck,
+  }] : []),
+]);
 </script>
 
 <template>

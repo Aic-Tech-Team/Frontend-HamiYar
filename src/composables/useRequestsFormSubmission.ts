@@ -61,7 +61,9 @@ export function useRequestsFormSubmission(
       isEditMode.value = false;
 
       toast.success("اطلاعات با موفقیت ثبت شد.", {
-        description: "اطلاعات مورد نظر با موفقیت ثبت شد و درخواست شما آماده چاپ است.",
+        description: requestType === "internship"
+          ? "درخواست کارآموزی ثبت شد و در انتظار تایید مدیر است."
+          : "اطلاعات مورد نظر با موفقیت ثبت شد و درخواست شما آماده چاپ است.",
         richColors: true,
       });
     } catch (error: any) {

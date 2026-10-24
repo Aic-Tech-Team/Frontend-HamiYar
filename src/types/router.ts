@@ -39,5 +39,8 @@ declare module "vue-router" {
      * Public print/document view (no edit chrome)
      */
     print?: boolean;
+
+    /** Backend permission is authoritative; never trust localStorage roles. */
+    requiresInternshipApprovalPermission?: boolean;
   }
 }

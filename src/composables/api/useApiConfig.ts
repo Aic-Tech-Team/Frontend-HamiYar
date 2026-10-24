@@ -36,6 +36,10 @@ export const useApiConfig = () => {
           get: (trackingNumber: string) => `${base}/${trackingNumber}/`,
           submit: `${base}/create/`,
           overviewCount: `${base}/overview/count/`,
+          verify: (trackingNumber: string) => `${base}/verify/${encodeURIComponent(trackingNumber)}/`,
+          managerList: `${base}/manager/list/`,
+          managerDetail: (id: number) => `${base}/manager/${id}/`,
+          managerApprove: (id: number) => `${base}/manager/${id}/approve/`,
         };
       })(),
 

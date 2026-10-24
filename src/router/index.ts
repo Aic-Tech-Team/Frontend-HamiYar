@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import "@/types/router";
 import { appConfig } from "@/config";
 import { useAuthJwtStore } from "@/stores/account/useAuthJwtStore";
+import { useInternshipManagerAccessStore } from "@/stores/internship/useInternshipManagerAccessStore";
 import LandingPageView from "@/views/LandingPageView.vue";
 
 const appName = appConfig.app.name;
@@ -79,6 +80,15 @@ const router = createRouter({
           component: () => import("@/views/dashboard/DashboardHomeView.vue"),
           meta: {
             title: `داشبورد | ${appName}`,
+          },
+        },
+        {
+          path: "internship-approvals",
+          name: "InternshipApprovals",
+          component: () => import("@/views/dashboard/InternshipApprovalsView.vue"),
+          meta: {
+            title: `تایید کارآموزی‌ها | ${appName}`,
+            requiresInternshipApprovalPermission: true,
           },
         },
         {
@@ -187,7 +197,7 @@ const router = createRouter({
   ],
 });
 
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
   const authStore = useAuthJwtStore();
   const isAuthenticated = authStore.isAuthenticated;
   const requiresAuth = to.meta.requiresAuth ?? true;
@@ -204,6 +214,14 @@ router.beforeEach((to, from, next) => {
   if (to.meta.redirectIfAuthenticated && isAuthenticated) {
     next({ name: "Dashboard" });
     return;
+  }
+
+  if (to.meta.requiresInternshipApprovalPermission) {
+    const managerAccess = useInternshipManagerAccessStore();
+    if (!(await managerAccess.check(authStore.accessToken, true))) {
+      next({ name: "Dashboard" });
+      return;
+    }
   }
 
   next();
