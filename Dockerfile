@@ -1,17 +1,24 @@
+# syntax=docker/dockerfile:1.7
+
 FROM node:22-alpine AS builder
 
 WORKDIR /app
 
-ENV COREPACK_ENABLE_PROJECT_SPEC=0 \
-    PNPM_MANAGE_PACKAGE_MANAGER_VERSIONS=false
+ENV PNPM_MANAGE_PACKAGE_MANAGER_VERSIONS=false
 
 RUN npm install -g pnpm@11.13.1 \
     --registry=https://registry.npmjs.org/
 
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 
-RUN pnpm install --frozen-lockfile \
-    --registry=https://registry.npmjs.org/
+RUN --mount=type=cache,id=hamiyar-pnpm,target=/pnpm/store \
+    pnpm install \
+    --frozen-lockfile \
+    --store-dir=/pnpm/store \
+    --registry=https://registry.npmjs.org/ \
+    --network-concurrency=4 \
+    --fetch-retries=3 \
+    --fetch-timeout=120000
 
 COPY . .
 
